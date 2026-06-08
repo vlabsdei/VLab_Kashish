@@ -22,8 +22,9 @@ The optimization process considers factors such as:
 
 Traffic density represents the number of vehicles occupying the available road space.
 
-
-ρ = N/L
+$$
+ρ = \frac{N}{L}
+$$
 
 Where:
 
