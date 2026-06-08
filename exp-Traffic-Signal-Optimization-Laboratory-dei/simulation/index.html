@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Traffic Signal Optimization Laboratory
+    </title>
+
+    <link rel="stylesheet"
+          href="./css/main.css">
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header>
+
+        <h1>
+            Traffic Signal Optimization Laboratory
+        </h1>
+
+        <p>
+            Smart City Infrastructure Engineering Virtual Lab
+        </p>
+
+    </header>
+
+    <!-- MAIN CONTAINER -->
+
+    <div class="main-container">
+
+        <!-- INPUT PANEL -->
+
+        <aside class="control-panel">
+
+            <h2>
+                Input Parameters
+            </h2>
+
+            <div class="input-group">
+
+                <label>
+                    Vehicle Arrival Rate
+                </label>
+
+                <input
+                    type="range"
+                    id="arrivalRate"
+                    min="10"
+                    max="120"
+                    value="60">
+
+                <span id="arrivalRateValue">
+                    60 Vehicles/min
+                </span>
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+                    Green Signal Time
+                </label>
+
+                <input
+                    type="range"
+                    id="greenTime"
+                    min="10"
+                    max="120"
+                    value="30">
+
+                <span id="greenTimeValue">
+                    30 Sec
+                </span>
+
+            </div>
+
+            <div class="input-group">
+
+                <label>
+                    Red Signal Time
+                </label>
+
+                <input
+                    type="range"
+                    id="redTime"
+                    min="10"
+                    max="120"
+                    value="30">
+
+                <span id="redTimeValue">
+                    30 Sec
+                </span>
+
+            </div>
+<div class="input-group">
+
+    <label>
+        Number of Lanes
+    </label>
+
+    <input
+        type="text"
+        value="2"
+        readonly>
+
+</div>
+            <div class="input-group">
+
+                <label>
+                    Pedestrian Flow
+                </label>
+
+                <input
+                    type="range"
+                    id="pedestrianFlow"
+                    min="0"
+                    max="100"
+                    value="20">
+
+                <span id="pedestrianFlowValue">
+                    20 Persons/min
+                </span>
+
+            </div>
+
+            <button id="startBtn">
+                Start Simulation
+            </button>
+
+            <button id="stopBtn">
+                Stop Simulation
+            </button>
+
+            <button id="resetBtn">
+                Reset
+            </button>
+
+        </aside>
+
+        <!-- SIMULATION AREA -->
+
+        <section class="simulation-panel">
+
+            <div class="intersection">
+<div class="simulation-status">
+    <h3>Simulation Status</h3>
+
+    <p>
+        Signal :
+        <span id="signalState">
+            North-South Green
+        </span>
+    </p>
+
+    <p>
+        Vehicles Passed :
+        <span id="vehiclesPassed">
+            0
+        </span>
+    </p>
+
+    <p>
+        Time Remaining :
+        <span id="timeRemaining">
+            30
+        </span>
+        sec
+    </p>
+
+</div>
+
+                <!-- ROADS -->
+
+<div class="road horizontal"></div>
+
+<div class="road vertical"></div>
+<div class="junction-box"></div>
+
+<!-- ROAD MARKINGS -->
+
+<div class="lane-mark horizontal-mark"></div>
+
+<div class="lane-mark vertical-mark"></div>
+
+                <!-- STOP LINES -->
+
+                <div class="stop-line north-stop"></div>
+                <div class="stop-line south-stop"></div>
+                <div class="stop-line east-stop"></div>
+                <div class="stop-line west-stop"></div>
+                <!-- ZEBRA CROSSINGS -->
+
+<div class="zebra zebra-top"></div>
+
+<div class="zebra zebra-bottom"></div>
+
+<div class="zebra zebra-left"></div>
+
+<div class="zebra zebra-right"></div>
+
+                <!-- TRAFFIC SIGNALS -->
+
+<div class="signal north-signal">
+    <div class="light red"></div>
+    <div class="light yellow"></div>
+    <div class="light green"></div>
+</div>
+
+<div class="signal south-signal">
+    <div class="light red"></div>
+    <div class="light yellow"></div>
+    <div class="light green"></div>
+</div>
+
+<div class="signal east-signal">
+    <div class="light red"></div>
+    <div class="light yellow"></div>
+    <div class="light green"></div>
+</div>
+
+<div class="signal west-signal">
+    <div class="light red"></div>
+    <div class="light yellow"></div>
+    <div class="light green"></div>
+</div>
+
+                <!-- QUEUE COUNTERS -->
+
+                <div class="queue north-queue">
+    N Queue :
+    <span id="northQueue">0</span>
+    Vehicles
+</div>
+
+<div class="queue south-queue">
+    S Queue :
+    <span id="southQueue">0</span>
+    Vehicles
+</div>
+
+<div class="queue east-queue">
+    E Queue :
+    <span id="eastQueue">0</span>
+    Vehicles
+</div>
+
+<div class="queue west-queue">
+    W Queue :
+    <span id="westQueue">0</span>
+    Vehicles
+</div>
+
+                <!-- VEHICLES -->
+
+                <div id="vehiclesContainer"></div>
+
+            </div>
+            
+
+        </section>
+
+    </div>
+
+    <!-- RESULTS -->
+
+    <section class="results">
+
+        <div class="card">
+
+            <h3>
+                Queue Length
+            </h3>
+
+            <p id="queueLength">
+                0
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>
+                Waiting Time
+            </h3>
+
+            <p id="waitingTime">
+                0 sec
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>
+                Traffic Density
+            </h3>
+
+            <p id="density">
+                0
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>
+                Throughput
+            </h3>
+
+            <p id="throughput">
+                0
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>
+                Signal Efficiency
+            </h3>
+
+            <p id="signalEfficiency">
+                0%
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>
+                Congestion Status
+            </h3>
+
+            <p id="congestionStatus">
+                Low
+            </p>
+
+        </div>
+
+    </section>
+    <section class="formula-section">
+
+    <h2>
+        Traffic Engineering Formulas
+    </h2>
+
+    <p>
+    Theoretical Queue Length =
+    Arrival Rate × Red Signal Time
+</p>
+
+    <p>
+        Waiting Time = Queue Length ÷ Arrival Rate
+    </p>
+
+    <p>
+        Traffic Density = Vehicles ÷ Number of Lanes
+    </p>
+
+    <p>
+        Throughput = Vehicles Passed ÷ Time
+    </p>
+
+    <p>
+        Signal Efficiency =
+        (Vehicles Passed ÷ Total Vehicles) × 100
+    </p>
+    <p>
+    Efficiency > 80% = Excellent
+</p>
+
+<p>
+    Efficiency 60% - 80% = Good
+</p>
+
+<p>
+    Efficiency 40% - 60% = Moderate
+</p>
+
+<p>
+    Efficiency < 40% = Poor
+</p>
+
+</section>
+
+    <script src="./js/main.js"></script>
+
+</body>
+
+</html>

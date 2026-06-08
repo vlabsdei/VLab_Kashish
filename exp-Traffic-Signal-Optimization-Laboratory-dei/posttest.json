@@ -1,0 +1,175 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "Q1. After performing the simulation, which change most effectively reduced queue length at the intersection?",
+      "answers": {
+        "a": "Increasing green signal time",
+        "b": "Increasing red signal time",
+        "c": "Reducing the number of lanes",
+        "d": "Increasing vehicle arrival rate"
+      },
+      "explanations": {
+        "a": "Correct. A longer green signal allows more vehicles to pass, reducing queue length.",
+        "b": "Longer red times generally increase queue length.",
+        "c": "Fewer lanes reduce road capacity.",
+        "d": "Higher arrival rates increase congestion."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q2. What happens when the vehicle arrival rate becomes greater than the service rate?",
+      "answers": {
+        "a": "Traffic congestion increases",
+        "b": "Queue length becomes zero",
+        "c": "Signal efficiency becomes 100%",
+        "d": "Traffic density decreases"
+      },
+      "explanations": {
+        "a": "Correct. More vehicles arrive than can be cleared, causing congestion.",
+        "b": "Queue length usually increases.",
+        "c": "Efficiency typically decreases.",
+        "d": "Traffic density generally increases."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q3. How does increasing the number of lanes affect intersection performance?",
+      "answers": {
+        "a": "Increases vehicle handling capacity",
+        "b": "Increases waiting time",
+        "c": "Reduces throughput",
+        "d": "Creates more congestion"
+      },
+      "explanations": {
+        "a": "Correct. Additional lanes increase the number of vehicles that can pass.",
+        "b": "Waiting time usually decreases.",
+        "c": "Throughput generally increases.",
+        "d": "Congestion is usually reduced."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q4. Which output parameter is used to measure the effectiveness of traffic signal operation?",
+      "answers": {
+        "a": "Signal Efficiency",
+        "b": "Road Width",
+        "c": "Vehicle Color",
+        "d": "Road Name"
+      },
+      "explanations": {
+        "a": "Correct. Signal Efficiency measures how effectively vehicles are managed at the intersection.",
+        "b": "Road width is an infrastructure parameter.",
+        "c": "Vehicle color has no effect.",
+        "d": "Road names are unrelated."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q5. What is the most likely effect of increasing pedestrian flow at an intersection?",
+      "answers": {
+        "a": "Vehicle throughput may decrease",
+        "b": "Road capacity doubles",
+        "c": "Queue length becomes zero",
+        "d": "Traffic signals become unnecessary"
+      },
+      "explanations": {
+        "a": "Correct. More pedestrian crossings can reduce time available for vehicle movement.",
+        "b": "Pedestrian flow does not increase capacity.",
+        "c": "Queues may actually increase.",
+        "d": "Traffic signals remain necessary."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q6. A high traffic density value indicates that:",
+      "answers": {
+        "a": "The road is crowded with vehicles",
+        "b": "The road is empty",
+        "c": "Traffic signals are disabled",
+        "d": "No vehicles are arriving"
+      },
+      "explanations": {
+        "a": "Correct. High density means many vehicles occupy the available road space.",
+        "b": "An empty road has low density.",
+        "c": "Signal operation does not determine density.",
+        "d": "Arriving vehicles contribute to density."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q7. If the green signal time is too short during heavy traffic, what will happen?",
+      "answers": {
+        "a": "Queue length and waiting time will increase",
+        "b": "All vehicles will clear the intersection",
+        "c": "Traffic density will become zero",
+        "d": "Road capacity will increase"
+      },
+      "explanations": {
+        "a": "Correct. Insufficient green time causes vehicle accumulation.",
+        "b": "Heavy traffic cannot be cleared with short green time.",
+        "c": "Density generally increases.",
+        "d": "Signal timing does not increase road capacity."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q8. Which output parameter represents the number of vehicles successfully crossing the intersection?",
+      "answers": {
+        "a": "Vehicle Throughput",
+        "b": "Queue Length",
+        "c": "Traffic Density",
+        "d": "Waiting Time"
+      },
+      "explanations": {
+        "a": "Correct. Vehicle Throughput measures vehicles passing through the intersection.",
+        "b": "Queue Length measures waiting vehicles.",
+        "c": "Traffic Density measures road occupancy.",
+        "d": "Waiting Time measures delay."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q9. Which engineering concept is primarily demonstrated when vehicles form a line while waiting at a red signal?",
+      "answers": {
+        "a": "Queueing Theory",
+        "b": "Thermodynamics",
+        "c": "Fluid Mechanics",
+        "d": "Structural Analysis"
+      },
+      "explanations": {
+        "a": "Correct. Queueing Theory studies waiting lines and service systems.",
+        "b": "Thermodynamics deals with heat and energy.",
+        "c": "Fluid Mechanics studies fluid flow.",
+        "d": "Structural Analysis studies structures."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q10. Based on the experiment, what is the main benefit of traffic signal optimization in smart cities?",
+      "answers": {
+        "a": "Improved traffic flow and reduced congestion",
+        "b": "Elimination of all traffic signals",
+        "c": "Reduction in the number of roads",
+        "d": "Increase in vehicle waiting time"
+      },
+      "explanations": {
+        "a": "Correct. Optimized signals improve mobility, reduce delays, and increase transportation efficiency.",
+        "b": "Traffic signals remain necessary.",
+        "c": "Road quantity is not affected.",
+        "d": "The objective is to reduce waiting time."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    }
+  ]
+}
