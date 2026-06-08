@@ -1,6 +1,4 @@
-// =====================================
 // INPUT CONTROLS
-// =====================================
 
 const arrivalRate =
 document.getElementById("arrivalRate");
@@ -16,9 +14,7 @@ document.getElementById("pedestrianFlow");
 
 const lanes = 2;
 
-// =====================================
 // DISPLAY VALUES
-// =====================================
 
 arrivalRate.addEventListener("input",()=>{
 
@@ -60,9 +56,7 @@ pedestrianFlow.addEventListener("input",()=>{
 
 });
 
-// =====================================
 // GLOBAL VARIABLES
-// =====================================
 
 let simulationRunning = false;
 
@@ -72,9 +66,7 @@ let signalInterval;
 let vehicleInterval;
 let resultInterval;
 
-// =====================================
 // TRAFFIC COUNTERS
-// =====================================
 
 let northPassed = 0;
 let southPassed = 0;
@@ -88,17 +80,13 @@ let southQueue = 0;
 let eastQueue = 0;
 let westQueue = 0;
 
-// =====================================
 // VEHICLE STORAGE
-// =====================================
 
 const vehicles = [];
 
 const SAFE_DISTANCE = 50;
 
-// =====================================
 // SIGNAL CONTROL
-// =====================================
 
 function updateSignals(){
 
@@ -166,9 +154,7 @@ function updateSignals(){
     }
 }
 
-// =====================================
 // CREATE VEHICLE
-// =====================================
 
 function createVehicle(){
 
@@ -277,9 +263,7 @@ function createVehicle(){
         direction
     );
 }
-// =====================================
 // VEHICLE MOVEMENT
-// =====================================
 
 function moveVehicle(
     vehicle,
@@ -443,9 +427,7 @@ if(index > -1){
             }
         }
 
-        // =====================
         // SOUTH → NORTH
-        // =====================
 
         if(direction==="south"){
 
@@ -484,9 +466,7 @@ if(index > -1){
             }
         }
 
-        // =====================
         // EAST → WEST
-        // =====================
 
         if(direction==="east"){
 
@@ -525,9 +505,7 @@ if(index > -1){
             }
         }
 
-        // =====================
         // WEST → EAST
-        // =====================
 
         if(direction==="west"){
 
@@ -568,9 +546,7 @@ if(index > -1){
 
     },20);
 }
-// =====================================
 // CALCULATE RESULTS
-// =====================================
 
 function updateResults(){
 northQueue = 0;
@@ -755,9 +731,7 @@ if(cycleDisplay){
     }
 }
 
-// =====================================
 // START SIMULATION
-// =====================================
 
 document.getElementById(
     "startBtn"
@@ -823,9 +797,7 @@ setInterval(()=>{
 },1000);
 };
 
-// =====================================
 // STOP SIMULATION
-// =====================================
 
 document.getElementById(
     "stopBtn"
@@ -846,9 +818,7 @@ document.getElementById(
     );
 };
 
-// =====================================
 // RESET SIMULATION
-// =====================================
 
 document.getElementById(
     "resetBtn"
@@ -857,9 +827,7 @@ document.getElementById(
     location.reload();
 };
 
-// =====================================
 // INITIAL STATE
-// =====================================
 greenTime.addEventListener(
     "change",
     updateSignals
