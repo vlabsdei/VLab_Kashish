@@ -22,8 +22,9 @@ The optimization process considers factors such as:
 
 Traffic density represents the number of vehicles occupying the available road space.
 
-
-ρ = N/L
+$$
+ρ = \frac{N}{L}
+$$
 
 Where:
 
@@ -51,7 +52,9 @@ Where:
 
 Waiting time represents the average time vehicles spend waiting at the intersection.
 
-W = Queue Length ÷ Arrival Rate
+$$
+W = \frac{Queue Length}{Arrival Rate}
+$$
 
 Where:
 
@@ -69,8 +72,9 @@ Higher throughput indicates better intersection performance.
 
 Signal Efficiency measures how effectively a traffic signal manages traffic flow.
 
-
-Efficiency = (Vehicles Passed / Total Vehicles) × 100
+$$
+Efficiency = \frac{Vehicles Passed}{Total Vehicles} \times 100
+$$
 
 Where:
 
