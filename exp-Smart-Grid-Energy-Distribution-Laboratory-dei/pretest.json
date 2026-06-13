@@ -1,0 +1,175 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "Q1. What is the primary purpose of a smart grid?",
+      "answers": {
+        "a": "To improve energy generation and distribution efficiency",
+        "b": "To increase electricity consumption",
+        "c": "To replace power plants",
+        "d": "To eliminate electrical wires"
+      },
+      "explanations": {
+        "a": "Smart grids use digital technologies to improve the efficiency, reliability, and sustainability of electricity distribution.",
+        "b": "Incorrect. Smart grids aim to optimize consumption, not increase it.",
+        "c": "Incorrect. Smart grids work with existing power plants.",
+        "d": "Incorrect. Smart grids still use electrical transmission infrastructure."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q2. Which component generates electrical power in a smart grid system?",
+      "answers": {
+        "a": "Consumer",
+        "b": "Transformer",
+        "c": "Power Plant",
+        "d": "Smart Meter"
+      },
+      "explanations": {
+        "a": "Consumers use electricity rather than generate it.",
+        "b": "Transformers modify voltage levels.",
+        "c": "Power plants generate electrical energy for distribution.",
+        "d": "Smart meters measure energy usage."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q3. What does load balancing in a smart grid help prevent?",
+      "answers": {
+        "a": "Energy generation",
+        "b": "Power overloads",
+        "c": "Electricity billing",
+        "d": "Data transmission"
+      },
+      "explanations": {
+        "a": "Load balancing does not prevent generation.",
+        "b": "Correct. It distributes demand evenly and prevents overload conditions.",
+        "c": "Billing is unrelated.",
+        "d": "Data transmission is not the primary goal."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q4. Which of the following is a major advantage of smart grids?",
+      "answers": {
+        "a": "Frequent power outages",
+        "b": "Manual monitoring only",
+        "c": "Real-time monitoring and control",
+        "d": "Higher energy losses"
+      },
+      "explanations": {
+        "a": "Smart grids reduce outages.",
+        "b": "Smart grids rely on automated monitoring.",
+        "c": "Correct. Real-time monitoring improves reliability and efficiency.",
+        "d": "Smart grids aim to reduce losses."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q5. What device measures electricity usage in a smart grid?",
+      "answers": {
+        "a": "Circuit Breaker",
+        "b": "Smart Meter",
+        "c": "Generator",
+        "d": "Battery"
+      },
+      "explanations": {
+        "a": "Circuit breakers provide protection.",
+        "b": "Correct. Smart meters record and communicate electricity usage data.",
+        "c": "Generators produce power.",
+        "d": "Batteries store energy."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q6. What happens when total energy demand exceeds supply?",
+      "answers": {
+        "a": "Grid overload may occur",
+        "b": "Energy efficiency increases automatically",
+        "c": "Power generation stops",
+        "d": "Demand becomes zero"
+      },
+      "explanations": {
+        "a": "Correct. Excess demand can overload the grid.",
+        "b": "Efficiency does not automatically increase.",
+        "c": "Generation does not necessarily stop.",
+        "d": "Demand remains unchanged."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q7. Which sector typically has the highest electricity demand?",
+      "answers": {
+        "a": "Residential",
+        "b": "Industrial",
+        "c": "Street Lighting",
+        "d": "Telecommunication"
+      },
+      "explanations": {
+        "a": "Residential demand is generally lower than industrial demand.",
+        "b": "Correct. Industrial facilities often consume the most electricity.",
+        "c": "Street lighting uses less power overall.",
+        "d": "Telecommunication systems use comparatively less energy."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q8. What is the role of renewable energy in a smart grid?",
+      "answers": {
+        "a": "Increase pollution",
+        "b": "Reduce sustainability",
+        "c": "Provide clean and sustainable energy",
+        "d": "Disable smart meters"
+      },
+      "explanations": {
+        "a": "Renewable energy reduces pollution.",
+        "b": "It improves sustainability.",
+        "c": "Correct. Renewable sources support cleaner energy generation.",
+        "d": "Renewable energy has no relation to disabling smart meters."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q9. Which parameter is commonly monitored in a smart grid?",
+      "answers": {
+        "a": "Energy demand",
+        "b": "Temperature of buildings only",
+        "c": "Internet speed",
+        "d": "Weather forecast only"
+      },
+      "explanations": {
+        "a": "Correct. Monitoring demand helps optimize distribution.",
+        "b": "Building temperature alone is insufficient.",
+        "c": "Internet speed is unrelated.",
+        "d": "Weather may influence demand but is not the primary parameter."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q10. Why is efficiency important in energy distribution?",
+      "answers": {
+        "a": "To increase transmission losses",
+        "b": "To waste generated power",
+        "c": "To deliver maximum energy with minimum losses",
+        "d": "To reduce power generation capacity"
+      },
+      "explanations": {
+        "a": "Efficiency aims to reduce losses.",
+        "b": "Efficiency minimizes waste.",
+        "c": "Correct. Efficient systems maximize delivered energy and minimize losses.",
+        "d": "Efficiency does not necessarily reduce capacity."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    }
+  ]
+}

@@ -1,0 +1,467 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+}
+
+/* HEADER */
+
+header{
+    background:#3949ab;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+header h1{
+    margin-bottom:5px;
+}
+
+/* MAIN LAYOUT */
+
+.main-container{
+    display:grid;
+    grid-template-columns:300px 1fr;
+    gap:20px;
+    padding:20px;
+}
+
+/* CONTROL PANEL */
+
+.control-panel{
+    width:300px;
+    background:white;
+    padding:20px;
+    border-right:2px solid #ddd;
+     height:fit-content;
+}
+
+.control-panel h2{
+    margin-bottom:20px;
+    color:#3949ab;
+}
+
+.input-group{
+    margin-bottom:18px;
+}
+
+.input-group label{
+    display:block;
+    margin-bottom:5px;
+    font-weight:bold;
+}
+
+.input-group input{
+    width:100%;
+}
+
+.input-group span{
+    display:block;
+    margin-top:5px;
+    color:#3949ab;
+    font-weight:bold;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:6px;
+    color:white;
+    cursor:pointer;
+}
+
+#startBtn{
+    background:#2e7d32;
+}
+
+#stopBtn{
+    background:#ef6c00;
+}
+
+#resetBtn{
+    background:#c62828;
+}
+
+/* SIMULATION */
+
+.simulation-panel{
+    flex:1;
+    padding:20px;
+    position:relative;
+}
+
+/* STATUS */
+
+.simulation-status{
+     max-width:900px;
+    background:white;
+    padding:10px;
+    border-radius:10px;
+    margin-top:-35px;
+    margin-bottom:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.15);
+}
+
+/* SMART GRID */
+
+.smart-grid{
+     margin-top:-15px;
+    position:relative;
+    width:100%;
+    min-height:650px;
+    background:white;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+}
+
+/* NODES */
+
+.solar-node,
+.wind-node,
+.controller-node,
+.distribution-node,
+.consumer{
+    position:absolute;
+    width:180px;
+    text-align:center;
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.15);
+}
+
+.icon{
+    font-size:48px;
+    margin-bottom:10px;
+}
+.flow-label{
+    font-size:12px;
+    color:#666;
+    margin-top:5px;
+}
+
+/* TOP SOURCES */
+
+.solar-node{
+    top:30px;
+    left:60px;
+}
+
+.wind-node{
+    top:30px;
+    right:60px;
+}
+
+/* CONTROLLER */
+
+.controller-node{
+    top:120px;
+    left:50%;
+    transform:translateX(-50%);
+    width:220px;
+    border:3px solid #ffb300;
+
+    animation:glow 2s infinite;
+}
+
+/* DISTRIBUTION */
+
+.distribution-node{
+    top:310px;
+    left:50%;
+    transform:translateX(-50%);
+    width:240px;
+    border:3px solid #1976d2;
+    animation:distributionGlow 2s infinite;
+}
+
+/* LOADS */
+
+.consumer{
+    top:490px;
+}
+
+.residential{
+    left:12%;
+}
+
+.commercial{
+    left:50%;
+    transform:translateX(-50%);
+}
+
+.industrial{
+    right:12%;
+}
+/* NODE HOVER EFFECT */
+
+.solar-node:hover,
+.wind-node:hover,
+.consumer:hover{
+    transform:translateY(-5px);
+    transition:0.3s;
+}
+
+.controller-node:hover,
+.distribution-node:hover,
+.commercial:hover{
+    transform:translateX(-50%) translateY(-5px);
+    transition:0.3s;
+}
+
+/* LINES */
+
+.solar-connection{
+    position:absolute;
+    width:3px;
+    height:35px;
+    background:#4caf50;
+    left:210px;
+    top:170px;
+}
+
+.wind-connection{
+    position:absolute;
+    width:3px;
+    height:35px;
+    background:#2196f3;
+    right:210px;
+    top:170px;
+}
+.top-junction{
+    position:absolute;
+    height:2px;
+    background:#555;
+    top:205px;
+    left:210px;
+    width:calc(100% - 420px);
+}
+.main-power-line{
+    position:absolute;
+    width:4px;
+    height:40px;
+    background:#ff9800;
+    left:50%;
+    top:290px;
+    transform:translateX(-50%);
+}
+
+.distribution-line{
+    position:absolute;
+    width:78%;
+    height:4px;
+    background:#1976d2;
+    top:470px;
+    left:11%;
+}
+
+.left-load{
+    position:absolute;
+    width:3px;
+    height:30px;
+    background:#1976d2;
+    top:470px;
+    left:18%;
+}
+
+.center-load{
+    position:absolute;
+    width:3px;
+    height:50px;
+    background:#1976d2;
+    top:450px;
+    left:50%;
+}
+
+.right-load{
+    position:absolute;
+    width:3px;
+    height:30px;
+    background:#1976d2;
+    top:470px;
+    right:18%;
+}
+
+
+
+@keyframes glow{
+
+    0%{
+        box-shadow:0 0 5px #ffb300;
+    }
+
+    50%{
+        box-shadow:0 0 20px #ffb300;
+    }
+
+    100%{
+        box-shadow:0 0 5px #ffb300;
+    }
+}
+@keyframes distributionGlow{
+
+    0%{
+        box-shadow:0 0 5px #1976d2;
+    }
+
+    50%{
+        box-shadow:0 0 15px #1976d2;
+    }
+
+    100%{
+        box-shadow:0 0 5px #1976d2;
+    }
+}
+
+/* RESULTS */
+
+.results{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    padding:15px;
+    margin-top:-40px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.12);
+}
+.card:nth-child(1){
+    border-top:5px solid #16a34a;
+}
+
+.card:nth-child(2){
+    border-top:5px solid #2563eb;
+}
+
+.card:nth-child(3){
+    border-top:5px solid #f97316;
+}
+
+.card:nth-child(4){
+    border-top:5px solid #9333ea;
+}
+
+.card:nth-child(5){
+    border-top:5px solid #0891b2;
+}
+
+.card:nth-child(6){
+    border-top:5px solid #e11d48;
+}
+
+.card h3{
+    margin-bottom:10px;
+    color:#3949ab;
+}
+.card p{
+    color:#000 !important;
+    font-weight:700 !important;
+    font-size:24px;
+}
+/* FORMULAS */
+
+.formula-section{
+    margin:20px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.15);
+}
+
+.formula-section h2{
+    margin-bottom:15px;
+    color:#3949ab;
+}
+
+.formula-section p{
+    margin-bottom:10px;
+    padding:10px;
+    background:#f5f7ff;
+    border-left:4px solid #3949ab;
+}
+.status-normal{
+    color:#2e7d32;
+    font-weight:bold;
+}
+
+.status-danger{
+    color:#c62828;
+    font-weight:bold;
+}
+
+.status-warning{
+    color:#ef6c00;
+    font-weight:bold;
+}
+/* MOBILE */
+
+@media(max-width:1000px){
+
+    .main-container{
+        grid-template-columns:1fr;
+    }
+
+    .control-panel{
+        width:100%;
+    }
+
+    .smart-grid{
+        min-height:500px;
+    }
+
+    .solar-node,
+    .wind-node,
+    .controller-node,
+    .distribution-node,
+    .consumer{
+        position:relative;
+        top:auto;
+        left:auto;
+        right:auto;
+        transform:none;
+        margin:15px auto;
+    }
+
+    .solar-connection,
+    .wind-connection,
+    .top-junction,
+    .main-power-line,
+    .distribution-line,
+    .left-load,
+    .center-load,
+    .right-load{
+        display:none;
+    }
+}
+.main-power-line::after{
+    content:"";
+    position:absolute;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#ffeb3b;
+    left:-4px;
+    animation:powerMove 2s linear infinite;
+}
+
+@keyframes powerMove{
+    from{
+        top:0;
+    }
+    to{
+        top:30px;
+    }
+}

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Grid Energy Distribution Laboratory</title>
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header>
+        <h1>Smart Grid Energy Distribution Laboratory</h1>
+        <p>Smart City Infrastructure Engineering Virtual Lab</p>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+
+    <div class="main-container">
+
+        <!-- INPUT PANEL -->
+
+        <aside class="control-panel">
+
+            <h2>Input Parameters</h2>
+
+            <div class="input-group">
+                <label>Solar Generation (kW)</label>
+                <input type="range"
+                       id="solarPower"
+                       min="0"
+                       max="1000"
+                       value="500">
+                <span id="solarPowerValue">
+                    500 kW
+                </span>
+            </div>
+
+            <div class="input-group">
+                <label>Wind Generation (kW)</label>
+                <input type="range"
+                       id="windPower"
+                       min="0"
+                       max="1000"
+                       value="300">
+                <span id="windPowerValue">
+                    300 kW
+                </span>
+            </div>
+
+            <div class="input-group">
+                <label>Residential Load (kW)</label>
+                <input type="range"
+                       id="residentialLoad"
+                       min="0"
+                       max="500"
+                       value="200">
+                <span id="residentialLoadValue">
+                    200 kW
+                </span>
+            </div>
+
+            <div class="input-group">
+                <label>Commercial Load (kW)</label>
+                <input type="range"
+                       id="commercialLoad"
+                       min="0"
+                       max="500"
+                       value="150">
+                <span id="commercialLoadValue">
+                    150 kW
+                </span>
+            </div>
+
+            <div class="input-group">
+                <label>Industrial Load (kW)</label>
+                <input type="range"
+                       id="industrialLoad"
+                       min="0"
+                       max="1000"
+                       value="250">
+                <span id="industrialLoadValue">
+                    250 kW
+                </span>
+            </div>
+
+            <button id="startBtn">
+                 ▶ Start Simulation
+            </button>
+
+            <button id="stopBtn">
+                ■ Stop Simulation
+            </button>
+
+            <button id="resetBtn">
+                ↻ Reset
+            </button>
+
+        </aside>
+
+        <!-- SIMULATION AREA -->
+
+        <section class="simulation-panel">
+
+            <div class="simulation-status">
+
+                <h3>Grid Status</h3>
+
+                <p>
+                    Generated Power :
+                    <span id="generatedPowerStatus">
+                        800
+                    </span>
+                    kW
+                </p>
+
+                <p>
+                    Total Demand :
+                    <span id="totalDemandStatus">
+                        600
+                    </span>
+                    kW
+                </p>
+
+                <p>
+                    Grid Efficiency :
+                    <span id="efficiencyStatus">
+                        75
+                    </span>%
+                </p>
+
+                <p>
+                    Status :
+                    <span id="gridStatus">
+                        Balanced
+                    </span>
+                </p>
+
+            </div>
+
+            <!-- SMART GRID DIAGRAM -->
+
+            <div class="smart-grid">
+    <div class="grid-layout">
+        
+
+                <!-- SOLAR -->
+
+                <div class="solar-node">
+                    <div class="icon">☀️</div>
+                    <h3>Solar Power Plant</h3>
+                    <p id="solarOutput">
+                        500 kW
+                    </p>
+                </div>
+
+                <!-- WIND -->
+
+                <div class="wind-node">
+                    <div class="icon">🌪️</div>
+                    <h3>Wind Power Plant</h3>
+                    <p id="windOutput">
+                        300 kW
+                    </p>
+                </div>
+
+                <!-- CONNECTIONS TO CONTROLLER -->
+
+                <div class="solar-connection"></div>
+                <div class="wind-connection"></div>
+                <div class="top-junction"></div>
+
+                <!-- CONTROLLER -->
+
+                <div class="controller-node">
+
+                    <div class="icon">
+                        ⚡
+                    </div>
+
+                    <h3>
+                        Smart Grid Controller
+                    </h3>
+                    <p class="flow-label">
+    Energy Management
+</p>
+
+                </div>
+
+                <!-- MAIN POWER LINE -->
+
+                <div class="main-power-line"></div>
+
+                <!-- DISTRIBUTION NETWORK -->
+
+                <div class="distribution-node">
+
+                    <div class="icon">
+                        🔌
+                    </div>
+
+                    <h3>
+                        Distribution Network
+                    </h3>
+                    <p class="flow-label">
+    Smart Distribution
+</p>
+
+                </div>
+
+                <!-- HORIZONTAL DISTRIBUTION LINE -->
+
+                <div class="distribution-line"></div>
+                
+                <!-- LOAD CONNECTIONS -->
+
+                <div class="load-line left-load"></div>
+                <div class="load-line center-load"></div>
+                <div class="load-line right-load"></div>
+
+                <!-- CONSUMERS -->
+
+                <div class="consumer residential">
+
+                    <div class="icon">
+                        🏠
+                    </div>
+
+                    <h4>
+                        Residential
+                    </h4>
+
+                    <p id="residentialDemand">
+                        200 kW
+                    </p>
+
+                </div>
+
+                <div class="consumer commercial">
+
+                    <div class="icon">
+                        🏢
+                    </div>
+
+                    <h4>
+                        Commercial
+                    </h4>
+
+                    <p id="commercialDemand">
+                        150 kW
+                    </p>
+
+                </div>
+
+                <div class="consumer industrial">
+
+                    <div class="icon">
+                        🏭
+                    </div>
+
+                    <h4>
+                        Industrial
+                    </h4>
+
+                    <p id="industrialDemand">
+                        250 kW
+                    </p>
+
+                </div>
+
+            </div>
+                </div>
+
+
+        </section>
+
+    </div>
+        
+
+
+
+    <!-- RESULTS -->
+
+    <section class="results">
+
+       <div class="card">
+    <div class="card-icon">⚡</div>
+    <h3>Generated Power</h3>
+            <p id="generatedPower">
+                800 kW
+            </p>
+        </div>
+
+        <div class="card">
+             <div class="card-icon">👥</div>
+            <h3>Total Demand</h3>
+            <p id="totalDemand">
+                600 kW
+            </p>
+        </div>
+
+        <div class="card">
+             <div class="card-icon">📈</div>
+            <h3>Power Surplus</h3>
+            <p id="surplusPower">
+                200 kW
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">📊</div>
+            <h3>Grid Efficiency</h3>
+            <p id="gridEfficiency">
+                75%
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🌿</div>
+            <h3>Renewable Utilization</h3>
+            <p id="renewableUtilization">
+                High
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">🛡️</div>
+            <h3>Grid Condition</h3>
+            <p id="gridCondition">
+                Stable
+            </p>
+        </div>
+
+    </section>
+
+    <!-- FORMULAS -->
+
+    <section class="formula-section">
+
+        <h2>
+            Smart Grid Energy Distribution Formulas
+        </h2>
+
+        <p>
+            Total Generated Power = Solar Generation + Wind Generation
+        </p>
+
+        <p>
+            Total Demand = Residential Load + Commercial Load + Industrial Load
+        </p>
+
+        <p>
+            Surplus Power = Generated Power − Total Demand
+        </p>
+
+        <p>
+Grid Efficiency = (Min(Total Generated Power, Total Demand) ÷ Total Demand) × 100        </p>
+
+        <p>
+Renewable Utilization = (Total Demand ÷ Total Generated Power) × 100        
+</p>
+
+        <p><strong> Grid Condition:</strong></p>
+
+<p>• Surplus Power &rarr; Generated Power &gt; Demand</p>
+
+<p>• Balanced &rarr; Generated Power = Demand</p>
+
+<p>• Power Deficit &rarr; Generated Power &lt; Demand</p>
+
+    </section>
+
+    <script src="./js/main.js"></script>
+
+</body>
+
+</html>

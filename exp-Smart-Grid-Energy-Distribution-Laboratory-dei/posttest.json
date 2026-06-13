@@ -1,0 +1,175 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "Q1. What is the main objective of load balancing in a smart grid?",
+      "answers": {
+        "a": "To increase electricity prices",
+        "b": "To distribute power demand efficiently",
+        "c": "To stop power generation",
+        "d": "To reduce the number of consumers"
+      },
+      "explanations": {
+        "a": "Incorrect. Load balancing is not related to pricing.",
+        "b": "Correct. Load balancing distributes power demand efficiently across the grid.",
+        "c": "Incorrect. It does not stop generation.",
+        "d": "Incorrect. Consumers are not reduced."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q2. Which technology enables real-time monitoring in smart grids?",
+      "answers": {
+        "a": "Smart Meters",
+        "b": "Generators",
+        "c": "Transformers",
+        "d": "Circuit Breakers"
+      },
+      "explanations": {
+        "a": "Correct. Smart meters provide real-time energy usage data.",
+        "b": "Generators only produce electricity.",
+        "c": "Transformers change voltage levels.",
+        "d": "Circuit breakers provide protection."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q3. What indicates an overloaded smart grid?",
+      "answers": {
+        "a": "Supply is greater than demand",
+        "b": "Demand equals supply",
+        "c": "Demand exceeds supply",
+        "d": "No electricity is consumed"
+      },
+      "explanations": {
+        "a": "This does not indicate overload.",
+        "b": "This is a balanced condition.",
+        "c": "Correct. Overload occurs when demand exceeds available supply.",
+        "d": "This is unrelated."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q4. Which sector is commonly included in smart grid energy distribution simulations?",
+      "answers": {
+        "a": "Residential",
+        "b": "Commercial",
+        "c": "Industrial",
+        "d": "All of the above"
+      },
+      "explanations": {
+        "a": "Residential is included.",
+        "b": "Commercial is included.",
+        "c": "Industrial is included.",
+        "d": "Correct. All these sectors are part of energy distribution systems."
+      },
+      "correctAnswer": "d",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q5. What is the benefit of integrating renewable energy sources into a smart grid?",
+      "answers": {
+        "a": "Higher pollution",
+        "b": "Reduced sustainability",
+        "c": "Cleaner energy generation",
+        "d": "Increased energy losses"
+      },
+      "explanations": {
+        "a": "Renewables reduce pollution.",
+        "b": "Renewables improve sustainability.",
+        "c": "Correct. Renewable sources provide cleaner energy.",
+        "d": "They do not intentionally increase losses."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q6. Which parameter is used to determine total energy demand?",
+      "answers": {
+        "a": "Sum of all sector demands",
+        "b": "Only residential demand",
+        "c": "Only industrial demand",
+        "d": "Power plant capacity"
+      },
+      "explanations": {
+        "a": "Correct. Total demand is the sum of demands from all sectors.",
+        "b": "Incomplete calculation.",
+        "c": "Incomplete calculation.",
+        "d": "Capacity is different from demand."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q7. What is the role of a power plant in a smart grid?",
+      "answers": {
+        "a": "Store electricity",
+        "b": "Generate electricity",
+        "c": "Measure electricity usage",
+        "d": "Control household appliances"
+      },
+      "explanations": {
+        "a": "Power plants primarily generate power.",
+        "b": "Correct. Power plants are responsible for electricity generation.",
+        "c": "Smart meters perform measurement.",
+        "d": "Household appliances are not controlled by power plants."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q8. What happens when smart grid efficiency increases?",
+      "answers": {
+        "a": "Energy losses decrease",
+        "b": "Power outages increase",
+        "c": "Demand becomes zero",
+        "d": "Generation stops"
+      },
+      "explanations": {
+        "a": "Correct. Higher efficiency reduces energy losses.",
+        "b": "Efficiency helps reduce outages.",
+        "c": "Demand does not become zero.",
+        "d": "Generation continues."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q9. Which device helps consumers monitor their electricity consumption?",
+      "answers": {
+        "a": "Transformer",
+        "b": "Generator",
+        "c": "Smart Meter",
+        "d": "Transmission Tower"
+      },
+      "explanations": {
+        "a": "Transformers change voltage levels.",
+        "b": "Generators produce electricity.",
+        "c": "Correct. Smart meters monitor and report electricity usage.",
+        "d": "Transmission towers carry power."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q10. What is the expected outcome of an effective smart grid energy distribution system?",
+      "answers": {
+        "a": "Higher energy losses",
+        "b": "Efficient and reliable power delivery",
+        "c": "Frequent blackouts",
+        "d": "Reduced electricity availability"
+      },
+      "explanations": {
+        "a": "Smart grids aim to reduce losses.",
+        "b": "Correct. Smart grids provide efficient and reliable electricity distribution.",
+        "c": "They help reduce blackouts.",
+        "d": "Availability is improved, not reduced."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    }
+  ]
+}
