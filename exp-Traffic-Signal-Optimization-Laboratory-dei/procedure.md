@@ -3,38 +3,43 @@
 1. Open the Traffic Signal Optimization Laboratory simulation.
 
 2. Set the input parameters:
-   - Vehicle Arrival Rate (vehicles/min)
-   - Green Signal Time (seconds)
-   - Red Signal Time (seconds)
-   - Pedestrian Flow (persons/min)
 
-3. Click the Start Simulation button to begin traffic movement.
+   * Vehicle Arrival Rate (vehicles/min)
+   * Green Signal Time (seconds)
 
-4. Observe vehicle movement from the North, South, East, and West directions.
+3. Note the fixed signal settings:
 
-5. Monitor traffic signal changes between:
-   - North-South Green
-   - East-West Green
+   * Yellow Signal Time = 3 seconds
+   * All Red Time = 3 seconds
 
-6. Observe the queue formation at each approach and note the queue counters:
+4. Click the Start Simulation button to begin traffic movement and vehicle generation.
 
-   - N Queue
-   - S Queue
-   - E Queue
-   - W Queue
+5. Observe vehicle movement from the North, South, East, and West directions through the intersection.
 
-7. Record the simulation outputs:
+6. Monitor traffic signal transitions between:
 
-   - Queue Length
-   - Waiting Time
-   - Traffic Density
-   - Throughput
-   - Signal Efficiency
-   - Congestion Status
+   * North-South Green
+   * North-South Yellow
+   * East-West Green
+   * East-West Yellow
+   * All Red Phase
 
-8. Modify the signal timings and arrival rates to analyze their impact on traffic flow.
+7. Observe queue formation at each approach and monitor the queue counters:
 
-9. Compare the observed results with the theoretical traffic engineering formulas.
+   * N Queue
+   * S Queue
+   * E Queue
+   * W Queue
 
-10. Repeat the simulation with different parameter values and identify the configuration that minimizes congestion and maximizes signal efficiency.
+8. Record the output parameters displayed by the simulation:
 
+   * Queue Length
+   * Waiting Time
+   * Vehicles Generated
+   * Vehicles Passed
+   * Signal Efficiency
+   * Congestion Status
+
+9. Modify the Vehicle Arrival Rate and Green Signal Time to analyze their impact on traffic flow, queue formation, and signal performance.
+
+10. Compare the observed results with the traffic engineering formulas and identify the signal timing configuration that minimizes congestion, reduces waiting time, and improves signal efficiency.

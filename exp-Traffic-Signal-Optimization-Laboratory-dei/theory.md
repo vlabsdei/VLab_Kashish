@@ -2,99 +2,117 @@
 
 ## Introduction
 
-Traffic signals are essential components of urban transportation systems that regulate the movement of vehicles and pedestrians at road intersections. Proper signal timing helps improve traffic flow, reduce delays, minimize congestion, and enhance road safety.
+Traffic signals are essential components of urban transportation systems that regulate the movement of vehicles at road intersections. Proper signal timing helps improve traffic flow, reduce delays, minimize congestion, and enhance road safety.
 
-In modern smart cities, intelligent traffic management systems use traffic data and optimization techniques to dynamically adjust signal timings according to traffic demand.
+In modern smart cities, intelligent traffic management systems use traffic data and optimization techniques to improve signal performance according to traffic demand.
+
 
 ## Traffic Signal Optimization
 
-Traffic Signal Optimization is the process of determining the most effective signal timings to maximize vehicle movement and minimize waiting time at an intersection.
+Traffic Signal Optimization is the process of determining effective signal timings to maximize vehicle movement and minimize waiting time at an intersection.
 
 The optimization process considers factors such as:
 
-- Vehicle Arrival Rate
-- Green Signal Time
-- Red Signal Time
-- Number of Lanes
-- Pedestrian Flow
+* Vehicle Arrival Rate
+* Green Signal Time
+* Yellow Signal Time
+* All Red Time
+* Traffic Demand
 
-## Traffic Density
-
-Traffic density represents the number of vehicles occupying the available road space.
+By adjusting signal timings, traffic congestion can be reduced and intersection performance can be improved.
 
 
-ρ = N/L
+## Vehicle Arrival Rate
 
-Where:
+Vehicle Arrival Rate represents the number of vehicles entering the intersection per unit time.
 
-- ρ = Traffic Density
-- N = Number of Vehicles
-- L = Number of Lanes
+A higher arrival rate increases traffic demand and may lead to longer queues and delays if the signal timing is not optimized.
 
-Higher traffic density indicates a greater possibility of congestion.
 
 ## Queue Length
 
-Queue length is the number of vehicles waiting at the intersection during the red signal phase.
+Queue Length represents the number of vehicles waiting at the intersection due to a red signal.
 
-A queue forms when the arrival rate of vehicles exceeds the service rate of the intersection.
+Queue Length is calculated as:
 
-Q = Arrival Rate × Red Time
+Queue Length = North Queue + South Queue + East Queue + West Queue
 
-Where:
+A larger queue length indicates a higher level of congestion at the intersection.
 
-- Q = Queue Length
-- Arrival Rate = Vehicles arriving per minute
-- Red Time = Red signal duration
 
 ## Waiting Time
 
-Waiting time represents the average time vehicles spend waiting at the intersection.
+Waiting Time represents the average delay experienced by vehicles before crossing the intersection.
 
-W = Queue Length ÷ Arrival Rate
+Waiting Time = Queue Length ÷ Arrival Rate
 
 Where:
 
-- W = Waiting Time
-- Queue Length = Number of vehicles waiting at the intersection
-- Arrival Rate = Vehicles arriving per minute
+* Waiting Time = Average vehicle delay
+* Queue Length = Number of vehicles waiting at the intersection
+* Arrival Rate = Vehicles arriving per minute
 
-## Vehicle Throughput
+Lower waiting times indicate better traffic flow efficiency.
 
-Vehicle Throughput is the number of vehicles successfully crossing the intersection during a signal cycle.
 
-Higher throughput indicates better intersection performance.
+## Vehicles Generated
+
+Vehicles Generated represent the total number of vehicles created during the simulation.
+
+This parameter indicates the traffic demand imposed on the intersection during the experiment.
+
+
+## Vehicles Passed
+
+Vehicles Passed represent the total number of vehicles that successfully cross the intersection.
+
+A higher number of vehicles passed indicates better traffic movement and signal performance.
+
 
 ## Signal Efficiency
 
-Signal Efficiency measures how effectively a traffic signal manages traffic flow.
+Signal Efficiency measures how effectively the traffic signal manages vehicle flow.
 
-
-Efficiency = (Vehicles Passed / Total Vehicles) × 100
+Signal Efficiency = (Vehicles Passed ÷ Vehicles Generated) × 100
 
 Where:
 
-- Vehicles Passed = Number of vehicles that successfully crossed the intersection
-- Total Vehicles = Vehicles Passed + Vehicles Waiting in Queue
+* Vehicles Passed = Number of vehicles that successfully crossed the intersection
+* Vehicles Generated = Total number of vehicles generated during the simulation
 
-Interpretation
-- Efficiency > 80% → Excellent
-- 60% – 80% → Good
-- 40% – 60% → Moderate
-- < 40% → Poor
+### Interpretation
+
+* Efficiency > 80% → Excellent
+* Efficiency 60% – 80% → Good
+* Efficiency 40% – 60% → Moderate
+* Efficiency < 40% → Poor
 
 A higher efficiency value indicates better utilization of signal timing and reduced congestion.
+
+
+## Congestion Status
+
+Congestion Status provides a qualitative assessment of traffic conditions at the intersection based on queue length and traffic flow characteristics.
+
+Typical congestion levels include:
+
+* Low
+* Moderate
+* High
+* Severe
+
 
 ## Smart City Applications
 
 Traffic Signal Optimization is widely used in:
 
-- Intelligent Transportation Systems
-- Adaptive Traffic Signal Control
-- Smart Traffic Monitoring
-- Urban Mobility Management
-- Smart City Infrastructure Planning
+* Intelligent Transportation Systems
+* Adaptive Traffic Signal Control
+* Smart Traffic Monitoring
+* Urban Mobility Management
+* Smart City Infrastructure Planning
+
 
 ## Conclusion
 
-This experiment helps students understand traffic engineering principles, queue formation, traffic density, waiting time analysis, and intelligent traffic management techniques used in modern smart cities.
+This experiment helps students understand traffic signal operation, queue formation, waiting time analysis, vehicle throughput, signal efficiency, and intelligent traffic management techniques used in modern smart city transportation systems.

@@ -1,2 +1,2 @@
 ### Aim of the experiment
-To analyze the impact of traffic signal timing on traffic flow, congestion, and intersection efficiency using a dynamic simulation.
+To simulate and optimize traffic signal operation at an intersection and evaluate its impact on queue length, waiting time, vehicle throughput, and traffic efficiency.
