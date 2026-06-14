@@ -6,11 +6,7 @@ document.getElementById("arrivalRate");
 const greenTime =
 document.getElementById("greenTime");
 
-const redTime =
-document.getElementById("redTime");
 
-const pedestrianFlow =
-document.getElementById("pedestrianFlow");
 
 const lanes = 2;
 
@@ -36,25 +32,9 @@ greenTime.addEventListener("input",()=>{
 
 });
 
-redTime.addEventListener("input",()=>{
 
-    document.getElementById(
-        "redTimeValue"
-    ).textContent =
-    redTime.value +
-    " Sec";
 
-});
 
-pedestrianFlow.addEventListener("input",()=>{
-
-    document.getElementById(
-        "pedestrianFlowValue"
-    ).textContent =
-    pedestrianFlow.value +
-    " Persons/min";
-
-});
 
 // GLOBAL VARIABLES
 
@@ -76,8 +56,12 @@ let northPassed = 0;
 let southPassed = 0;
 let eastPassed = 0;
 let westPassed = 0;
+let vehiclesGenerated = 0;
 let cycleCounter = 0;
 let timeRemaining = 0;
+let yellowRemaining = 3;
+let allRedRemaining = 3;
+let phaseRemaining = 0;
 
 let northQueue = 0;
 let southQueue = 0;
@@ -533,11 +517,13 @@ westLane1 <= westLane2
     vehicle.style.transform = "rotate(0deg)";
 }
 
-    container.appendChild(
-        vehicle
-    );
+  container.appendChild(
+    vehicle
+);
 
-    vehicles.push({
+vehiclesGenerated++;
+
+vehicles.push({
         element:vehicle,
         direction:direction
     });
@@ -917,10 +903,7 @@ if(passedDisplay){
     throughput;
 }
 
-    const density =
-(
-    totalQueue / 2
-).toFixed(2);
+   
 
     const waitingTime =
 (
@@ -931,8 +914,7 @@ if(passedDisplay){
     * 60
 ).toFixed(2);
     const totalVehicles =
-    throughput +
-    totalQueue;
+vehiclesGenerated;
 
     const efficiency =
     (
@@ -960,13 +942,11 @@ if(passedDisplay){
     ).textContent =
     waitingTime + " sec";
 
-    // DENSITY
-
-    document.getElementById(
-        "density"
-    ).textContent =
-    density;
-
+document.getElementById(
+    "vehiclesGenerated"
+).textContent =
+    vehiclesGenerated;
+    
     // THROUGHPUT
 
     document.getElementById(
@@ -1067,6 +1047,9 @@ if(vehicleInterval){
 timeRemaining =
 parseInt(greenTime.value);
 
+phaseRemaining =
+parseInt(greenTime.value);
+
 updateSignals();
 
     const vehiclesPerMinute =
@@ -1082,31 +1065,30 @@ setInterval(
 );
 
 
- signalInterval =
+
+   resultInterval =
 setInterval(()=>{
 
     if(simulationPaused)
     return;
+phaseRemaining--;
+if(signalState === "GREEN" && phaseRemaining <= 0){
 
-    // GREEN -> YELLOW
     signalState = "YELLOW";
+    phaseRemaining = 3;
+
     updateSignals();
+}
 
-    // Yellow for 3 sec
-yellowTimeout = setTimeout(()=>{
+else if(signalState === "YELLOW" && phaseRemaining <= 0){
 
-    if(simulationPaused)
-    return;
-
-    // YELLOW -> ALL RED
     signalState = "ALL_RED";
+    phaseRemaining = 3;
+
     updateSignals();
+}
 
-       // All Red for 3 sec
-allRedTimeout = setTimeout(()=>{
-
-    if(simulationPaused)
-    return;
+else if(signalState === "ALL_RED" && phaseRemaining < 0){
 
     signalDirection =
     signalDirection === "NS"
@@ -1115,31 +1097,23 @@ allRedTimeout = setTimeout(()=>{
 
     signalState = "GREEN";
 
-            timeRemaining =
-            parseInt(greenTime.value);
+    timeRemaining =
+    parseInt(greenTime.value);
 
-            updateSignals();
+    phaseRemaining =
+    parseInt(greenTime.value);
 
-        },3000);
-
-    },3000);
-
-},
-(parseInt(greenTime.value) + 6) * 1000
-);
-   resultInterval =
-setInterval(()=>{
-
-    if(simulationPaused)
-    return;
-
+    updateSignals();
+}
     updateResults();
 
     cycleCounter++;
 
-    if(signalState === "GREEN"){
+   if(signalState === "GREEN"){
 
-    timeRemaining--;
+    if(timeRemaining > 0){
+        timeRemaining--;
+    }
 
 }
 else if(signalState === "YELLOW"){
@@ -1147,7 +1121,14 @@ else if(signalState === "YELLOW"){
     document.getElementById(
         "timeRemaining"
     ).textContent =
-    "Yellow";
+    "Yellow : " +
+    yellowRemaining +
+    " sec";
+
+
+    if(yellowRemaining < 0){
+        yellowRemaining = 0;
+    }
 
     return;
 }
@@ -1156,7 +1137,14 @@ else if(signalState === "ALL_RED"){
     document.getElementById(
         "timeRemaining"
     ).textContent =
-    "All Red";
+    "All Red : " +
+    allRedRemaining +
+    " sec";
+
+
+    if(allRedRemaining < 0){
+        allRedRemaining = 0;
+    }
 
     return;
 }
@@ -1198,10 +1186,7 @@ greenTime.addEventListener(
     updateSignals
 );
 
-redTime.addEventListener(
-    "change",
-    updateSignals
-);
+
 updateSignals();
 
 updateResults();

@@ -83,55 +83,27 @@
 
             </div>
 
-            <div class="input-group">
+           <hr>
 
-                <label>
-                    Red Signal Time
-                </label>
-
-                <input
-                    type="range"
-                    id="redTime"
-                    min="10"
-                    max="120"
-                    value="30">
-
-                <span id="redTimeValue">
-                    30 Sec
-                </span>
-
-            </div>
 <div class="input-group">
 
-    <label>
-        Number of Lanes
-    </label>
+    <h3>
+        Fixed Signal Settings
+    </h3>
 
-    <input
-        type="text"
-        value="2"
-        readonly>
+    <p>
+        Yellow Time :
+        <strong>3 Sec</strong>
+    </p>
+
+    <p>
+        All Red Time :
+        <strong>3 Sec</strong>
+    </p>
 
 </div>
-            <div class="input-group">
 
-                <label>
-                    Pedestrian Flow
-                </label>
-
-                <input
-                    type="range"
-                    id="pedestrianFlow"
-                    min="0"
-                    max="100"
-                    value="20">
-
-                <span id="pedestrianFlowValue">
-                    20 Persons/min
-                </span>
-
-            </div>
-
+<hr>
             <button id="startBtn">
                 Start Simulation
             </button>
@@ -140,11 +112,69 @@
                 Stop Simulation
             </button>
 
-            <button id="resetBtn">
-                Reset
-            </button>
+           <button id="resetBtn">
+    Reset
+</button>
 
-        </aside>
+<hr>
+
+<h2 class="output-title">
+    Output Parameters
+</h2>
+
+<section class="results">
+
+    <div class="card">
+
+        <h3>Queue Length</h3>
+
+        <p id="queueLength">0</p>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Waiting Time</h3>
+
+        <p id="waitingTime">0 sec</p>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Vehicles Generated</h3>
+
+        <p id="vehiclesGenerated">0</p>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Vehicles Passed</h3>
+
+        <p id="throughput">0</p>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Signal Efficiency</h3>
+
+        <p id="signalEfficiency">0%</p>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Congestion Status</h3>
+
+        <p id="congestionStatus">Low</p>
+
+    </div>
+
+</section>
+
+</aside>
 
         <!-- SIMULATION AREA -->
 
@@ -171,9 +201,9 @@
     <p>
         Time Remaining :
         <span id="timeRemaining">
-            30
+            30 sec
         </span>
-        sec
+    
     </p>
 
 </div>
@@ -272,81 +302,7 @@
 
     <!-- RESULTS -->
 
-    <section class="results">
-
-        <div class="card">
-
-            <h3>
-                Queue Length
-            </h3>
-
-            <p id="queueLength">
-                0
-            </p>
-
-        </div>
-
-        <div class="card">
-
-            <h3>
-                Waiting Time
-            </h3>
-
-            <p id="waitingTime">
-                0 sec
-            </p>
-
-        </div>
-
-        <div class="card">
-
-            <h3>
-                Traffic Density
-            </h3>
-
-            <p id="density">
-                0
-            </p>
-
-        </div>
-
-        <div class="card">
-
-            <h3>
-                Throughput
-            </h3>
-
-            <p id="throughput">
-                0
-            </p>
-
-        </div>
-
-        <div class="card">
-
-            <h3>
-                Signal Efficiency
-            </h3>
-
-            <p id="signalEfficiency">
-                0%
-            </p>
-
-        </div>
-
-        <div class="card">
-
-            <h3>
-                Congestion Status
-            </h3>
-
-            <p id="congestionStatus">
-                Low
-            </p>
-
-        </div>
-
-    </section>
+   
     <section class="formula-section">
 
     <h2>
@@ -354,38 +310,33 @@
     </h2>
 
     <p>
-    Theoretical Queue Length =
-    Arrival Rate × Red Signal Time
-</p>
-
+Queue Length = North Queue + South Queue + East Queue + West Queue </p>
     <p>
         Waiting Time = Queue Length ÷ Arrival Rate
     </p>
 
     <p>
-        Traffic Density = Vehicles ÷ Number of Lanes
-    </p>
-
-    <p>
-        Throughput = Vehicles Passed ÷ Time
-    </p>
-
-    <p>
-        Signal Efficiency =
-        (Vehicles Passed ÷ Total Vehicles) × 100
-    </p>
-    <p>
-    Efficiency > 80% = Excellent
+    Vehicles Generated =
+    Total Vehicles Created During Simulation
 </p>
 
+   <p>
+    Vehicles Passed = Total Vehicles Successfully Crossing the Intersection
+</p>
+    <p>
+    Signal Efficiency =
+    (Vehicles Passed ÷ Vehicles Generated) × 100
+</p>
+
+     <p>
+    Efficiency > 80% = Excellent
+</p>
 <p>
     Efficiency 60% - 80% = Good
 </p>
-
 <p>
     Efficiency 40% - 60% = Moderate
 </p>
-
 <p>
     Efficiency < 40% = Poor
 </p>
