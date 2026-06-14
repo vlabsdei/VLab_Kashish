@@ -451,21 +451,21 @@ button{
 
 .north-queue{
     top:20px;
-    left:52%;
+    left:56%;
 }
 
 .south-queue{
     bottom:20px;
-    left:52%;
+    left:56%;
 }
 
 .east-queue{
-    top:320px;
+    top:295px;
     right:20px;
 }
 
 .west-queue{
-    top:500px;
+    top:560px;
     left:20px;
 }
 

@@ -86,7 +86,9 @@ const vehicles = [];
 
 const SAFE_DISTANCE = 50;
 
+// =====================================
 // SIGNAL CONTROL
+// =====================================
 
 function updateSignals(){
 
@@ -154,7 +156,9 @@ function updateSignals(){
     }
 }
 
+// =====================================
 // CREATE VEHICLE
+// =====================================
 
 function createVehicle(){
 
@@ -195,59 +199,53 @@ function createVehicle(){
 
     // NORTH
 
-    if(direction==="north"){
+    // NORTH -> SOUTH (2 incoming lanes)
+if(direction==="north"){
 
+    const lane =
+    Math.random() < 0.5 ? "44%" : "47%";
 
-        vehicle.style.left =
-        "47%";
+    vehicle.style.left = lane;
+    vehicle.dataset.lane = lane;
+    vehicle.style.top = "-80px";
+    vehicle.style.transform = "rotate(90deg)";
+}
 
-       vehicle.style.top = "-80px";
+// SOUTH -> NORTH (2 incoming lanes)
+if(direction==="south"){
 
-        vehicle.style.transform =
-        "rotate(90deg)";
-    }
+    const lane =
+    Math.random() < 0.5 ? "50%" : "53%";
 
-    // SOUTH
+    vehicle.style.left = lane;
+    vehicle.dataset.lane = lane;
+    vehicle.style.top = "980px";
+    vehicle.style.transform = "rotate(-90deg)";
+}
 
-    if(direction==="south"){
+// EAST -> WEST (2 incoming lanes)
+if(direction==="east"){
 
+    const laneY =
+    Math.random() < 0.5 ? "350px" : "410px";
 
-        vehicle.style.left =
-        "51%";
+    vehicle.style.left = "1800px";
+    vehicle.style.top = laneY;
+    vehicle.dataset.lane = laneY; 
+    vehicle.style.transform = "rotate(180deg)";
+}
 
-        vehicle.style.top = "980px";
+// WEST -> EAST (2 incoming lanes)
+if(direction==="west"){
 
-        vehicle.style.transform =
-        "rotate(-90deg)";
-    }
+    const laneY =
+    Math.random() < 0.5 ? "460px" : "500px";
 
-    // EAST
-
-    if(direction==="east"){
-
-
-       vehicle.style.left = "1800px";
-
-        vehicle.style.top =
-        "380px";
-
-        vehicle.style.transform =
-        "rotate(180deg)";
-    }
-
-    // WEST
-
-    if(direction==="west"){
-
-
-        vehicle.style.left = "-80px";
-
-        vehicle.style.top =
-        "520px";
-
-        vehicle.style.transform =
-        "rotate(0deg)";
-    }
+    vehicle.style.left = "-80px";
+    vehicle.style.top = laneY;
+    vehicle.dataset.lane = laneY; 
+    vehicle.style.transform = "rotate(0deg)";
+}
 
     container.appendChild(
         vehicle
@@ -263,7 +261,9 @@ function createVehicle(){
         direction
     );
 }
+// =====================================
 // VEHICLE MOVEMENT
+// =====================================
 
 function moveVehicle(
     vehicle,
@@ -314,6 +314,10 @@ setInterval(()=>{
         if(v.element === vehicle) return;
 
         if(v.direction !== direction) return;
+        if(
+    v.element.dataset.lane !==
+    vehicle.dataset.lane
+) return;
 
         if(!v.element.isConnected) return;
 
@@ -389,18 +393,18 @@ if(direction==="west"){
         // =====================
         // NORTH → SOUTH
         // =====================
+if(direction==="north"){
 
-        if(direction==="north"){
+    // Stop near north stop line
+    if(
+        signalDirection!=="NS" &&
+        position >= 250 &&
+        position <= 320
+    ){
+        return;
+    }
 
-            if(
-                signalDirection!=="NS" &&
-                position > 250 &&
-                position < 320
-            ){
-                return;
-            }
-
-            position += 1.2;
+    position += 1.2;
 
             vehicle.style.top =
             position + "px";
@@ -427,19 +431,20 @@ if(index > -1){
             }
         }
 
+        // =====================
         // SOUTH → NORTH
+        // =====================
+if(direction==="south"){
 
-        if(direction==="south"){
+    // Stop near south stop line
+    if(
+        signalDirection!=="NS" &&
+        position >= 520 && position <= 580
+    ){
+        return;
+    }
 
-            if(
-                signalDirection!=="NS" &&
-                position < 650 &&
-                position > 560
-            ){
-                return;
-            }
-
-            position -= 1.2;
+    position -= 1.2;
 
             vehicle.style.top =
             position + "px";
@@ -466,19 +471,18 @@ if(index > -1){
             }
         }
 
+        // =====================
         // EAST → WEST
+        // =====================
 
         if(direction==="east"){
 
-            if(
-                signalDirection!=="EW" &&
-                position < 1150 &&
-                position > 1050
-            ){
-                return;
-            }
+    // Stop exactly before intersection
+    if(signalDirection!=="EW" && position <= 1080 && position >= 1040){
+    return;
+}
 
-            position -= 1.2;
+    position -= 1.2;
 
             vehicle.style.left =
             position + "px";
@@ -505,20 +509,17 @@ if(index > -1){
             }
         }
 
+        // =====================
         // WEST → EAST
+        // =====================
 
         if(direction==="west"){
 
-            if(
-                signalDirection!=="EW" &&
-                position > 620 &&
-                position < 700
-            ){
-                return;
-            }
-
-            position += 1.2;
-
+    // Stop exactly before intersection
+    if(signalDirection!=="EW" && position >= 680 && position <= 720){
+    return;
+}
+    position += 1.2;
             vehicle.style.left =
             position + "px";
 
@@ -546,7 +547,9 @@ if(index > -1){
 
     },20);
 }
+// =====================================
 // CALCULATE RESULTS
+// =====================================
 
 function updateResults(){
 northQueue = 0;
@@ -731,7 +734,9 @@ if(cycleDisplay){
     }
 }
 
+// =====================================
 // START SIMULATION
+// =====================================
 
 document.getElementById(
     "startBtn"
@@ -797,7 +802,9 @@ setInterval(()=>{
 },1000);
 };
 
+// =====================================
 // STOP SIMULATION
+// =====================================
 
 document.getElementById(
     "stopBtn"
@@ -818,7 +825,9 @@ document.getElementById(
     );
 };
 
+// =====================================
 // RESET SIMULATION
+// =====================================
 
 document.getElementById(
     "resetBtn"
@@ -827,7 +836,9 @@ document.getElementById(
     location.reload();
 };
 
+// =====================================
 // INITIAL STATE
+// =====================================
 greenTime.addEventListener(
     "change",
     updateSignals
