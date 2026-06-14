@@ -59,12 +59,16 @@ pedestrianFlow.addEventListener("input",()=>{
 // GLOBAL VARIABLES
 
 let simulationRunning = false;
-
+let simulationPaused = false;
 let signalDirection = "NS";
+let signalState = "GREEN";
 
 let signalInterval;
 let vehicleInterval;
 let resultInterval;
+
+let yellowTimeout;
+let allRedTimeout;
 
 // TRAFFIC COUNTERS
 
@@ -84,14 +88,105 @@ let westQueue = 0;
 
 const vehicles = [];
 
-const SAFE_DISTANCE = 50;
+const SAFE_DISTANCE = 60;
 
 // =====================================
 // SIGNAL CONTROL
 // =====================================
 
 function updateSignals(){
+if(signalState === "ALL_RED"){
+    document
+.querySelectorAll(".light")
+.forEach(light=>{
+    light.classList.remove("active");
+});
 
+    document
+    .querySelector(".north-signal .red")
+    .classList.add("active");
+
+    document
+    .querySelector(".south-signal .red")
+    .classList.add("active");
+
+    document
+    .querySelector(".east-signal .red")
+    .classList.add("active");
+
+    document
+    .querySelector(".west-signal .red")
+    .classList.add("active");
+
+    const state =
+    document.getElementById(
+        "signalState"
+    );
+
+    if(state){
+        state.textContent =
+        "All Red";
+    }
+
+    return;
+}
+if(signalState === "YELLOW"){
+
+    document
+    .querySelectorAll(".light")
+    .forEach(light=>{
+        light.classList.remove("active");
+    });
+
+    if(signalDirection==="NS"){
+
+        document
+        .querySelector(".north-signal .yellow")
+        .classList.add("active");
+
+        document
+        .querySelector(".south-signal .yellow")
+        .classList.add("active");
+
+        document
+        .querySelector(".east-signal .red")
+        .classList.add("active");
+
+        document
+        .querySelector(".west-signal .red")
+        .classList.add("active");
+
+        document.getElementById(
+            "signalState"
+        ).textContent =
+        "North-South Yellow";
+
+    }else{
+
+        document
+        .querySelector(".north-signal .red")
+        .classList.add("active");
+
+        document
+        .querySelector(".south-signal .red")
+        .classList.add("active");
+
+        document
+        .querySelector(".east-signal .yellow")
+        .classList.add("active");
+
+        document
+        .querySelector(".west-signal .yellow")
+        .classList.add("active");
+
+        document.getElementById(
+            "signalState"
+        ).textContent =
+        "East-West Yellow";
+    }
+
+    return;
+}
     document
     .querySelectorAll(".light")
     .forEach(light=>{
@@ -162,8 +257,13 @@ function updateSignals(){
 
 function createVehicle(){
 
-    if(!simulationRunning)
-    return;
+  if(
+    !simulationRunning ||
+    simulationPaused
+)
+return;
+if(vehicles.length >= 60)
+return;
 
     const container =
     document.getElementById(
@@ -187,12 +287,135 @@ function createVehicle(){
         "west"
     ];
 
-    const direction =
-    directions[
-        Math.floor(
-            Math.random()*4
-        )
-    ];
+  let availableDirections = [];
+
+directions.forEach(dir => {
+
+    if(
+        dir === "north" &&
+        signalDirection !== "NS"
+    ){
+        const count =
+        vehicles.filter(
+            v => v.direction === "north"
+        ).length;
+
+        if(count < 10){
+            availableDirections.push(dir);
+        }
+    }
+
+    else if(
+        dir === "south" &&
+        signalDirection !== "NS"
+    ){
+        const count =
+        vehicles.filter(
+            v => v.direction === "south"
+        ).length;
+
+        if(count < 10){
+            availableDirections.push(dir);
+        }
+    }
+
+   else if(
+    dir === "east" &&
+    signalDirection !== "EW"
+){
+    const count =
+    vehicles.filter(
+        v => v.direction === "east"
+    ).length;
+
+    if(count < 24){
+        availableDirections.push(dir);
+    }
+}
+
+else if(
+    dir === "west" &&
+    signalDirection !== "EW"
+){
+    const count =
+    vehicles.filter(
+        v => v.direction === "west"
+    ).length;
+
+    if(count < 24){
+        availableDirections.push(dir);
+    }
+}
+    else{
+        availableDirections.push(dir);
+    }
+});
+
+if(availableDirections.length === 0){
+    return;
+}
+
+const direction =
+availableDirections[
+    Math.floor(
+        Math.random() *
+        availableDirections.length
+    )
+];
+    // Separate limit: North max 10, South max 10
+if(signalDirection !== "NS"){
+
+    const northCount =
+    vehicles.filter(
+        v => v.direction === "north"
+    ).length;
+
+    const southCount =
+    vehicles.filter(
+        v => v.direction === "south"
+    ).length;
+
+    if(
+        direction === "north" &&
+        northCount >= 10
+    ){
+        return;
+    }
+
+    if(
+        direction === "south" &&
+        southCount >= 10
+    ){
+        return;
+    }
+}
+// East max 24, West max 24 when EW is red
+if(signalDirection !== "EW"){
+
+    const eastCount =
+    vehicles.filter(
+        v => v.direction === "east"
+    ).length;
+
+    const westCount =
+    vehicles.filter(
+        v => v.direction === "west"
+    ).length;
+
+    if(
+        direction === "east" &&
+        eastCount >= 24
+    ){
+        return;
+    }
+
+    if(
+        direction === "west" &&
+        westCount >= 24
+    ){
+        return;
+    }
+}
 
     vehicle.dataset.direction =
     direction;
@@ -202,8 +425,24 @@ function createVehicle(){
     // NORTH -> SOUTH (2 incoming lanes)
 if(direction==="north"){
 
+    const northLane1 =
+    vehicles.filter(
+        v =>
+        v.direction === "north" &&
+        v.element.dataset.lane === "44%"
+    ).length;
+
+    const northLane2 =
+    vehicles.filter(
+        v =>
+        v.direction === "north" &&
+        v.element.dataset.lane === "47%"
+    ).length;
+
     const lane =
-    Math.random() < 0.5 ? "44%" : "47%";
+    northLane1 <= northLane2
+    ? "44%"
+    : "47%";
 
     vehicle.style.left = lane;
     vehicle.dataset.lane = lane;
@@ -214,8 +453,24 @@ if(direction==="north"){
 // SOUTH -> NORTH (2 incoming lanes)
 if(direction==="south"){
 
-    const lane =
-    Math.random() < 0.5 ? "50%" : "53%";
+   const southLane1 =
+vehicles.filter(
+    v =>
+    v.direction === "south" &&
+    v.element.dataset.lane === "50%"
+).length;
+
+const southLane2 =
+vehicles.filter(
+    v =>
+    v.direction === "south" &&
+    v.element.dataset.lane === "53%"
+).length;
+
+const lane =
+southLane1 <= southLane2
+? "50%"
+: "53%";
 
     vehicle.style.left = lane;
     vehicle.dataset.lane = lane;
@@ -226,8 +481,24 @@ if(direction==="south"){
 // EAST -> WEST (2 incoming lanes)
 if(direction==="east"){
 
-    const laneY =
-    Math.random() < 0.5 ? "350px" : "410px";
+   const eastLane1 =
+vehicles.filter(
+    v =>
+    v.direction === "east" &&
+    v.element.dataset.lane === "350px"
+).length;
+
+const eastLane2 =
+vehicles.filter(
+    v =>
+    v.direction === "east" &&
+    v.element.dataset.lane === "410px"
+).length;
+
+const laneY =
+eastLane1 <= eastLane2
+? "350px"
+: "410px";
 
     vehicle.style.left = "1800px";
     vehicle.style.top = laneY;
@@ -237,9 +508,24 @@ if(direction==="east"){
 
 // WEST -> EAST (2 incoming lanes)
 if(direction==="west"){
+const westLane1 =
+vehicles.filter(
+    v =>
+    v.direction === "west" &&
+    v.element.dataset.lane === "460px"
+).length;
 
-    const laneY =
-    Math.random() < 0.5 ? "460px" : "500px";
+const westLane2 =
+vehicles.filter(
+    v =>
+    v.direction === "west" &&
+    v.element.dataset.lane === "500px"
+).length;
+
+const laneY =
+westLane1 <= westLane2
+? "460px"
+: "500px";
 
     vehicle.style.left = "-80px";
     vehicle.style.top = laneY;
@@ -387,8 +673,11 @@ if(direction==="west"){
 
     if(blocked) return;
 
-        if(!simulationRunning)
-        return;
+       if(
+    !simulationRunning ||
+    simulationPaused
+)
+return;
 
         // =====================
         // NORTH → SOUTH
@@ -397,12 +686,14 @@ if(direction==="north"){
 
     // Stop near north stop line
     if(
-        signalDirection!=="NS" &&
-        position >= 250 &&
-        position <= 320
-    ){
-        return;
-    }
+   (signalDirection!=="NS" ||
+ signalState==="YELLOW" ||
+ signalState==="ALL_RED") &&
+    position >= 250 &&
+    position <= 320
+){
+    return;
+}
 
     position += 1.2;
 
@@ -438,11 +729,14 @@ if(direction==="south"){
 
     // Stop near south stop line
     if(
-        signalDirection!=="NS" &&
-        position >= 520 && position <= 580
-    ){
-        return;
-    }
+    (signalDirection!=="NS" ||
+ signalState==="YELLOW" ||
+ signalState==="ALL_RED")&&
+    position >= 520 &&
+    position <= 580
+){
+    return;
+}
 
     position -= 1.2;
 
@@ -478,10 +772,15 @@ if(index > -1){
         if(direction==="east"){
 
     // Stop exactly before intersection
-    if(signalDirection!=="EW" && position <= 1080 && position >= 1040){
+    if(
+   (signalDirection!=="EW" ||
+ signalState==="YELLOW" ||
+ signalState==="ALL_RED") &&
+    position <= 1080 &&
+    position >= 1040
+){
     return;
 }
-
     position -= 1.2;
 
             vehicle.style.left =
@@ -516,7 +815,13 @@ if(index > -1){
         if(direction==="west"){
 
     // Stop exactly before intersection
-    if(signalDirection!=="EW" && position >= 680 && position <= 720){
+    if(
+   (signalDirection!=="EW" ||
+ signalState==="YELLOW" ||
+ signalState==="ALL_RED") &&
+    position >= 680 &&
+    position <= 720
+){
     return;
 }
     position += 1.2;
@@ -742,62 +1047,124 @@ document.getElementById(
     "startBtn"
 ).onclick = ()=>{
 
-    if(simulationRunning)
-    return;
+  if(simulationPaused){
 
-    simulationRunning = true;
-    timeRemaining =
-parseInt(greenTime.value);
+    simulationPaused = false;
 
     updateSignals();
 
-    const vehiclesPerMinute =
-parseInt(arrivalRate.value);
+    return;
+}
 
-const spawnRate =
-60000 / vehiclesPerMinute;
+if(simulationRunning)
+return;
+simulationRunning = true;
 
-vehicleInterval =
-setInterval(
-
-    createVehicle,
-
-    spawnRate
-
-);
-
-    signalInterval =
-    setInterval(()=>{
-
-        signalDirection =
-signalDirection === "NS"
-? "EW"
-: "NS";
+if(vehicleInterval){
+    return;
+}
 
 timeRemaining =
 parseInt(greenTime.value);
 
 updateSignals();
-    },
 
-    parseInt(
-        greenTime.value
-    ) * 1000
-    );
+    const vehiclesPerMinute =
+parseInt(arrivalRate.value);
 
-    resultInterval =
+const spawnRate =
+(60000 / vehiclesPerMinute);
+
+vehicleInterval =
+setInterval(
+    createVehicle,
+    spawnRate
+);
+
+
+ signalInterval =
 setInterval(()=>{
+
+    if(simulationPaused)
+    return;
+
+    // GREEN -> YELLOW
+    signalState = "YELLOW";
+    updateSignals();
+
+    // Yellow for 3 sec
+yellowTimeout = setTimeout(()=>{
+
+    if(simulationPaused)
+    return;
+
+    // YELLOW -> ALL RED
+    signalState = "ALL_RED";
+    updateSignals();
+
+       // All Red for 3 sec
+allRedTimeout = setTimeout(()=>{
+
+    if(simulationPaused)
+    return;
+
+    signalDirection =
+    signalDirection === "NS"
+    ? "EW"
+    : "NS";
+
+    signalState = "GREEN";
+
+            timeRemaining =
+            parseInt(greenTime.value);
+
+            updateSignals();
+
+        },3000);
+
+    },3000);
+
+},
+(parseInt(greenTime.value) + 6) * 1000
+);
+   resultInterval =
+setInterval(()=>{
+
+    if(simulationPaused)
+    return;
 
     updateResults();
 
     cycleCounter++;
 
+    if(signalState === "GREEN"){
+
     timeRemaining--;
+
+}
+else if(signalState === "YELLOW"){
 
     document.getElementById(
         "timeRemaining"
     ).textContent =
-    timeRemaining;
+    "Yellow";
+
+    return;
+}
+else if(signalState === "ALL_RED"){
+
+    document.getElementById(
+        "timeRemaining"
+    ).textContent =
+    "All Red";
+
+    return;
+}
+
+document.getElementById(
+    "timeRemaining"
+).textContent =
+timeRemaining;
 
 },1000);
 };
@@ -810,21 +1177,8 @@ document.getElementById(
     "stopBtn"
 ).onclick = ()=>{
 
-    simulationRunning = false;
-
-    clearInterval(
-        vehicleInterval
-    );
-
-    clearInterval(
-        signalInterval
-    );
-
-    clearInterval(
-        resultInterval
-    );
+    simulationPaused = true;
 };
-
 // =====================================
 // RESET SIMULATION
 // =====================================
