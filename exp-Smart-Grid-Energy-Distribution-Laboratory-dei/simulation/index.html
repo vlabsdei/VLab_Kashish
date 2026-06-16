@@ -150,28 +150,57 @@
                 <!-- SOLAR -->
 
                 <div class="solar-node">
-                    <div class="icon">☀️</div>
-                    <h3>Solar Power Plant</h3>
-                    <p id="solarOutput">
-                        500 kW
-                    </p>
-                </div>
+    <img src="./images/solar.jpg"
+         alt="Solar Power Plant"
+         class="solar-img">
+
+    <h3>Solar Power Plant</h3>
+
+    <p id="solarOutput">
+        500 kW
+    </p>
+</div>
 
                 <!-- WIND -->
 
-                <div class="wind-node">
-                    <div class="icon">🌪️</div>
-                    <h3>Wind Power Plant</h3>
-                    <p id="windOutput">
-                        300 kW
-                    </p>
-                </div>
+               <div class="wind-node">
+    <img src="./images/wind.jpg"
+         alt="Wind Power Plant"
+         class="wind-img">
+
+    <h3>Wind Power Plant</h3>
+
+    <p id="windOutput">
+        300 kW
+    </p>
+</div>
 
                 <!-- CONNECTIONS TO CONTROLLER -->
 
-                <div class="solar-connection"></div>
-                <div class="wind-connection"></div>
-                <div class="top-junction"></div>
+<div class="solar-connection"></div>              
+ <div class="wind-connection"></div>
+               <div class="top-junction">
+
+    <!-- Solar Energy Dots -->
+    <span class="solar-dot s1"></span>
+    <span class="solar-dot s2"></span>
+    <span class="solar-dot s3"></span>
+    <span class="solar-dot s4"></span>
+    <span class="solar-dot s5"></span>
+<span class="solar-dot s6"></span>
+<span class="solar-dot s7"></span>
+
+
+    <!-- Wind Energy Dots -->
+    <span class="wind-dot w1"></span>
+    <span class="wind-dot w2"></span>
+    <span class="wind-dot w3"></span>
+    <span class="wind-dot w4"></span>
+    <span class="wind-dot w5"></span>
+<span class="wind-dot w6"></span>
+<span class="wind-dot w7"></span>
+
+</div>
 
                 <!-- CONTROLLER -->
 
@@ -192,7 +221,7 @@
 
                 <!-- MAIN POWER LINE -->
 
-                <div class="main-power-line"></div>
+               <div class="main-power-line"></div>
 
                 <!-- DISTRIBUTION NETWORK -->
 
@@ -213,13 +242,47 @@
 
                 <!-- HORIZONTAL DISTRIBUTION LINE -->
 
-                <div class="distribution-line"></div>
-                
-                <!-- LOAD CONNECTIONS -->
+            <div class="distribution-line"></div>
+            <div class="left-vertical">
+    <span class="vd vd1"></span>
+    <span class="vd vd2"></span>
+   
+</div>
 
-                <div class="load-line left-load"></div>
-                <div class="load-line center-load"></div>
-                <div class="load-line right-load"></div>
+<div class="right-vertical">
+    <span class="vd vd5"></span>
+    <span class="vd vd6"></span>
+    
+</div>
+
+<!-- Residential Particles -->
+<!-- Horizontal Flow : Distribution → Residential -->
+
+<div class="residential-flow">
+    <span class="lp lp1"></span>
+    <span class="lp lp2"></span>
+    <span class="lp lp3"></span>
+    <span class="lp lp4"></span>
+    <span class="lp lp5"></span>
+    <span class="lp lp6"></span>
+    <span class="lp lp7"></span>
+</div>
+
+<!-- Vertical Flow : Distribution → Commercial -->
+
+<div class="center-load"></div>
+
+<!-- Horizontal Flow : Distribution → Industrial -->
+
+<div class="industrial-flow">
+    <span class="rp rp1"></span>
+    <span class="rp rp2"></span>
+    <span class="rp rp3"></span>
+    <span class="rp rp4"></span>
+    <span class="rp rp5"></span>
+    <span class="rp rp6"></span>
+    <span class="rp rp7"></span>
+</div>
 
                 <!-- CONSUMERS -->
 

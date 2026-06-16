@@ -121,6 +121,26 @@ button{
     overflow:hidden;
     box-shadow:0 4px 15px rgba(0,0,0,0.15);
 }
+.smart-grid::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background-image:
+        linear-gradient(rgba(0,150,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,150,255,0.08) 1px, transparent 1px);
+
+    background-size:50px 50px;
+
+    animation:gridMove 12s linear infinite;
+
+    z-index:0;
+}
+
+.smart-grid > *{
+    position:relative;
+    z-index:1;
+}
 
 /* NODES */
 
@@ -141,6 +161,14 @@ button{
 .icon{
     font-size:48px;
     margin-bottom:10px;
+}
+.solar-node .icon{
+    display:inline-block;
+    animation:rotateSun 12s linear infinite;
+}
+.wind-node .icon{
+    display:inline-block;
+    animation:none
 }
 .flow-label{
     font-size:12px;
@@ -169,8 +197,7 @@ button{
     width:220px;
     border:3px solid #ffb300;
 
-    animation:glow 2s infinite;
-}
+animation:glow 2s infinite,pulseScale 2s infinite;}
 
 /* DISTRIBUTION */
 
@@ -227,6 +254,34 @@ button{
     left:210px;
     top:170px;
 }
+.solar-connection::before,
+.solar-connection::after{
+    content:"";
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#00ff88;
+    box-shadow:0 0 12px #00ff88;
+    left:-4px;
+}
+
+.solar-connection::before{
+    animation:solarFlow 1.5s linear infinite;
+}
+
+.solar-connection::after{
+    animation:solarFlow 1.5s linear infinite .75s;
+}
+
+@keyframes solarFlow{
+    from{
+        top:0;
+    }
+    to{
+        top:35px;
+    }
+}
 
 .wind-connection{
     position:absolute;
@@ -236,14 +291,156 @@ button{
     right:210px;
     top:170px;
 }
+.wind-connection::before,
+.wind-connection::after{
+    content:"";
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#2196f3;
+    box-shadow:0 0 12px #2196f3;
+    left:-4px;
+}
+
+.wind-connection::before{
+    animation:windFlow 1.5s linear infinite;
+}
+
+.wind-connection::after{
+    animation:windFlow 1.5s linear infinite .75s;
+}
+
+@keyframes windFlow{
+    from{
+        top:0;
+    }
+    to{
+        top:35px;
+    }
+}
+
 .top-junction{
     position:absolute;
     height:2px;
-    background:#555;
+
+    background:
+    linear-gradient(
+        to right,
+        #00ff66 0%,
+        #00ff66 50%,
+        #2196f3 50%,
+        #2196f3 100%
+    );
+
     top:205px;
     left:210px;
     width:calc(100% - 420px);
 }
+/* GREEN DOT : SOLAR -> CONTROLLER */
+
+/* MULTIPLE SOLAR DOTS */
+
+.solar-dot{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#00ff88;
+    box-shadow:
+        0 0 10px #00ff88,
+        0 0 20px #00ff88;
+    top:-4px;
+}
+
+.s1{
+    animation:solarFlowMulti 5s linear infinite;
+}
+
+.s2{
+    animation:solarFlowMulti 5s linear infinite 0.7s;
+}
+
+.s3{
+    animation:solarFlowMulti 5s linear infinite 1.4s;
+}
+
+.s4{
+    animation:solarFlowMulti 5s linear infinite 2.1s;
+}
+.s5{ animation:solarFlowMulti 5s linear infinite 2.8s; }
+.s6{ animation:solarFlowMulti 5s linear infinite 3.5s; }
+.s7{
+    animation:solarFlowMulti 5s linear infinite 4.2s;
+}
+
+/* MULTIPLE WIND DOTS */
+
+.wind-dot{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#2196f3;
+    box-shadow:
+        0 0 10px #2196f3,
+        0 0 20px #2196f3;
+    top:-4px;
+}
+
+.w1{
+    animation:windFlowMulti 5s linear infinite;
+}
+
+.w2{
+    animation:windFlowMulti 5s linear infinite 0.7s;
+}
+
+.w3{
+    animation:windFlowMulti 5s linear infinite 1.4s;
+}
+
+.w4{
+    animation:windFlowMulti 5s linear infinite 2.1s;
+}
+
+.w5{ animation:windFlowMulti 5s linear infinite 2.8s; }
+.w6{ animation:windFlowMulti 5s linear infinite 3.5s; }
+.w7{
+    animation:windFlowMulti 5s linear infinite 4.2s;
+}
+/* SOLAR -> CONTROLLER */
+
+@keyframes solarFlowMulti{
+
+    from{
+        left:0;
+        opacity:1;
+    }
+
+    to{
+        left:50%;
+        opacity:1;
+    }
+
+}
+
+/* WIND -> CONTROLLER */
+
+@keyframes windFlowMulti{
+
+    from{
+        left:100%;
+        opacity:1;
+    }
+
+    to{
+        left:50%;
+        opacity:1;
+    }
+
+}
+
 .main-power-line{
     position:absolute;
     width:4px;
@@ -256,21 +453,85 @@ button{
 
 .distribution-line{
     position:absolute;
-    width:78%;
+    width:64%;
     height:4px;
-    background:#1976d2;
-    top:470px;
-    left:11%;
-}
-
-.left-load{
-    position:absolute;
-    width:3px;
-    height:30px;
     background:#1976d2;
     top:470px;
     left:18%;
 }
+.left-vertical{
+    position:absolute;
+    width:3px;
+    height:35px;
+    background:#1976d2;
+
+    left:18%;
+    top:470px;
+}
+
+.right-vertical{
+    position:absolute;
+    width:3px;
+    height:35px;
+    background:#1976d2;
+
+    right:18%;
+    top:470px;
+}
+.vd{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#00e5ff;
+
+    box-shadow:
+        0 0 10px #00e5ff,
+        0 0 20px #00e5ff;
+
+    left:-4px;
+}
+
+.vd1{animation:verticalFlow 2s linear infinite;}
+.vd2{animation:verticalFlow 2s linear infinite .5s;}
+
+
+.vd5{animation:verticalFlow 2s linear infinite;}
+.vd6{animation:verticalFlow 2s linear infinite .5s;}
+@keyframes verticalFlow{
+
+    from{
+        top:0;
+        opacity:1;
+    }
+
+    to{
+        top:35px;
+        opacity:1;
+    }
+
+}
+.residential-flow{
+    position:absolute;
+    top:466px;
+    left:18%;
+    width:31.5%;
+    height:4px;
+}
+
+.industrial-flow{
+    position:absolute;
+    top:466px;
+    left:50%;
+    width:31.5%;
+    height:4px;
+}
+.distribution-line::before,
+.distribution-line::after{
+    display:none;
+}
+
+
 
 .center-load{
     position:absolute;
@@ -280,14 +541,95 @@ button{
     top:450px;
     left:50%;
 }
-
-.right-load{
+.center-load::after{
+    content:"";
     position:absolute;
-    width:3px;
-    height:30px;
-    background:#1976d2;
-    top:470px;
-    right:18%;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#00e5ff;
+    box-shadow:0 0 12px #00e5ff;
+    left:-4px;
+    animation:centerFlow 2s linear infinite;
+}
+
+@keyframes centerFlow{
+    from{
+        top:0;
+    }
+    to{
+        top:50px;
+    }
+}
+
+
+/* Residential 7 particles */
+
+.lp{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#00e5ff;
+    box-shadow:
+        0 0 10px #00e5ff,
+        0 0 20px #00e5ff;
+    top:-3px;
+}
+
+.lp1{animation:leftParticle 3s linear infinite;}
+.lp2{animation:leftParticle 3s linear infinite .4s;}
+.lp3{animation:leftParticle 3s linear infinite .8s;}
+.lp4{animation:leftParticle 3s linear infinite 1.2s;}
+.lp5{animation:leftParticle 3s linear infinite 1.6s;}
+.lp6{animation:leftParticle 3s linear infinite 2s;}
+.lp7{animation:leftParticle 3s linear infinite 2.4s;}
+
+/* Industrial 7 particles */
+
+.rp{
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#00e5ff;
+    box-shadow:
+        0 0 10px #00e5ff,
+        0 0 20px #00e5ff;
+    top:-3px;
+}
+
+.rp1{animation:rightParticle 3s linear infinite;}
+.rp2{animation:rightParticle 3s linear infinite .4s;}
+.rp3{animation:rightParticle 3s linear infinite .8s;}
+.rp4{animation:rightParticle 3s linear infinite 1.2s;}
+.rp5{animation:rightParticle 3s linear infinite 1.6s;}
+.rp6{animation:rightParticle 3s linear infinite 2s;}
+.rp7{animation:rightParticle 3s linear infinite 2.4s;}
+@keyframes leftParticle{
+    from{
+        left:100%;
+    }
+    to{
+        left:0;
+    }
+}
+
+@keyframes rightParticle{
+    from{
+        left:0;
+    }
+    to{
+        left:100%;
+    }
+}
+@keyframes loadFlow{
+    from{
+        top:0;
+    }
+    to{
+        top:30px;
+    }
 }
 
 
@@ -440,21 +782,30 @@ button{
     .top-junction,
     .main-power-line,
     .distribution-line,
-    .left-load,
     .center-load,
-    .right-load{
+.residential-flow,
+.industrial-flow{
         display:none;
     }
 }
+.main-power-line::before,
 .main-power-line::after{
     content:"";
     position:absolute;
-    width:12px;
-    height:12px;
+    width:10px;
+    height:10px;
     border-radius:50%;
     background:#ffeb3b;
-    left:-4px;
-    animation:powerMove 2s linear infinite;
+    box-shadow:0 0 15px #ffeb3b;
+    left:-3px;
+}
+
+.main-power-line::before{
+    animation:powerMove 1.5s linear infinite;
+}
+
+.main-power-line::after{
+    animation:powerMove 1.5s linear infinite .75s;
 }
 
 @keyframes powerMove{
@@ -464,4 +815,119 @@ button{
     to{
         top:30px;
     }
+}
+@keyframes gridMove{
+    from{
+        background-position:0 0;
+    }
+    to{
+        background-position:50px 50px;
+    }
+}
+
+@keyframes rotateSun{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes windSpin{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes topFlow{
+    from{
+        left:0;
+    }
+    to{
+        left:100%;
+    }
+}
+
+@keyframes flowRight{
+    from{
+        left:0;
+    }
+    to{
+        left:100%;
+    }
+}
+
+@keyframes pulseScale{
+    0%,100%{
+        transform:translateX(-50%) scale(1);
+    }
+
+    50%{
+        transform:translateX(-50%) scale(1.05);
+    }
+}
+/* PARTICLES OFF BY DEFAULT */
+
+.solar-dot,
+.wind-dot,
+.lp,
+.rp,
+.vd,
+.main-power-line::before,
+.main-power-line::after,
+.center-load::after,
+.solar-connection::before,
+.solar-connection::after,
+.wind-connection::before,
+.wind-connection::after{
+    animation-play-state: paused;
+    opacity:1;
+}
+
+/* START SIMULATION -> PARTICLES ON */
+
+.simulation-active .solar-dot,
+.simulation-active .wind-dot,
+.simulation-active .lp,
+.simulation-active .rp,
+.simulation-active .vd,
+.simulation-active .main-power-line::before,
+.simulation-active .main-power-line::after,
+.simulation-active .center-load::after,
+.simulation-active .solar-connection::before,
+.simulation-active .solar-connection::after,
+.simulation-active .wind-connection::before,
+.simulation-active .wind-connection::after{
+    animation-play-state: running;
+    opacity:1;
+}
+/* HIDE PARTICLES WHEN NO FLOW */
+
+.center-load.no-flow::after,
+.solar-connection.no-flow::before,
+.solar-connection.no-flow::after,
+.wind-connection.no-flow::before,
+.wind-connection.no-flow::after{
+    display:none;
+}
+/* SOLAR & WIND IMAGES */
+
+.solar-img,
+.wind-img{
+    width:80px;
+    height:80px;
+    object-fit:contain;
+    display:block;
+    margin:0 auto 10px;
+}
+
+/* Remove old emoji styling */
+
+.solar-node .icon,
+.wind-node .icon{
+    display:none;
 }

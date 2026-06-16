@@ -78,6 +78,9 @@ function updateSliderValues() {
 
 function runSimulation() {
 
+    if (!simulationRunning) {
+        return;
+    }
     const solar =
         Number(solarPower.value);
 
@@ -106,12 +109,181 @@ function runSimulation() {
         const controller =
     document.querySelector(".controller-node");
 
+if (surplus < 0) {
+
+    controller.style.borderColor = "#dc2626";
+    controller.style.boxShadow = "0 0 20px #dc2626";
+
+} else if (surplus > 100) {
+
+    controller.style.borderColor = "#16a34a";
+    controller.style.boxShadow = "0 0 20px #16a34a";
+
+} else {
+
+    controller.style.borderColor = "#ffb300";
+    controller.style.boxShadow = "0 0 20px #ffb300";
+}
+const solarDuration =
+    Math.max(1, 6 - (solar / 200));
+
+const windDuration =
+    Math.max(1, 6 - (wind / 200));
+
+document.querySelectorAll(".solar-dot")
+.forEach(dot => {
+
+    if (solar === 0) {
+
+        dot.style.display = "none";
+
+    } else {
+
+        dot.style.display = "block";
+        dot.style.animationDuration =
+            solarDuration + "s";
+    }
+});
+const solarConnection =
+    document.querySelector(".solar-connection");
+
+if(solarConnection){
+
+    solarConnection.classList.toggle(
+        "no-flow",
+        solar === 0
+    );
+}
+
+document.querySelectorAll(".wind-dot")
+.forEach(dot => {
+    if (wind === 0) {
+
+        dot.style.display = "none";
+
+    } else {
+
+        dot.style.display = "block";
+        dot.style.animationDuration =
+            windDuration + "s";
+    }
+});
+const windConnection =
+    document.querySelector(".wind-connection");
+
+if(windConnection){
+
+    windConnection.classList.toggle(
+        "no-flow",
+        wind === 0
+    );
+}
+const residentialDots =
+    residential === 0
+    ? 0
+    : Math.ceil((residential / 500) * 7);
+
+document.querySelectorAll(".lp")
+.forEach((dot,index)=>{
+
+    dot.style.display =
+        index < residentialDots
+        ? "block"
+        : "none";
+});
+const industrialDots =
+    industrial === 0
+    ? 0
+    : Math.ceil((industrial / 1000) * 7);
+
+document.querySelectorAll(".rp")
+.forEach((dot,index)=>{
+
+    dot.style.display =
+        index < industrialDots
+        ? "block"
+        : "none";
+});
+const centerLoad =
+    document.querySelector(".center-load");
+
+if(centerLoad){
+
+    centerLoad.classList.toggle(
+        "no-flow",
+        commercial === 0
+    );
+}
+// Residential vertical particles
+
+const vd1 = document.querySelector(".vd1");
+const vd2 = document.querySelector(".vd2");
+
+if (residential === 0) {
+
+    if(vd1) vd1.style.display = "none";
+    if(vd2) vd2.style.display = "none";
+
+} else {
+if (residential > 0) {
+
+    if(vd1) vd1.style.display = "block";
+
+    if(vd2){
+        vd2.style.display =
+            residential > 300
+            ? "block"
+            : "none";
+    }
+
+} else {
+
+    if(vd1) vd1.style.display = "none";
+    if(vd2) vd2.style.display = "none";
+}
+}
+
+// Industrial vertical particles
+
+const vd5 = document.querySelector(".vd5");
+const vd6 = document.querySelector(".vd6");
+
+if (industrial === 0) {
+
+    if(vd5) vd5.style.display = "none";
+    if(vd6) vd6.style.display = "none";
+
+} else {
+
+   if (industrial > 0) {
+
+    if(vd5) vd5.style.display = "block";
+
+    if(vd6){
+        vd6.style.display =
+            industrial > 600
+            ? "block"
+            : "none";
+    }
+
+} else {
+
+    if(vd5) vd5.style.display = "none";
+    if(vd6) vd6.style.display = "none";
+}
+}    
+
     let efficiency = 0;
 
-    if (totalGenerated > 0) {
+if (totalLoad === 0) {
 
-       efficiency = (Math.min(totalGenerated, totalLoad) / totalLoad) * 100;
-    }
+    efficiency = 100;
+
+} else {
+
+    efficiency =
+        (Math.min(totalGenerated, totalLoad) / totalLoad) * 100;
+}
 
     efficiency =
         efficiency.toFixed(1);
@@ -242,7 +414,7 @@ function runSimulation() {
         "#dc2626";
 
     gridStatus.textContent =
-        "Overloaded";
+        "Deficit";
 
     gridStatus.className =
         "status-danger";
@@ -254,36 +426,31 @@ function runSimulation() {
 startBtn.addEventListener("click", () => {
 
     simulationRunning = true;
-    if (surplus < 0) {
 
-    controller.style.borderColor =
-        "#dc2626";
-
-} else {
-
-    controller.style.borderColor =
-        "#ffb300";
-}
+    document.body.classList.add("simulation-active");
 
     runSimulation();
 });
-
 // Stop Simulation
 
 stopBtn.addEventListener("click", () => {
 
     simulationRunning = false;
 
-    gridStatus.textContent =
-        "Stopped";
+    document.body.classList.remove("simulation-active");
 
-    gridStatus.className =
-    "status-warning";
+    gridStatus.textContent = "Stopped";
+
+    gridStatus.className = "status-warning";
 });
 
 // Reset Simulation
 
 resetBtn.addEventListener("click", () => {
+
+    simulationRunning = false;
+
+    document.body.classList.remove("simulation-active");
 
     solarPower.value = 500;
     windPower.value = 300;
@@ -294,7 +461,8 @@ resetBtn.addEventListener("click", () => {
 
     updateSliderValues();
 
-    runSimulation();
+   gridStatus.textContent = "Ready";
+gridStatus.className = "";
 });
 
 // Live Slider Updates
@@ -352,4 +520,5 @@ industrialLoad.addEventListener("input", () => {
 // Initial Load
 
 updateSliderValues();
-runSimulation();
+
+gridStatus.textContent = "Ready";
