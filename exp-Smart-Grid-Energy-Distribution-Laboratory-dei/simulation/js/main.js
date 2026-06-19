@@ -1,524 +1,768 @@
-// SMART GRID ENERGY DISTRIBUTION LAB
+// SMART GRID ENERGY DISTRIBUTION LAB SYSTEM ENGINE
+
+// Keep Virtual Labs parent header visible and lock heights to prevent scrollbars
+function adjustParentLayout() {
+    try {
+        if (window.self !== window.top) {
+            const parentDoc = window.parent.document;
+
+            // Ensure parent navbar header is visible
+            const parentHeader = parentDoc.querySelector('.simulation-header') || parentDoc.querySelector('.vlabs-header');
+            if (parentHeader) {
+                parentHeader.style.setProperty('display', 'flex', 'important');
+            }
+            
+            // Ensure floating menu button is visible
+            const floatingMenu = parentDoc.getElementById('toggle-menu-float-button');
+            if (floatingMenu) {
+                floatingMenu.style.setProperty('display', 'block', 'important');
+            }
+
+            // Lock parent body and html to prevent outer page scrollbar
+            const parentHtml = parentDoc.documentElement;
+            const parentBody = parentDoc.body;
+            if (parentHtml && parentBody) {
+                parentHtml.style.setProperty('overflow', 'hidden', 'important');
+                parentBody.style.setProperty('overflow', 'hidden', 'important');
+                parentBody.style.setProperty('height', '100vh', 'important');
+            }
+            
+            // Measure parent header height and strictly lock the iframe height to prevent feedback loops/cutoffs
+            const iframe = parentDoc.getElementById('fraDisabled') || parentDoc.querySelector('iframe');
+            if (iframe) {
+                const headerHeight = parentHeader ? parentHeader.offsetHeight : 60;
+                iframe.style.setProperty('height', `calc(100vh - ${headerHeight}px)`, 'important');
+                iframe.style.setProperty('min-height', `calc(100vh - ${headerHeight}px)`, 'important');
+            }
+            
+            // Adjust padding of parent content container
+            const parentContent = parentDoc.querySelector('.vlabs-page-content');
+            if (parentContent) {
+                parentContent.style.setProperty('padding-bottom', '0', 'important');
+                parentContent.style.setProperty('margin', '0', 'important');
+            }
+        }
+    } catch (e) {
+        console.warn("Could not modify parent layout due to cross-origin restriction:", e);
+    }
+}
+adjustParentLayout();
+window.addEventListener('load', adjustParentLayout);
+window.addEventListener('resize', adjustParentLayout);
 
 // Input Elements
-
 const solarPower = document.getElementById("solarPower");
 const windPower = document.getElementById("windPower");
-
 const residentialLoad = document.getElementById("residentialLoad");
 const commercialLoad = document.getElementById("commercialLoad");
 const industrialLoad = document.getElementById("industrialLoad");
 
-// Display Elements
-
+// Display Elements (Control Panel labels)
 const solarPowerValue = document.getElementById("solarPowerValue");
 const windPowerValue = document.getElementById("windPowerValue");
-
 const residentialLoadValue = document.getElementById("residentialLoadValue");
 const commercialLoadValue = document.getElementById("commercialLoadValue");
 const industrialLoadValue = document.getElementById("industrialLoadValue");
 
 // Diagram Displays
-
 const solarOutput = document.getElementById("solarOutput");
 const windOutput = document.getElementById("windOutput");
-
 const residentialDemand = document.getElementById("residentialDemand");
 const commercialDemand = document.getElementById("commercialDemand");
 const industrialDemand = document.getElementById("industrialDemand");
+const utilityOutput = document.getElementById("utilityOutput");
+const batteryOutput = document.getElementById("batteryOutput");
 
 // Result Cards
-
 const generatedPower = document.getElementById("generatedPower");
 const totalDemand = document.getElementById("totalDemand");
 const surplusPower = document.getElementById("surplusPower");
 const gridEfficiency = document.getElementById("gridEfficiency");
 const renewableUtilization = document.getElementById("renewableUtilization");
 const gridCondition = document.getElementById("gridCondition");
+const svgSurplus = document.getElementById("svgSurplus");
 
 // Status Panel
-
 const generatedPowerStatus = document.getElementById("generatedPowerStatus");
 const totalDemandStatus = document.getElementById("totalDemandStatus");
+const netBalanceStatus = document.getElementById("netBalanceStatus");
 const efficiencyStatus = document.getElementById("efficiencyStatus");
 const gridStatus = document.getElementById("gridStatus");
 
-// Buttons
-
+// Toggles & Presets
+const islandModeToggle = document.getElementById("islandModeToggle");
 const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
 const resetBtn = document.getElementById("resetBtn");
 
-// Simulation State
-
+// SIMULATION STATE VARIABLES
 let simulationRunning = false;
+let batteryCharge = 50.0; // Current battery charge percentage (0 to 100)
+const batteryCapacity = 1000; // Total capacity in kWh
+let simulationInterval = null;
 
-// Update Slider Values
+// SCADA Chart History Data
+let chartGenHistory = Array(30).fill(0);
+let chartDemHistory = Array(30).fill(0);
 
-function updateSliderValues() {
-
-    solarPowerValue.textContent =
-        solarPower.value + " kW";
-
-    windPowerValue.textContent =
-        windPower.value + " kW";
-
-    residentialLoadValue.textContent =
-        residentialLoad.value + " kW";
-
-    commercialLoadValue.textContent =
-        commercialLoad.value + " kW";
-
-    industrialLoadValue.textContent =
-        industrialLoad.value + " kW";
-}
-
-// Run Simulation
 // =====================================
+// DYNAMIC RESIZER
+// =====================================
+function resizeGrid() {
+    const wrapper = document.querySelector('.intersection-wrapper');
+    const grid = document.querySelector('.smart-grid');
+    if (!wrapper || !grid) return;
 
-function runSimulation() {
+    const containerWidth = wrapper.clientWidth;
+    const containerHeight = wrapper.clientHeight;
 
-    if (!simulationRunning) {
-        return;
-    }
-    const solar =
-        Number(solarPower.value);
+    const scaleWidth = containerWidth / 1200; // 1200px is logical coordinate width
+    const scaleHeight = containerHeight / 660; // 660px is logical coordinate height
+    const scale = Math.min(scaleWidth, scaleHeight) * 0.95;
 
-    const wind =
-        Number(windPower.value);
-
-    const residential =
-        Number(residentialLoad.value);
-
-    const commercial =
-        Number(commercialLoad.value);
-
-    const industrial =
-        Number(industrialLoad.value);
-
-    // Calculations
-
-    const totalGenerated =
-        solar + wind;
-
-    const totalLoad =
-        residential + commercial + industrial;
-
-    const surplus =
-        totalGenerated - totalLoad;
-        const controller =
-    document.querySelector(".controller-node");
-
-if (surplus < 0) {
-
-    controller.style.borderColor = "#dc2626";
-    controller.style.boxShadow = "0 0 20px #dc2626";
-
-} else if (surplus > 100) {
-
-    controller.style.borderColor = "#16a34a";
-    controller.style.boxShadow = "0 0 20px #16a34a";
-
-} else {
-
-    controller.style.borderColor = "#ffb300";
-    controller.style.boxShadow = "0 0 20px #ffb300";
+    // Apply inline transform directly to ensure absolute centering and scaling compatibility
+    grid.style.transform = `translate(-50%, -50%) scale(${scale})`;
+    grid.style.setProperty('--scale-factor', scale);
 }
-const solarDuration =
-    Math.max(1, 6 - (solar / 200));
 
-const windDuration =
-    Math.max(1, 6 - (wind / 200));
+window.addEventListener('resize', resizeGrid);
+window.addEventListener('load', resizeGrid);
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    resizeGrid();
+} else {
+    document.addEventListener('DOMContentLoaded', resizeGrid);
+}
 
-document.querySelectorAll(".solar-dot")
-.forEach(dot => {
+// =====================================
+// INITIAL UTILITY LABELS
+// =====================================
+function updateSliderLabels() {
+    solarPowerValue.textContent = solarPower.value + " kW";
+    windPowerValue.textContent = windPower.value + " kW";
+    residentialLoadValue.textContent = residentialLoad.value + " kW";
+    commercialLoadValue.textContent = commercialLoad.value + " kW";
+    industrialLoadValue.textContent = industrialLoad.value + " kW";
+}
 
-    if (solar === 0) {
+// =====================================
+// SCADA CHART RENDERER
+// =====================================
+function updateScadaChart(newGen, newDem) {
+    chartGenHistory.push(newGen);
+    chartGenHistory.shift();
+    chartDemHistory.push(newDem);
+    chartDemHistory.shift();
 
-        dot.style.display = "none";
+    const chart = document.getElementById("scadaChart");
+    const lineGen = document.getElementById("chartLineGen");
+    const lineDem = document.getElementById("chartLineDem");
+    const areaGen = document.getElementById("chartAreaGen");
+    const areaDem = document.getElementById("chartAreaDem");
+    
+    if (!chart || !lineGen || !lineDem) return;
 
+    const maxVal = 2200; // Scale height dynamically based on max load capacity
+    const width = 1000;
+    const height = 150;
+    const padding = 10;
+    
+    const pointsCount = chartGenHistory.length;
+    const stepX = width / (pointsCount - 1);
+
+    // Build SVG Path Coordinates
+    let genPathPoints = [];
+    let demPathPoints = [];
+
+    for (let i = 0; i < pointsCount; i++) {
+        const x = i * stepX;
+        const yGen = height - padding - (chartGenHistory[i] / maxVal) * (height - 2 * padding);
+        const yDem = height - padding - (chartDemHistory[i] / maxVal) * (height - 2 * padding);
+        
+        genPathPoints.push(`${x},${yGen}`);
+        demPathPoints.push(`${x},${yDem}`);
+    }
+
+    // Set lines paths
+    lineGen.setAttribute("d", `M ${genPathPoints.join(" L ")}`);
+    lineDem.setAttribute("d", `M ${demPathPoints.join(" L ")}`);
+
+    // Set filled area paths (close paths at bottom)
+    areaGen.setAttribute("d", `M 0,${height} L ${genPathPoints.join(" L ")} L ${width},${height} Z`);
+    areaDem.setAttribute("d", `M 0,${height} L ${demPathPoints.join(" L ")} L ${width},${height} Z`);
+}
+
+// =====================================
+// TURBINE GRAPHIC ANIMATION CONTROL
+// =====================================
+function animateTurbine(windPowerVal) {
+    const icon = document.getElementById("wind-icon");
+    if (!icon) return;
+
+    icon.className = "node-icon turbine-icon"; // Clear
+    
+    if (windPowerVal === 0) {
+        // Stopped
+    } else if (windPowerVal === 1000 && document.getElementById("btn-storm").classList.contains("active")) {
+        // Storm Lockout Protection (Stopped & Alert)
+    } else if (windPowerVal < 300) {
+        icon.classList.add("spin-slow");
+    } else if (windPowerVal < 700) {
+        icon.classList.add("spin-medium");
     } else {
-
-        dot.style.display = "block";
-        dot.style.animationDuration =
-            solarDuration + "s";
+        icon.classList.add("spin-fast");
     }
-});
-const solarConnection =
-    document.querySelector(".solar-connection");
-
-if(solarConnection){
-
-    solarConnection.classList.toggle(
-        "no-flow",
-        solar === 0
-    );
 }
 
-document.querySelectorAll(".wind-dot")
-.forEach(dot => {
-    if (wind === 0) {
+// =====================================
+// SIMULATION STEP ENGINE
+// =====================================
+function runSimulationTick() {
+    let solar = Number(solarPower.value);
+    let wind = Number(windPower.value);
+    const residential = Number(residentialLoad.value);
+    const commercial = Number(commercialLoad.value);
+    const industrial = Number(industrialLoad.value);
+    const isIslanded = islandModeToggle.checked;
 
-        dot.style.display = "none";
+    // Grid components DOM
+    const nodeSolar = document.getElementById("node-solar");
+    const nodeWind = document.getElementById("node-wind");
+    const nodeUtility = document.getElementById("node-utility");
+    const nodeBattery = document.getElementById("node-battery");
+    const nodeRes = document.getElementById("node-res");
+    const nodeCom = document.getElementById("node-com");
+    const nodeInd = document.getElementById("node-ind");
+    const controller = document.getElementById("node-controller");
+    const batteryLevelBar = document.getElementById("batteryLevelBar");
 
+    // Clear alert highlights
+    nodeWind.classList.remove("storm-alert");
+    nodeRes.classList.remove("blackout-state");
+    nodeCom.classList.remove("blackout-state");
+    nodeInd.classList.remove("blackout-state");
+
+    // STORM LOCKOUT LOGIC:
+    const isStorm = document.getElementById("btn-storm").classList.contains("active");
+    if (isStorm) {
+        wind = 0;
+        windPower.value = 0;
+        windPowerValue.textContent = "0 kW (LOCKED)";
+        nodeWind.classList.add("storm-alert");
+    }
+
+    animateTurbine(wind);
+
+    // Sum generation and consumption demand
+    const totalGenerated = solar + wind;
+    const totalLoad = residential + commercial + industrial;
+    let netBalance = totalGenerated - totalLoad;
+
+    let batteryPowerExchange = 0; // Negative = charging, Positive = discharging
+    let utilityPowerExchange = 0; // Negative = exporting, Positive = importing
+    let actualLoadCovered = totalLoad;
+    let blackoutActive = false;
+
+    // BATTERY STORAGE SYSTEM & UTILITY GRID INTEGRATED FLOW LOGIC
+    if (netBalance > 0) {
+        // POWER SURPLUS:
+        // 1. Charge Battery first
+        if (batteryCharge < 100) {
+            const chargeSpeed = 2.0; // Charge rate multiplier
+            batteryCharge = Math.min(100, batteryCharge + chargeSpeed);
+            batteryPowerExchange = -Math.min(netBalance, 150); // Cap battery absorption rate
+            netBalance += batteryPowerExchange; // Reduce remaining surplus
+        }
+
+        // 2. Export remaining surplus to Utility Grid (if tied)
+        if (netBalance > 0 && !isIslanded) {
+            utilityPowerExchange = -netBalance; // Export surplus
+        }
+    } else if (netBalance < 0) {
+        // POWER DEFICIT:
+        let deficitRemaining = Math.abs(netBalance);
+
+        // 1. Discharge battery to cover the deficit
+        if (batteryCharge > 0) {
+            const dischargeSpeed = 2.0;
+            batteryCharge = Math.max(0, batteryCharge - dischargeSpeed);
+            batteryPowerExchange = Math.min(deficitRemaining, 200); // Cap max discharge rate
+            deficitRemaining -= batteryPowerExchange;
+        }
+
+        // 2. Import backup power from utility grid (if tied)
+        if (deficitRemaining > 0) {
+            if (!isIslanded) {
+                utilityPowerExchange = deficitRemaining;
+                deficitRemaining = 0;
+            } else {
+                // 3. BLACKOUT: standalone Island mode has run out of battery!
+                blackoutActive = true;
+                actualLoadCovered = Math.max(0, totalLoad - deficitRemaining);
+            }
+        }
+    }
+
+    // UPDATE DIAGRAM LABELS & METRIC DOMS
+    solarOutput.textContent = solar + " kW";
+    windOutput.textContent = wind + " kW";
+    residentialDemand.textContent = residential + " kW";
+    commercialDemand.textContent = commercial + " kW";
+    industrialDemand.textContent = industrial + " kW";
+
+    // Update Battery DOM representation
+    batteryLevelBar.style.width = batteryCharge.toFixed(0) + "%";
+    
+    // Set battery bar charge color depending on state
+    batteryLevelBar.className = "battery-level";
+    if (batteryPowerExchange < 0) {
+        batteryLevelBar.classList.add("charging");
+        batteryOutput.textContent = batteryCharge.toFixed(0) + "% (Charging)";
+    } else if (batteryPowerExchange > 0) {
+        batteryLevelBar.classList.add("discharging");
+        batteryOutput.textContent = batteryCharge.toFixed(0) + "% (Discharging)";
     } else {
-
-        dot.style.display = "block";
-        dot.style.animationDuration =
-            windDuration + "s";
-    }
-});
-const windConnection =
-    document.querySelector(".wind-connection");
-
-if(windConnection){
-
-    windConnection.classList.toggle(
-        "no-flow",
-        wind === 0
-    );
-}
-const residentialDots =
-    residential === 0
-    ? 0
-    : Math.ceil((residential / 500) * 7);
-
-document.querySelectorAll(".lp")
-.forEach((dot,index)=>{
-
-    dot.style.display =
-        index < residentialDots
-        ? "block"
-        : "none";
-});
-const industrialDots =
-    industrial === 0
-    ? 0
-    : Math.ceil((industrial / 1000) * 7);
-
-document.querySelectorAll(".rp")
-.forEach((dot,index)=>{
-
-    dot.style.display =
-        index < industrialDots
-        ? "block"
-        : "none";
-});
-const centerLoad =
-    document.querySelector(".center-load");
-
-if(centerLoad){
-
-    centerLoad.classList.toggle(
-        "no-flow",
-        commercial === 0
-    );
-}
-// Residential vertical particles
-
-const vd1 = document.querySelector(".vd1");
-const vd2 = document.querySelector(".vd2");
-
-if (residential === 0) {
-
-    if(vd1) vd1.style.display = "none";
-    if(vd2) vd2.style.display = "none";
-
-} else {
-if (residential > 0) {
-
-    if(vd1) vd1.style.display = "block";
-
-    if(vd2){
-        vd2.style.display =
-            residential > 300
-            ? "block"
-            : "none";
+        batteryOutput.textContent = batteryCharge.toFixed(0) + "% (Standby)";
     }
 
-} else {
-
-    if(vd1) vd1.style.display = "none";
-    if(vd2) vd2.style.display = "none";
-}
-}
-
-// Industrial vertical particles
-
-const vd5 = document.querySelector(".vd5");
-const vd6 = document.querySelector(".vd6");
-
-if (industrial === 0) {
-
-    if(vd5) vd5.style.display = "none";
-    if(vd6) vd6.style.display = "none";
-
-} else {
-
-   if (industrial > 0) {
-
-    if(vd5) vd5.style.display = "block";
-
-    if(vd6){
-        vd6.style.display =
-            industrial > 600
-            ? "block"
-            : "none";
+    // Update Utility Grid DOM
+    const utilityBadge = document.getElementById("utilityBadge");
+    if (isIslanded) {
+        utilityBadge.textContent = "ISLAND";
+        utilityBadge.className = "node-badge islanded";
+        utilityOutput.textContent = "Offline (Island)";
+        nodeUtility.style.borderColor = "rgba(255,255,255,0.08)";
+    } else {
+        utilityBadge.textContent = "TIED";
+        utilityBadge.className = "node-badge";
+        if (utilityPowerExchange > 0) {
+            utilityOutput.textContent = `Import: ${utilityPowerExchange.toFixed(0)} kW`;
+            nodeUtility.style.borderColor = "var(--color-utility)";
+        } else if (utilityPowerExchange < 0) {
+            utilityOutput.textContent = `Export: ${Math.abs(utilityPowerExchange).toFixed(0)} kW`;
+            nodeUtility.style.borderColor = "var(--color-solar)";
+        } else {
+            utilityOutput.textContent = "Standby (Tied)";
+            nodeUtility.style.borderColor = "rgba(255,255,255,0.08)";
+        }
     }
 
-} else {
+    // Blackout / Rolling load shedding visual updates
+    if (blackoutActive) {
+        nodeRes.classList.add("blackout-state");
+        nodeCom.classList.add("blackout-state");
+        nodeInd.classList.add("blackout-state");
+    }
 
-    if(vd5) vd5.style.display = "none";
-    if(vd6) vd6.style.display = "none";
+    // CALCULATE GLOBAL RESULTS
+    let efficiency = totalLoad > 0 ? (actualLoadCovered / totalLoad) * 100 : 100;
+    efficiency = efficiency.toFixed(1);
+
+    // Update SCADA Header Values
+    if (generatedPowerStatus) generatedPowerStatus.textContent = totalGenerated;
+    if (totalDemandStatus) totalDemandStatus.textContent = totalLoad;
+    
+    const balanceSign = (totalGenerated - totalLoad) >= 0 ? "+" : "";
+    if (netBalanceStatus) {
+        netBalanceStatus.textContent = balanceSign + (totalGenerated - totalLoad);
+        netBalanceStatus.className = "value value-balance";
+        if (totalGenerated - totalLoad > 0) {
+            netBalanceStatus.classList.add("surplus");
+        } else if (totalGenerated - totalLoad < 0) {
+            netBalanceStatus.classList.add("deficit");
+        } else {
+            netBalanceStatus.classList.add("balanced");
+        }
+    }
+
+    if (efficiencyStatus) efficiencyStatus.textContent = efficiency;
+
+    // Update Bottom Results Deck Doms
+    generatedPower.textContent = totalGenerated + " kW";
+    totalDemand.textContent = totalLoad + " kW";
+    surplusPower.textContent = (totalGenerated - totalLoad) + " kW";
+    
+    if (totalGenerated - totalLoad > 0) {
+        surplusPower.style.color = "var(--color-solar)";
+        if (svgSurplus) {
+            svgSurplus.setAttribute("stroke", "var(--color-solar)");
+            svgSurplus.innerHTML = `<line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>`;
+        }
+    } else if (totalGenerated - totalLoad < 0) {
+        surplusPower.style.color = "var(--color-utility)";
+        if (svgSurplus) {
+            svgSurplus.setAttribute("stroke", "var(--color-utility)");
+            svgSurplus.innerHTML = `<line x1="5" y1="12" x2="19" y2="12"></line>`;
+        }
+    } else {
+        surplusPower.style.color = "var(--color-controller)";
+        if (svgSurplus) {
+            svgSurplus.setAttribute("stroke", "var(--color-controller)");
+            svgSurplus.innerHTML = `<line x1="5" y1="9" x2="19" y2="9"></line><line x1="5" y1="15" x2="19" y2="15"></line>`;
+        }
+    }
+
+    gridEfficiency.textContent = efficiency + "%";
+
+    // Renewable share / utilization calculation
+    let renewShare = totalGenerated > 0 ? (Math.min(totalGenerated, totalLoad) / Math.max(totalLoad, 1)) * 100 : 100;
+    
+    if (renewShare >= 80) {
+        renewableUtilization.textContent = "High";
+        renewableUtilization.style.color = "#10b981";
+    } else if (renewShare >= 40) {
+        renewableUtilization.textContent = "Moderate";
+        renewableUtilization.style.color = "#f59e0b";
+    } else {
+        renewableUtilization.textContent = "Low";
+        renewableUtilization.style.color = "#ef4444";
+    }
+
+    // Grid Status indicator pill
+    if (blackoutActive) {
+        gridCondition.textContent = "Blackout / Alarm";
+        gridCondition.style.color = "var(--color-utility)";
+        if (gridStatus) {
+            gridStatus.textContent = "Blackout";
+            gridStatus.className = "state-pill status-danger";
+        }
+    } else if (isStorm) {
+        gridCondition.textContent = "Storm Protocol";
+        gridCondition.style.color = "var(--color-controller)";
+        if (gridStatus) {
+            gridStatus.textContent = "Storm Lock";
+            gridStatus.className = "state-pill status-warning";
+        }
+    } else if (utilityPowerExchange > 0) {
+        gridCondition.textContent = "Grid Importing";
+        gridCondition.style.color = "var(--color-controller)";
+        if (gridStatus) {
+            gridStatus.textContent = "Importing";
+            gridStatus.className = "state-pill status-warning";
+        }
+    } else if (utilityPowerExchange < 0) {
+        gridCondition.textContent = "Grid Exporting";
+        gridCondition.style.color = "var(--color-solar)";
+        if (gridStatus) {
+            gridStatus.textContent = "Exporting";
+            gridStatus.className = "state-pill status-normal";
+        }
+    } else if (batteryPowerExchange > 0) {
+        gridCondition.textContent = "Battery Discharging";
+        gridCondition.style.color = "var(--color-controller)";
+        if (gridStatus) {
+            gridStatus.textContent = "Discharging";
+            gridStatus.className = "state-pill status-warning";
+        }
+    } else if (batteryPowerExchange < 0) {
+        gridCondition.textContent = "Battery Charging";
+        gridCondition.style.color = "var(--color-solar)";
+        if (gridStatus) {
+            gridStatus.textContent = "Charging";
+            gridStatus.className = "state-pill status-normal";
+        }
+    } else {
+        gridCondition.textContent = "Grid Stable";
+        gridCondition.style.color = "var(--color-dist)";
+        if (gridStatus) {
+            gridStatus.textContent = "Balanced";
+            gridStatus.className = "state-pill status-normal";
+        }
+    }
+
+    // =====================================
+    // TRANSMISSION POWER FLOW LINES (SVG PATH CONTROL)
+    // =====================================
+    const flowSolar = document.getElementById("flow-solar");
+    const flowWind = document.getElementById("flow-wind");
+    const flowUtility = document.getElementById("flow-utility");
+    const flowBattery = document.getElementById("flow-battery");
+    const flowControllerDist = document.getElementById("flow-controller-dist");
+    const flowDistRes = document.getElementById("flow-dist-res");
+    const flowDistCom = document.getElementById("flow-dist-com");
+    const flowDistInd = document.getElementById("flow-dist-ind");
+
+    if (simulationRunning) {
+        if (solar > 0) {
+            flowSolar.style.opacity = "1";
+            flowSolar.style.stroke = "var(--color-solar)";
+            const solarSpeed = Math.max(0.8, 4 - (solar / 250));
+            flowSolar.style.setProperty("--flow-speed", `${solarSpeed}s`);
+        } else {
+            flowSolar.style.opacity = "0";
+        }
+
+        if (wind > 0) {
+            flowWind.style.opacity = "1";
+            flowWind.style.stroke = "var(--color-wind)";
+            const windSpeed = Math.max(0.8, 4 - (wind / 250));
+            flowWind.style.setProperty("--flow-speed", `${windSpeed}s`);
+        } else {
+            flowWind.style.opacity = "0";
+        }
+
+        if (batteryPowerExchange < 0) {
+            flowBattery.style.opacity = "1";
+            flowBattery.style.stroke = "var(--color-solar)";
+            flowBattery.className = "flow-path flow-forward";
+        } else if (batteryPowerExchange > 0) {
+            flowBattery.style.opacity = "1";
+            flowBattery.style.stroke = "var(--color-controller)";
+            flowBattery.className = "flow-path flow-reverse";
+        } else {
+            flowBattery.style.opacity = "0";
+        }
+
+        if (!isIslanded && utilityPowerExchange > 0) {
+            flowUtility.style.opacity = "1";
+            flowUtility.style.stroke = "var(--color-utility)";
+            flowUtility.className = "flow-path flow-forward";
+        } else if (!isIslanded && utilityPowerExchange < 0) {
+            flowUtility.style.opacity = "1";
+            flowUtility.style.stroke = "var(--color-solar)";
+            flowUtility.className = "flow-path flow-reverse";
+        } else {
+            flowUtility.style.opacity = "0";
+        }
+
+        if (totalLoad > 0 && !blackoutActive) {
+            flowControllerDist.style.opacity = "1";
+            flowControllerDist.style.stroke = "var(--color-controller)";
+            const transSpeed = Math.max(0.8, 4 - (actualLoadCovered / 500));
+            flowControllerDist.style.setProperty("--flow-speed", `${transSpeed}s`);
+        } else {
+            flowControllerDist.style.opacity = "0";
+        }
+
+        if (residential > 0 && !blackoutActive) {
+            flowDistRes.style.opacity = "1";
+            flowDistRes.style.stroke = "var(--color-dist)";
+            const speed = Math.max(0.8, 4 - (residential / 125));
+            flowDistRes.style.setProperty("--flow-speed", `${speed}s`);
+        } else {
+            flowDistRes.style.opacity = "0";
+        }
+
+        if (commercial > 0 && !blackoutActive) {
+            flowDistCom.style.opacity = "1";
+            flowDistCom.style.stroke = "var(--color-dist)";
+            const speed = Math.max(0.8, 4 - (commercial / 125));
+            flowDistCom.style.setProperty("--flow-speed", `${speed}s`);
+        } else {
+            flowDistCom.style.opacity = "0";
+        }
+
+        if (industrial > 0 && !blackoutActive) {
+            flowDistInd.style.opacity = "1";
+            flowDistInd.style.stroke = "var(--color-dist)";
+            const speed = Math.max(0.8, 4 - (industrial / 250));
+            flowDistInd.style.setProperty("--flow-speed", `${speed}s`);
+        } else {
+            flowDistInd.style.opacity = "0";
+        }
+    } else {
+        flowSolar.style.opacity = "0";
+        flowWind.style.opacity = "0";
+        flowUtility.style.opacity = "0";
+        flowBattery.style.opacity = "0";
+        flowControllerDist.style.opacity = "0";
+        flowDistRes.style.opacity = "0";
+        flowDistCom.style.opacity = "0";
+        flowDistInd.style.opacity = "0";
+    }
+
+    updateScadaChart(totalGenerated, totalLoad);
 }
-}    
 
-    let efficiency = 0;
+// =====================================
+// SIMULATION START/STOP LOOPS
+// =====================================
+function triggerSimulationStart() {
+    if (simulationRunning) return;
+    simulationRunning = true;
+    
+    document.body.classList.add("simulation-active");
+    
+    if (simulationInterval) clearInterval(simulationInterval);
 
-if (totalLoad === 0) {
-
-    efficiency = 100;
-
-} else {
-
-    efficiency =
-        (Math.min(totalGenerated, totalLoad) / totalLoad) * 100;
+    runSimulationTick();
+    simulationInterval = setInterval(runSimulationTick, 1000);
 }
-
-    efficiency =
-        efficiency.toFixed(1);
-
-    // Diagram Update
-
-    solarOutput.textContent =
-        solar + " kW";
-
-    windOutput.textContent =
-        wind + " kW";
-
-    residentialDemand.textContent =
-        residential + " kW";
-
-    commercialDemand.textContent =
-        commercial + " kW";
-
-    industrialDemand.textContent =
-        industrial + " kW";
-
-    // Results Update
-
-    generatedPower.textContent =
-        totalGenerated + " kW";
-
-    totalDemand.textContent =
-        totalLoad + " kW";
-
-    surplusPower.textContent =
-        surplus + " kW";
-        if (surplus >= 0) {
-
-    surplusPower.style.color =
-        "#16a34a";
-
-} else {
-
-    surplusPower.style.color =
-        "#dc2626";
-}
-
-    gridEfficiency.textContent =
-        efficiency + "%";
-
-    // Status Panel
-
-    generatedPowerStatus.textContent =
-        totalGenerated;
-
-    totalDemandStatus.textContent =
-        totalLoad;
-
-    efficiencyStatus.textContent =
-        efficiency;
-
-    // Renewable Utilization
-
-    if (efficiency >= 80) {
-
-    renewableUtilization.textContent =
-        "Excellent";
-
-    renewableUtilization.style.color =
-        "#16a34a";
-
-} else if (efficiency >= 60) {
-
-    renewableUtilization.textContent =
-        "Good";
-
-    renewableUtilization.style.color =
-        "#2563eb";
-
-} else if (efficiency >= 40) {
-
-    renewableUtilization.textContent =
-        "Moderate";
-
-    renewableUtilization.style.color =
-        "#f97316";
-
-} else {
-
-    renewableUtilization.textContent =
-        "Poor";
-
-    renewableUtilization.style.color =
-        "#dc2626";
-}
-
-    // Grid Condition
-
-   if (surplus > 100) {
-
-    gridCondition.textContent =
-        "Power Surplus";
-
-    gridCondition.style.color =
-        "#16a34a";
-
-    gridStatus.textContent =
-        "Surplus";
-
-    gridStatus.className =
-        "status-normal";
-
-} else if (surplus >= 0) {
-
-    gridCondition.textContent =
-        "Stable";
-
-    gridCondition.style.color =
-        "#2563eb";
-
-    gridStatus.textContent =
-        "Balanced";
-
-    gridStatus.className =
-        "status-normal";
-
-} else {
-
-    gridCondition.textContent =
-        "Power Deficit";
-
-    gridCondition.style.color =
-        "#dc2626";
-
-    gridStatus.textContent =
-        "Deficit";
-
-    gridStatus.className =
-        "status-danger";
-}
-}
-
-// Start Simulation
 
 startBtn.addEventListener("click", () => {
-
-    simulationRunning = true;
-
-    document.body.classList.add("simulation-active");
-
-    runSimulation();
+    triggerSimulationStart();
 });
-// Stop Simulation
 
 stopBtn.addEventListener("click", () => {
-
-    simulationRunning = false;
-
-    document.body.classList.remove("simulation-active");
-
-    gridStatus.textContent = "Stopped";
-
-    gridStatus.className = "status-warning";
+    triggerSimulationStop();
 });
 
-// Reset Simulation
-
 resetBtn.addEventListener("click", () => {
-
-    simulationRunning = false;
-
-    document.body.classList.remove("simulation-active");
+    triggerSimulationStop();
 
     solarPower.value = 500;
     windPower.value = 300;
-
     residentialLoad.value = 200;
     commercialLoad.value = 150;
     industrialLoad.value = 250;
+    islandModeToggle.checked = false;
+    batteryCharge = 50.0;
 
-    updateSliderValues();
+    document.querySelectorAll(".node-btn").forEach(btn => btn.classList.remove("active"));
+    document.getElementById("btn-sun").classList.add("active");
+    document.getElementById("btn-wind").classList.add("active");
 
-   gridStatus.textContent = "Ready";
-gridStatus.className = "";
-});
+    chartGenHistory = Array(30).fill(0);
+    chartDemHistory = Array(30).fill(0);
 
-// Live Slider Updates
+    updateSliderLabels();
+    runSimulationTick();
 
-solarPower.addEventListener("input", () => {
-
-    updateSliderValues();
-
-    if (simulationRunning) {
-
-        runSimulation();
+    if (gridStatus) {
+        gridStatus.textContent = "Ready";
+        gridStatus.className = "state-pill status-ready";
     }
 });
 
-windPower.addEventListener("input", () => {
-
-    updateSliderValues();
-
-    if (simulationRunning) {
-
-        runSimulation();
+function triggerSimulationStop() {
+    simulationRunning = false;
+    document.body.classList.remove("simulation-active");
+    
+    if (simulationInterval) {
+        clearInterval(simulationInterval);
+        simulationInterval = null;
     }
+
+    runSimulationTick();
+    
+    if (gridStatus) {
+        gridStatus.textContent = "Stopped";
+        gridStatus.className = "state-pill status-warning";
+    }
+}
+
+// =====================================
+// INTERACTIVE PRESET CLICKS
+// =====================================
+document.getElementById("btn-sun").addEventListener("click", (e) => {
+    solarPower.value = 1000;
+    setActivePresetGroup(e.target);
+});
+document.getElementById("btn-cloud").addEventListener("click", (e) => {
+    solarPower.value = 300;
+    setActivePresetGroup(e.target);
+});
+document.getElementById("btn-night").addEventListener("click", (e) => {
+    solarPower.value = 0;
+    setActivePresetGroup(e.target);
 });
 
-residentialLoad.addEventListener("input", () => {
-
-    updateSliderValues();
-
-    if (simulationRunning) {
-
-        runSimulation();
-    }
+document.getElementById("btn-wind").addEventListener("click", (e) => {
+    windPower.value = 700;
+    setActivePresetGroup(e.target);
+});
+document.getElementById("btn-breeze").addEventListener("click", (e) => {
+    windPower.value = 250;
+    setActivePresetGroup(e.target);
+});
+document.getElementById("btn-calm").addEventListener("click", (e) => {
+    windPower.value = 0;
+    setActivePresetGroup(e.target);
+});
+document.getElementById("btn-storm").addEventListener("click", (e) => {
+    windPower.value = 1000;
+    setActivePresetGroup(e.target);
 });
 
-commercialLoad.addEventListener("input", () => {
+function setActivePresetGroup(activeBtn) {
+    const parent = activeBtn.parentElement;
+    parent.querySelectorAll(".node-btn").forEach(btn => btn.classList.remove("active"));
+    activeBtn.classList.add("active");
 
-    updateSliderValues();
+    updateSliderLabels();
+    if (simulationRunning) runSimulationTick();
+}
 
-    if (simulationRunning) {
-
-        runSimulation();
-    }
+// =====================================
+// CONTROL PANEL SCENARIO BUTTONS
+// =====================================
+document.getElementById("presetPeak").addEventListener("click", (e) => {
+    residentialLoad.value = 450;
+    commercialLoad.value = 400;
+    industrialLoad.value = 850;
+    setActiveScenario(e.target);
 });
 
-industrialLoad.addEventListener("input", () => {
-
-    updateSliderValues();
-
-    if (simulationRunning) {
-
-        runSimulation();
-    }
+document.getElementById("presetStorm").addEventListener("click", (e) => {
+    solarPower.value = 100;
+    windPower.value = 1000;
+    document.querySelectorAll(".node-btn").forEach(btn => btn.classList.remove("active"));
+    document.getElementById("btn-cloud").classList.add("active");
+    document.getElementById("btn-storm").classList.add("active");
+    setActiveScenario(e.target);
 });
 
-// Initial Load
+document.getElementById("presetNight").addEventListener("click", (e) => {
+    solarPower.value = 0;
+    windPower.value = 200;
+    residentialLoad.value = 350;
+    commercialLoad.value = 100;
+    industrialLoad.value = 150;
+    document.querySelectorAll(".node-btn").forEach(btn => btn.classList.remove("active"));
+    document.getElementById("btn-night").classList.add("active");
+    document.getElementById("btn-breeze").classList.add("active");
+    setActiveScenario(e.target);
+});
 
-updateSliderValues();
+document.getElementById("presetEco").addEventListener("click", (e) => {
+    solarPower.value = 800;
+    windPower.value = 500;
+    residentialLoad.value = 150;
+    commercialLoad.value = 100;
+    industrialLoad.value = 200;
+    document.querySelectorAll(".node-btn").forEach(btn => btn.classList.remove("active"));
+    document.getElementById("btn-sun").classList.add("active");
+    document.getElementById("btn-wind").classList.add("active");
+    setActiveScenario(e.target);
+});
 
-gridStatus.textContent = "Ready";
+function setActiveScenario(activeBtn) {
+    document.querySelectorAll(".preset-btn").forEach(btn => btn.classList.remove("active"));
+    activeBtn.classList.add("active");
+    
+    updateSliderLabels();
+    if (simulationRunning) runSimulationTick();
+}
+
+// =====================================
+// LIVE SLIDER INPUT LISTENERS
+// =====================================
+const slidersList = [solarPower, windPower, residentialLoad, commercialLoad, industrialLoad];
+slidersList.forEach(slider => {
+    slider.addEventListener("input", () => {
+        document.querySelectorAll(".preset-btn").forEach(btn => btn.classList.remove("active"));
+        
+        if (slider === solarPower) {
+            document.getElementById("node-solar").querySelectorAll(".node-btn").forEach(btn => btn.classList.remove("active"));
+        }
+        if (slider === windPower) {
+            document.getElementById("node-wind").querySelectorAll(".node-btn").forEach(btn => btn.classList.remove("active"));
+        }
+
+        updateSliderLabels();
+        if (simulationRunning) runSimulationTick();
+    });
+});
+
+islandModeToggle.addEventListener("change", () => {
+    if (simulationRunning) runSimulationTick();
+});
+
+// =====================================
+// INITIAL ONLOAD SETUP
+// =====================================
+updateSliderLabels();
+runSimulationTick();
+if (gridStatus) {
+    gridStatus.textContent = "Ready";
+    gridStatus.className = "state-pill status-ready";
+}

@@ -6,438 +6,358 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Grid Energy Distribution Laboratory</title>
     <link rel="stylesheet" href="./css/main.css">
+    <!-- Google Fonts: Orbitron & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- HEADER -->
-
-    <header>
-        <h1>Smart Grid Energy Distribution Laboratory</h1>
-        <p>Smart City Infrastructure Engineering Virtual Lab</p>
-    </header>
-
     <!-- MAIN CONTAINER -->
-
     <div class="main-container">
 
-        <!-- INPUT PANEL -->
-
+        <!-- INPUT PANEL (SIDEBAR) -->
         <aside class="control-panel">
+            <h2>Grid Controls</h2>
 
-            <h2>Input Parameters</h2>
-
+            <!-- Sliders for Sources -->
+            <div class="control-section-title">Generation Sources</div>
+            
             <div class="input-group">
                 <label>Solar Generation (kW)</label>
-                <input type="range"
-                       id="solarPower"
-                       min="0"
-                       max="1000"
-                       value="500">
-                <span id="solarPowerValue">
-                    500 kW
-                </span>
+                <input type="range" id="solarPower" min="0" max="1000" value="500">
+                <span id="solarPowerValue">500 kW</span>
             </div>
 
             <div class="input-group">
                 <label>Wind Generation (kW)</label>
-                <input type="range"
-                       id="windPower"
-                       min="0"
-                       max="1000"
-                       value="300">
-                <span id="windPowerValue">
-                    300 kW
-                </span>
+                <input type="range" id="windPower" min="0" max="1000" value="300">
+                <span id="windPowerValue">300 kW</span>
             </div>
+
+            <!-- Sliders for Loads -->
+            <div class="control-section-title">Consumption Loads</div>
 
             <div class="input-group">
                 <label>Residential Load (kW)</label>
-                <input type="range"
-                       id="residentialLoad"
-                       min="0"
-                       max="500"
-                       value="200">
-                <span id="residentialLoadValue">
-                    200 kW
-                </span>
+                <input type="range" id="residentialLoad" min="0" max="500" value="200">
+                <span id="residentialLoadValue">200 kW</span>
             </div>
 
             <div class="input-group">
                 <label>Commercial Load (kW)</label>
-                <input type="range"
-                       id="commercialLoad"
-                       min="0"
-                       max="500"
-                       value="150">
-                <span id="commercialLoadValue">
-                    150 kW
-                </span>
+                <input type="range" id="commercialLoad" min="0" max="500" value="150">
+                <span id="commercialLoadValue">150 kW</span>
             </div>
 
             <div class="input-group">
                 <label>Industrial Load (kW)</label>
-                <input type="range"
-                       id="industrialLoad"
-                       min="0"
-                       max="1000"
-                       value="250">
-                <span id="industrialLoadValue">
-                    250 kW
-                </span>
+                <input type="range" id="industrialLoad" min="0" max="1000" value="250">
+                <span id="industrialLoadValue">250 kW</span>
             </div>
 
-            <button id="startBtn">
-                 ▶ Start Simulation
-            </button>
+            <!-- Toggles and Presets -->
+            <div class="control-section-title">Grid Mode & Presets</div>
+            
+            <div class="input-group toggle-group">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="islandModeToggle">
+                    <span class="slider round"></span>
+                </label>
+                <span class="toggle-label">Island Mode (Standalone)</span>
+            </div>
 
-            <button id="stopBtn">
-                ■ Stop Simulation
-            </button>
+            <div class="presets-grid">
+                <button class="preset-btn" id="presetPeak">Peak Load</button>
+                <button class="preset-btn" id="presetStorm">Storm Event</button>
+                <button class="preset-btn" id="presetNight">Night Time</button>
+                <button class="preset-btn" id="presetEco">Eco Mode</button>
+            </div>
 
-            <button id="resetBtn">
-                ↻ Reset
-            </button>
-
+            <!-- Primary Buttons -->
+            <hr>
+            <button id="startBtn">Start Grid Simulation</button>
+            <button id="stopBtn">Pause Grid Controller</button>
+            <button id="resetBtn">Reset Parameters</button>
         </aside>
 
-        <!-- SIMULATION AREA -->
-
+        <!-- SIMULATION PANEL -->
         <section class="simulation-panel">
 
-            <div class="simulation-status">
+            <!-- THE INTERACTIVE SMART GRID AREA -->
+            <div class="intersection-wrapper">
+                <div class="smart-grid">
+                    
+                    <!-- SVG TRANSMISSION LINES LAYER -->
+                    <svg class="transmission-svg" width="1200" height="660" viewBox="0 0 1200 660">
+                        <!-- Static Background Paths -->
+                        <path class="grid-line" id="bg-solar" d="M 140 100 L 140 180 L 600 180 L 600 220" />
+                        <path class="grid-line" id="bg-wind" d="M 1060 100 L 1060 180 L 600 180 L 600 220" />
+                        <path class="grid-line" id="bg-utility" d="M 140 290 L 490 290" />
+                        <path class="grid-line" id="bg-battery" d="M 710 290 L 1060 290" />
+                        <path class="grid-line" id="bg-controller-dist" d="M 600 360 L 600 390" />
+                        <path class="grid-line" id="bg-dist-res" d="M 600 500 L 600 510 L 140 510 L 140 520" />
+                        <path class="grid-line" id="bg-dist-com" d="M 600 500 L 600 520" />
+                        <path class="grid-line" id="bg-dist-ind" d="M 600 500 L 600 510 L 1060 510 L 1060 520" />
+                        
+                        <!-- Animated Flow Paths (Electricity dashes) -->
+                        <path class="flow-path flow-forward" id="flow-solar" d="M 140 100 L 140 180 L 600 180 L 600 220" />
+                        <path class="flow-path flow-forward" id="flow-wind" d="M 1060 100 L 1060 180 L 600 180 L 600 220" />
+                        <path class="flow-path" id="flow-utility" d="M 140 290 L 490 290" />
+                        <path class="flow-path" id="flow-battery" d="M 710 290 L 1060 290" />
+                        <path class="flow-path flow-forward" id="flow-controller-dist" d="M 600 360 L 600 390" />
+                        <path class="flow-path flow-forward" id="flow-dist-res" d="M 600 500 L 600 510 L 140 510 L 140 520" />
+                        <path class="flow-path flow-forward" id="flow-dist-com" d="M 600 500 L 600 520" />
+                        <path class="flow-path flow-forward" id="flow-dist-ind" d="M 600 500 L 600 510 L 1060 510 L 1060 520" />
+                    </svg>
 
-                <h3>Grid Status</h3>
+                    <!-- GRID NODES -->
+                    <!-- Solar Power Plant Node -->
+                    <div class="grid-node source-node solar-node" id="node-solar">
+                        <!-- Custom Vector Solar Panel Icon -->
+                        <svg viewBox="0 0 100 100" width="45" height="45" fill="none" stroke="var(--color-solar)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="20" y="30" width="60" height="40" rx="4" />
+                            <line x1="20" y1="50" x2="80" y2="50" />
+                            <line x1="40" y1="30" x2="40" y2="70" />
+                            <line x1="60" y1="30" x2="60" y2="70" />
+                            <line x1="50" y1="70" x2="50" y2="90" stroke-width="4" />
+                            <line x1="35" y1="90" x2="65" y2="90" stroke-width="4" />
+                        </svg>
+                        <h3>Solar Power</h3>
+                        <p class="output-value" id="solarOutput">500 kW</p>
+                        <div class="node-controls">
+                            <button class="node-btn active" data-val="1.0" id="btn-sun">Sunny</button>
+                            <button class="node-btn" data-val="0.3" id="btn-cloud">Cloudy</button>
+                            <button class="node-btn" data-val="0.0" id="btn-night">Night</button>
+                        </div>
+                    </div>
 
-                <p>
-                    Generated Power :
-                    <span id="generatedPowerStatus">
-                        800
-                    </span>
-                    kW
-                </p>
+                    <!-- Wind Power Plant Node -->
+                    <div class="grid-node source-node wind-node" id="node-wind">
+                        <!-- Custom Vector Wind Turbine Icon -->
+                        <svg viewBox="0 0 100 100" width="45" height="45" style="overflow: visible;">
+                            <line x1="50" y1="50" x2="50" y2="95" stroke="#94a3b8" stroke-width="4" stroke-linecap="round" />
+                            <g id="wind-blades" style="transform-origin: 50px 50px;">
+                                <circle cx="50" cy="50" r="4" fill="var(--color-wind)" />
+                                <path d="M 50 50 L 50 15 C 52 15 54 25 50 50 Z" fill="var(--color-wind)" />
+                                <path d="M 50 50 L 80 67 C 79 69 70 72 50 50 Z" fill="var(--color-wind)" />
+                                <path d="M 50 50 L 20 67 C 21 69 30 72 50 50 Z" fill="var(--color-wind)" />
+                            </g>
+                        </svg>
+                        <h3>Wind Power</h3>
+                        <p class="output-value" id="windOutput">300 kW</p>
+                        <div class="node-controls">
+                            <button class="node-btn active" data-val="1.0" id="btn-wind">Windy</button>
+                            <button class="node-btn" data-val="0.4" id="btn-breeze">Breeze</button>
+                            <button class="node-btn" data-val="0.0" id="btn-calm">Calm</button>
+                            <button class="node-btn storm-btn" data-val="storm" id="btn-storm">Storm</button>
+                        </div>
+                    </div>
 
-                <p>
-                    Total Demand :
-                    <span id="totalDemandStatus">
-                        600
-                    </span>
-                    kW
-                </p>
+                    <!-- Utility Grid Backup Node -->
+                    <div class="grid-node grid-tied-node utility-node" id="node-utility">
+                        <!-- Custom Vector Transmission Tower Icon -->
+                        <svg viewBox="0 0 100 100" width="45" height="45" fill="none" stroke="var(--color-utility)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M 50 10 L 20 90 M 50 10 L 80 90" />
+                            <path d="M 35 50 L 65 50 M 27 70 L 73 70" />
+                            <path d="M 15 40 L 85 40 M 15 40 L 50 10 L 85 40" />
+                        </svg>
+                        <h3>Utility Grid</h3>
+                        <p class="output-value" id="utilityOutput">Standby</p>
+                        <div class="node-badge" id="utilityBadge">TIED</div>
+                    </div>
 
-                <p>
-                    Grid Efficiency :
-                    <span id="efficiencyStatus">
-                        75
-                    </span>%
-                </p>
+                    <!-- Smart Grid Controller Node -->
+                    <div class="grid-node center-hub controller-node" id="node-controller">
+                        <!-- Custom Vector Processor / Controller Icon -->
+                        <svg viewBox="0 0 100 100" width="45" height="45" fill="none" stroke="var(--color-controller)" stroke-width="3">
+                            <rect x="25" y="25" width="50" height="50" rx="6" />
+                            <path d="M 45 20 L 45 25 M 55 20 L 55 25 M 45 75 L 45 80 M 55 75 L 55 80" />
+                            <path d="M 20 45 L 25 45 M 20 55 L 25 55 M 75 45 L 80 45 M 75 55 L 80 55" />
+                            <polygon points="50 35 40 50 60 50 50 65" fill="var(--color-controller)" stroke-width="1" />
+                        </svg>
+                        <h3>Grid Controller</h3>
+                        <p class="output-value" style="font-size: 11px; letter-spacing: 0.5px;">ENERGY MANAGEMENT</p>
+                    </div>
 
-                <p>
-                    Status :
-                    <span id="gridStatus">
-                        Balanced
-                    </span>
-                </p>
+                    <!-- Battery Storage System Node -->
+                    <div class="grid-node battery-node" id="node-battery">
+                        <div class="battery-cell">
+                            <div class="battery-level" id="batteryLevelBar" style="height: 50%;"></div>
+                        </div>
+                        <h3>Battery Storage</h3>
+                        <p class="output-value" id="batteryOutput">50% (Idle)</p>
+                    </div>
 
+                    <!-- Distribution Network Node -->
+                    <div class="grid-node center-hub distribution-node" id="node-distribution">
+                        <!-- Custom Vector Smart Distribution Node Icon -->
+                        <svg viewBox="0 0 100 100" width="45" height="45" fill="none" stroke="var(--color-dist)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="50" cy="50" r="15" />
+                            <path d="M 50 15 L 50 35 M 50 65 L 50 85 M 15 50 L 35 50 M 65 50 L 85 50" />
+                            <circle cx="50" cy="15" r="4" fill="var(--color-dist)" />
+                            <circle cx="50" cy="85" r="4" fill="var(--color-dist)" />
+                            <circle cx="15" cy="50" r="4" fill="var(--color-dist)" />
+                            <circle cx="85" cy="50" r="4" fill="var(--color-dist)" />
+                        </svg>
+                        <h3>Distribution</h3>
+                        <p class="output-value" style="font-size: 11px; letter-spacing: 0.5px;">SMART ROUTING</p>
+                    </div>
+
+                    <!-- Residential Consumer Node -->
+                    <div class="grid-node consumer-node residential-node" id="node-res">
+                        <!-- Custom Vector House Icon -->
+                        <svg viewBox="0 0 100 100" width="40" height="40" fill="none" stroke="var(--color-dist)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M 20 45 L 50 20 L 80 45 L 80 85 L 20 85 Z" />
+                            <rect x="42" y="55" width="16" height="30" />
+                        </svg>
+                        <h3>Residential</h3>
+                        <p class="output-value" id="residentialDemand">200 kW</p>
+                    </div>
+
+                    <!-- Commercial Consumer Node -->
+                    <div class="grid-node consumer-node commercial-node" id="node-com">
+                        <!-- Custom Vector Commercial Building Icon -->
+                        <svg viewBox="0 0 100 100" width="40" height="40" fill="none" stroke="var(--color-dist)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="25" y="15" width="50" height="70" rx="4" />
+                            <rect x="35" y="25" width="10" height="10" />
+                            <rect x="55" y="25" width="10" height="10" />
+                            <rect x="35" y="45" width="10" height="10" />
+                            <rect x="55" y="45" width="10" height="10" />
+                            <rect x="45" y="65" width="10" height="20" />
+                        </svg>
+                        <h3>Commercial</h3>
+                        <p class="output-value" id="commercialDemand">150 kW</p>
+                    </div>
+
+                    <!-- Industrial Consumer Node -->
+                    <div class="grid-node consumer-node industrial-node" id="node-ind">
+                        <!-- Custom Vector Factory Icon -->
+                        <svg viewBox="0 0 100 100" width="40" height="40" fill="none" stroke="var(--color-dist)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M 15 85 L 15 50 L 40 65 L 40 45 L 65 60 L 65 30 L 85 45 L 85 85 Z" />
+                            <line x1="25" y1="35" x2="25" y2="50" stroke-width="4" />
+                            <line x1="50" y1="30" x2="50" y2="45" stroke-width="4" />
+                        </svg>
+                        <h3>Industrial</h3>
+                        <p class="output-value" id="industrialDemand">250 kW</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- SMART GRID DIAGRAM -->
-
-            <div class="smart-grid">
-    <div class="grid-layout">
-        
-
-                <!-- SOLAR -->
-
-                <div class="solar-node">
-    <img src="./images/solar.jpg"
-         alt="Solar Power Plant"
-         class="solar-img">
-
-    <h3>Solar Power Plant</h3>
-
-    <p id="solarOutput">
-        500 kW
-    </p>
-</div>
-
-                <!-- WIND -->
-
-               <div class="wind-node">
-    <img src="./images/wind.jpg"
-         alt="Wind Power Plant"
-         class="wind-img">
-
-    <h3>Wind Power Plant</h3>
-
-    <p id="windOutput">
-        300 kW
-    </p>
-</div>
-
-                <!-- CONNECTIONS TO CONTROLLER -->
-
-<div class="solar-connection"></div>              
- <div class="wind-connection"></div>
-               <div class="top-junction">
-
-    <!-- Solar Energy Dots -->
-    <span class="solar-dot s1"></span>
-    <span class="solar-dot s2"></span>
-    <span class="solar-dot s3"></span>
-    <span class="solar-dot s4"></span>
-    <span class="solar-dot s5"></span>
-<span class="solar-dot s6"></span>
-<span class="solar-dot s7"></span>
-
-
-    <!-- Wind Energy Dots -->
-    <span class="wind-dot w1"></span>
-    <span class="wind-dot w2"></span>
-    <span class="wind-dot w3"></span>
-    <span class="wind-dot w4"></span>
-    <span class="wind-dot w5"></span>
-<span class="wind-dot w6"></span>
-<span class="wind-dot w7"></span>
-
-</div>
-
-                <!-- CONTROLLER -->
-
-                <div class="controller-node">
-
-                    <div class="icon">
-                        ⚡
-                    </div>
-
-                    <h3>
-                        Smart Grid Controller
-                    </h3>
-                    <p class="flow-label">
-    Energy Management
-</p>
-
-                </div>
-
-                <!-- MAIN POWER LINE -->
-
-               <div class="main-power-line"></div>
-
-                <!-- DISTRIBUTION NETWORK -->
-
-                <div class="distribution-node">
-
-                    <div class="icon">
-                        🔌
-                    </div>
-
-                    <h3>
-                        Distribution Network
-                    </h3>
-                    <p class="flow-label">
-    Smart Distribution
-</p>
-
-                </div>
-
-                <!-- HORIZONTAL DISTRIBUTION LINE -->
-
-            <div class="distribution-line"></div>
-            <div class="left-vertical">
-    <span class="vd vd1"></span>
-    <span class="vd vd2"></span>
-   
-</div>
-
-<div class="right-vertical">
-    <span class="vd vd5"></span>
-    <span class="vd vd6"></span>
-    
-</div>
-
-<!-- Residential Particles -->
-<!-- Horizontal Flow : Distribution → Residential -->
-
-<div class="residential-flow">
-    <span class="lp lp1"></span>
-    <span class="lp lp2"></span>
-    <span class="lp lp3"></span>
-    <span class="lp lp4"></span>
-    <span class="lp lp5"></span>
-    <span class="lp lp6"></span>
-    <span class="lp lp7"></span>
-</div>
-
-<!-- Vertical Flow : Distribution → Commercial -->
-
-<div class="center-load"></div>
-
-<!-- Horizontal Flow : Distribution → Industrial -->
-
-<div class="industrial-flow">
-    <span class="rp rp1"></span>
-    <span class="rp rp2"></span>
-    <span class="rp rp3"></span>
-    <span class="rp rp4"></span>
-    <span class="rp rp5"></span>
-    <span class="rp rp6"></span>
-    <span class="rp rp7"></span>
-</div>
-
-                <!-- CONSUMERS -->
-
-                <div class="consumer residential">
-
-                    <div class="icon">
-                        🏠
-                    </div>
-
-                    <h4>
-                        Residential
-                    </h4>
-
-                    <p id="residentialDemand">
-                        200 kW
-                    </p>
-
-                </div>
-
-                <div class="consumer commercial">
-
-                    <div class="icon">
-                        🏢
-                    </div>
-
-                    <h4>
-                        Commercial
-                    </h4>
-
-                    <p id="commercialDemand">
-                        150 kW
-                    </p>
-
-                </div>
-
-                <div class="consumer industrial">
-
-                    <div class="icon">
-                        🏭
-                    </div>
-
-                    <h4>
-                        Industrial
-                    </h4>
-
-                    <p id="industrialDemand">
-                        250 kW
-                    </p>
-
-                </div>
-
+            <!-- LIVE SCADA REAL-TIME CHART -->
+            <div class="chart-container">
+                <h3>Live SCADA Analytics: Generation vs Demand</h3>
+                <svg class="scada-chart" id="scadaChart" width="100%" height="150" viewBox="0 0 1000 150">
+                    <defs>
+                        <linearGradient id="genGlow" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#10b981" stop-opacity="0.2"/>
+                            <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+                        </linearGradient>
+                        <linearGradient id="demGlow" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#2563eb" stop-opacity="0.2"/>
+                            <stop offset="100%" stop-color="#2563eb" stop-opacity="0.0"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- Grid background lines -->
+                    <line x1="0" y1="37.5" x2="1000" y2="37.5" stroke="#e2e8f0" stroke-dasharray="5 5" />
+                    <line x1="0" y1="75" x2="1000" y2="75" stroke="#e2e8f0" stroke-dasharray="5 5" />
+                    <line x1="0" y1="112.5" x2="1000" y2="112.5" stroke="#e2e8f0" stroke-dasharray="5 5" />
+                    
+                    <!-- Graph Paths -->
+                    <path class="chart-area" id="chartAreaGen" fill="url(#genGlow)" d="" />
+                    <path class="chart-area" id="chartAreaDem" fill="url(#demGlow)" d="" />
+                    <path class="chart-line line-gen" id="chartLineGen" d="" />
+                    <path class="chart-line line-dem" id="chartLineDem" d="" />
+                    
+                    <!-- Labels -->
+                    <text x="10" y="25" fill="#10b981" font-size="12" font-weight="bold">Generation</text>
+                    <text x="100" y="25" fill="#2563eb" font-size="12" font-weight="bold">Demand</text>
+                </svg>
             </div>
-                </div>
-
-
         </section>
 
+        <!-- RESULTS SIDEBAR (RIGHT COLUMN) -->
+        <aside class="results-sidebar">
+            <h2>Grid Outputs</h2>
+            <div class="card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="var(--color-solar)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    </svg>
+                </div>
+                <div class="card-info">
+                    <h3>Generated Power</h3>
+                    <p id="generatedPower">800 kW</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="var(--color-dist)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                </div>
+                <div class="card-info">
+                    <h3>Total Demand</h3>
+                    <p id="totalDemand">600 kW</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <svg id="svgSurplus" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="var(--color-controller)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                </div>
+                <div class="card-info">
+                    <h3>Power Surplus/Deficit</h3>
+                    <p id="surplusPower">200 kW</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="var(--color-battery)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
+                    </svg>
+                </div>
+                <div class="card-info">
+                    <h3>Grid Efficiency</h3>
+                    <p id="gridEfficiency">100.0%</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 3.5 2 7a7 7 0 0 1-7 7h-3"/>
+                        <path d="M9 20a7 7 0 0 0 7-7"/>
+                    </svg>
+                </div>
+                <div class="card-info">
+                    <h3>Renewable Share</h3>
+                    <p id="renewableUtilization">High</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <div class="card-info">
+                    <h3>Grid Condition</h3>
+                    <p id="gridCondition">Stable</p>
+                </div>
+            </div>
+        </aside>
     </div>
-        
-
-
-
-    <!-- RESULTS -->
-
-    <section class="results">
-
-       <div class="card">
-    <div class="card-icon">⚡</div>
-    <h3>Generated Power</h3>
-            <p id="generatedPower">
-                800 kW
-            </p>
-        </div>
-
-        <div class="card">
-             <div class="card-icon">👥</div>
-            <h3>Total Demand</h3>
-            <p id="totalDemand">
-                600 kW
-            </p>
-        </div>
-
-        <div class="card">
-             <div class="card-icon">📈</div>
-            <h3>Power Surplus</h3>
-            <p id="surplusPower">
-                200 kW
-            </p>
-        </div>
-
-        <div class="card">
-            <div class="card-icon">📊</div>
-            <h3>Grid Efficiency</h3>
-            <p id="gridEfficiency">
-                75%
-            </p>
-        </div>
-
-        <div class="card">
-            <div class="card-icon">🌿</div>
-            <h3>Renewable Utilization</h3>
-            <p id="renewableUtilization">
-                High
-            </p>
-        </div>
-
-        <div class="card">
-            <div class="card-icon">🛡️</div>
-            <h3>Grid Condition</h3>
-            <p id="gridCondition">
-                Stable
-            </p>
-        </div>
-
-    </section>
-
-    <!-- FORMULAS -->
-
-    <section class="formula-section">
-
-        <h2>
-            Smart Grid Energy Distribution Formulas
-        </h2>
-
-        <p>
-            Total Generated Power = Solar Generation + Wind Generation
-        </p>
-
-        <p>
-            Total Demand = Residential Load + Commercial Load + Industrial Load
-        </p>
-
-        <p>
-            Surplus Power = Generated Power − Total Demand
-        </p>
-
-        <p>
-Grid Efficiency = (Min(Total Generated Power, Total Demand) ÷ Total Demand) × 100        </p>
-
-        <p>
-Renewable Utilization = (Total Demand ÷ Total Generated Power) × 100        
-</p>
-
-        <p><strong> Grid Condition:</strong></p>
-
-<p>• Surplus Power &rarr; Generated Power &gt; Demand</p>
-
-<p>• Balanced &rarr; Generated Power = Demand</p>
-
-<p>• Power Deficit &rarr; Generated Power &lt; Demand</p>
-
-    </section>
 
     <script src="./js/main.js"></script>
-
 </body>
 
 </html>
