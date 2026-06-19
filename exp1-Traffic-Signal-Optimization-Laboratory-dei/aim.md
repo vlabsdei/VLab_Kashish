@@ -1,0 +1,1 @@
+To simulate and optimize traffic signal operation at an intersection and evaluate its impact on queue length, waiting time, vehicle throughput, and traffic efficiency.
