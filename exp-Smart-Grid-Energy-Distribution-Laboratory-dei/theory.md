@@ -1,74 +1,88 @@
-# Theory
+## 1. Introduction to Smart Grids
+A Smart Grid is an advanced electrical power network that uses digital communications, sensors, and automated controls to manage electricity distribution. Unlike traditional grids, which only transmit power one-way from large power stations to consumers, a smart grid allows two-way flows of both electricity and information. It continuously matches real-time power generation with real-time consumer load demand.
 
-A Smart Grid is an advanced electrical power system that uses digital communication, automation, and intelligent control technologies to improve the efficiency, reliability, and sustainability of electricity generation and distribution. Unlike traditional power grids, a smart grid continuously monitors power generation and consumer demand, enabling efficient energy management and real-time decision-making.
 
-In this experiment, electrical energy is generated from two renewable energy sources: Solar Power Plant and Wind Power Plant. These renewable sources supply clean energy to the grid and help reduce dependence on conventional energy resources.
+## 2. Microgrid System Components
 
-The generated power is transmitted to a Smart Grid Controller, which acts as the central management unit of the system. The controller monitors the available generation and compares it with the total consumer demand. Based on this information, power is distributed through the Distribution Network to different categories of consumers, namely Residential, Commercial, and Industrial loads.
+The microgrid simulation includes the following key components:
 
-The performance of the smart grid depends on the balance between total generated power and total consumer demand. The simulation calculates important performance parameters such as Total Generated Power, Total Demand, Power Surplus or Deficit, Grid Efficiency, Renewable Utilization, and Grid Condition.
+### 2.1 Distributed Generation Sources
+* Solar Power Plant: Generates clean energy from sunlight. The output changes depending on weather settings (Sunny, Cloudy, or Night).
+* Wind Power Plant: Generates clean energy from wind. The output depends on wind conditions (Windy, Breeze, Calm, or Storm).
 
-By changing generation and load values, users can observe how the grid responds under different operating conditions. The experiment demonstrates the importance of renewable energy integration, intelligent energy management, and efficient power distribution in modern smart city infrastructure.
+### 2.2 Central Energy Management & Routing
+* Smart Grid Controller: The brain of the system. It monitors generation, calculates demand, and makes real-time decisions on where to route power.
+* Distribution Network: The smart physical routing hub that delivers power directly to consumers.
 
-# Mathematical Formulas
+### 2.3 Battery Energy Storage System (BESS)
+A rechargeable battery storage system (with a capacity of 1000 kWh) that buffers fluctuations in solar and wind power.
+* Charging: When generation is greater than load demand, the controller directs the surplus power to charge the battery. The battery's charge rate is capped at 150 kW.
+* Discharging: When demand is higher than generation, the battery discharges to feed the loads. The battery's discharge rate is capped at 200 kW.
 
-## 1. Total Generated Power
+### 2.4 Backup Utility Grid
+A connection to the external main power grid.
+* Grid-Tied Mode: Reconnects to the utility grid. It imports electricity to cover any deficit that renewable sources and batteries cannot handle. It exports excess electricity back to the grid when local generation and batteries are full.
+* Island Mode (Standalone): Disconnects the microgrid from the utility grid. The system must rely entirely on its own generation and battery storage. If local supply falls short and the battery reaches 0%, a blackout occurs.
 
-Total Generated Power = Solar Generation + Wind Generation
 
-## 2. Total Demand
+## 3. Control Actions & Safety Protocols
 
-Total Demand = Residential Load + Commercial Load + Industrial Load
+### 3.1 Storm Lockout Protection
+In high-speed wind conditions (Storm preset), wind turbines are vulnerable to severe mechanical stress and structural damage. The grid controller automatically activates safety brakes, bringing wind power output immediately to 0 kW and displaying a red warning alert on the node. The utility grid and battery step in to keep the network stable.
 
-## 3. Power Surplus / Deficit
+### 3.2 Blackout Prevention & Load Shedding
+In Island Mode, if generation is low (e.g., night time with no wind) and the battery runs completely out of charge (0%), the controller cannot deliver power. This triggers a localized blackout state, turning consumer nodes off (red/dark state) and dropping grid efficiency to 0% until power generation increases or grid connection is restored.
 
-Power Difference = Total Generated Power − Total Demand
 
-* If Power Difference > 0 → Power Surplus
-* If Power Difference < 0 → Power Deficit
+## 4. Mathematical Calculations
 
-## 4. Grid Efficiency
+These formulas match the calculations performed in the simulation code:
 
-Grid Efficiency (%) = (Min(Total Generated Power, Total Demand) ÷ Total Demand) × 100
+### 4.1 Total Power Calculations
+* Total Generated Power (kW):
+  Total Generated Power = Solar Generation + Wind Generation
 
-## 5. Renewable Utilization
+* Total Demand (kW):
+  Total Demand = Residential Load + Commercial Load + Industrial Load
 
-Renewable Utilization (%) = (Min(Total Generated Power, Total Demand) ÷ Total Demand) × 100
+* Net Power Balance (kW):
+  Net Power Balance = Total Generated Power - Total Demand
+  * If Net Power Balance is positive (+), the grid has a surplus.
+  * If Net Power Balance is negative (-), the grid has a deficit.
 
-# Grid Conditions
+### 4.2 Battery Power Exchange (kW)
+* Under a Surplus: The battery charges at a maximum rate of 150 kW.
+  Battery Power Exchange = -Min(Net Power Balance, 150)
+* Under a Deficit: The battery discharges at a maximum rate of 200 kW.
+  Battery Power Exchange = Min(Deficit Power, 200)
 
-## Power Surplus
+### 4.3 Grid Efficiency (%)
+Grid Efficiency measures how much of the consumer load demand is successfully powered.
+* In Grid-Tied Mode: Grid Efficiency is always 100.0% because the utility grid imports backup power to cover deficits.
+* In Island Mode (Standalone): Efficiency drops if the local supply and battery cannot cover the demand.
+  Grid Efficiency = (Actual Load Covered / Total Demand) * 100
 
-Generated Power > Total Demand
+### 4.4 Renewable Share
+Renewable Share measures the proportion of demand powered by solar and wind:
+Renewable Share (%) = (Min(Total Generated Power, Total Demand) / Total Demand) * 100
 
-The grid produces more electrical energy than required by consumers.
 
-## Balanced
+## 5. Performance Classifications
 
-Generated Power = Total Demand
+### 5.1 Renewable Share Classification
+* High: Renewable Share is 80% or greater.
+* Moderate: Renewable Share is between 40% and 79%.
+* Low: Renewable Share is less than 40%.
 
-Power generation exactly matches consumer demand.
+### 5.2 Grid Conditions
+* Grid Stable: Power generation matches demand; no active imports, exports, or battery exchanges.
+* Grid Importing: Reconnected to the utility grid to bring in backup power.
+* Grid Exporting: Exporting clean surplus generation to the utility grid.
+* Battery Charging: Storing surplus power in the local BESS.
+* Battery Discharging: Supplying battery power to cover deficits.
+* Storm Protocol: Turbine output is locked to 0 kW for safety.
+* Blackout / Alarm: Standalone system has run out of battery and generation, causing a total blackout.
 
-## Power Deficit
 
-Generated Power < Total Demand
-
-Consumer demand exceeds the available generated power.
-
-# Grid Efficiency Classification
-
-* Excellent : > 80%
-* Good : 60% – 80%
-* Moderate : 40% – 60%
-* Poor : < 40%
-
-# Renewable Utilization Classification
-
-* Excellent : > 80%
-* Good : 60% – 80%
-* Moderate : 40% – 60%
-* Poor : < 40%
-
-# Conclusion
-
-This experiment helps students understand smart grid operation, renewable energy integration, power demand management, and intelligent energy distribution. It demonstrates how solar and wind energy can be effectively utilized to satisfy varying consumer demands while maintaining efficient and reliable grid operation in smart city environments.
+## 6. Conclusion
+This simulation shows the practical application of smart grids in smart city infrastructure. It highlights the role of energy storage buffers, grid-tied safety nets, and automated safety overrides (like Storm Lockout) in managing volatile renewable energy inputs and keeping electricity delivery stable and reliable.
