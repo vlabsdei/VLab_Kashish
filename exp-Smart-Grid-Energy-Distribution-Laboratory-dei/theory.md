@@ -57,10 +57,12 @@ These formulas match the calculations performed in the simulation code:
   Battery Power Exchange = Min(Deficit Power, 200)
 
 ### 4.3 Grid Efficiency (%)
-Grid Efficiency measures how much of the consumer load demand is successfully powered.
-* In Grid-Tied Mode: Grid Efficiency is always 100.0% because the utility grid imports backup power to cover deficits.
-* In Island Mode (Standalone): Efficiency drops if the local supply and battery cannot cover the demand.
-  Grid Efficiency = (Actual Load Covered / Total Demand) * 100
+Grid Efficiency measures the proportion of consumer load demand met by local resources (renewable generation + battery storage) without relying on external utility grid imports:
+* In Surplus/Balanced Conditions: Grid Efficiency is 100.0% as local supply covers the entire demand.
+* In Deficit Conditions (Grid-Tied Mode): Efficiency drops below 100.0% because backup power is imported from the utility grid to cover the deficit.
+* In Deficit Conditions (Island Mode): Efficiency drops below 100.0% because local generation and battery storage cannot cover the demand, resulting in unmet load (load shedding/blackout).
+
+Grid Efficiency = ((Actual Load Covered - Utility Import) / Total Demand) * 100
 
 ### 4.4 Renewable Share
 Renewable Share measures the proportion of demand powered by solar and wind:
