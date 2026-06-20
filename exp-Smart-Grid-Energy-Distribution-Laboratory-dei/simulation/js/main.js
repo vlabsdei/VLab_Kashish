@@ -30,7 +30,13 @@ function adjustParentLayout() {
             // Measure parent header height and strictly lock the iframe height to prevent feedback loops/cutoffs
             const iframe = parentDoc.getElementById('fraDisabled') || parentDoc.querySelector('iframe');
             if (iframe) {
-                const headerHeight = parentHeader ? parentHeader.offsetHeight : 60;
+                let headerHeight = 70; // Standard fallback height
+                if (parentHeader) {
+                    const measuredHeight = parentHeader.offsetHeight;
+                    if (measuredHeight > 40) {
+                        headerHeight = measuredHeight;
+                    }
+                }
                 iframe.style.setProperty('height', `calc(100vh - ${headerHeight}px)`, 'important');
                 iframe.style.setProperty('min-height', `calc(100vh - ${headerHeight}px)`, 'important');
             }
@@ -117,8 +123,8 @@ function resizeGrid() {
     const containerHeight = wrapper.clientHeight;
 
     const scaleWidth = containerWidth / 1200; // 1200px is logical coordinate width
-    const scaleHeight = containerHeight / 660; // 660px is logical coordinate height
-    const scale = Math.min(scaleWidth, scaleHeight) * 0.95;
+    const scaleHeight = containerHeight / 585; // 585px is logical coordinate height
+    const scale = Math.min(scaleWidth, scaleHeight) * 0.98;
 
     // Apply inline transform directly to ensure absolute centering and scaling compatibility
     grid.style.transform = `translate(-50%, -50%) scale(${scale})`;
@@ -162,8 +168,8 @@ function updateScadaChart(newGen, newDem) {
     if (!chart || !lineGen || !lineDem) return;
 
     const maxVal = 2200; // Scale height dynamically based on max load capacity
-    const width = 1000;
-    const height = 150;
+    const width = 940; // Spans from 0 to 940, leaving 60px on right for live values
+    const height = 280;
     const padding = 10;
     
     const pointsCount = chartGenHistory.length;
@@ -189,6 +195,72 @@ function updateScadaChart(newGen, newDem) {
     // Set filled area paths (close paths at bottom)
     areaGen.setAttribute("d", `M 0,${height} L ${genPathPoints.join(" L ")} L ${width},${height} Z`);
     areaDem.setAttribute("d", `M 0,${height} L ${demPathPoints.join(" L ")} L ${width},${height} Z`);
+
+    // Update Historical Plot Markers
+    const genMarkersGroup = document.getElementById("genMarkers");
+    const demMarkersGroup = document.getElementById("demMarkers");
+    if (genMarkersGroup && demMarkersGroup) {
+        let genMarkersHTML = "";
+        let demMarkersHTML = "";
+        for (let i = 0; i < pointsCount; i++) {
+            const x = i * stepX;
+            const yGen = height - padding - (chartGenHistory[i] / maxVal) * (height - 2 * padding);
+            const yDem = height - padding - (chartDemHistory[i] / maxVal) * (height - 2 * padding);
+            
+            genMarkersHTML += `<circle cx="${x}" cy="${yGen}" r="3.2" fill="#10b981" stroke="#ffffff" stroke-width="1" pointer-events="none" />`;
+            demMarkersHTML += `<circle cx="${x}" cy="${yDem}" r="3.2" fill="#2563eb" stroke="#ffffff" stroke-width="1" pointer-events="none" />`;
+        }
+        genMarkersGroup.innerHTML = genMarkersHTML;
+        demMarkersGroup.innerHTML = demMarkersHTML;
+    }
+
+    // Update Live Markers & Values
+    const lastIdx = pointsCount - 1;
+    const xLive = lastIdx * stepX; // 940
+    const yGenLive = height - padding - (chartGenHistory[lastIdx] / maxVal) * (height - 2 * padding);
+    const yDemLive = height - padding - (chartDemHistory[lastIdx] / maxVal) * (height - 2 * padding);
+    
+    const genPulse = document.getElementById("liveGenPulse");
+    const genMarker = document.getElementById("liveGenMarker");
+    const genVal = document.getElementById("liveGenVal");
+    
+    const demPulse = document.getElementById("liveDemPulse");
+    const demMarker = document.getElementById("liveDemMarker");
+    const demVal = document.getElementById("liveDemVal");
+    
+    if (genPulse && genMarker && genVal) {
+        genPulse.setAttribute("cx", xLive);
+        genPulse.setAttribute("cy", yGenLive);
+        genMarker.setAttribute("cx", xLive);
+        genMarker.setAttribute("cy", yGenLive);
+        genVal.setAttribute("x", xLive + 8);
+        genVal.textContent = `${newGen} kW`;
+    }
+    
+    if (demPulse && demMarker && demVal) {
+        demPulse.setAttribute("cx", xLive);
+        demPulse.setAttribute("cy", yDemLive);
+        demMarker.setAttribute("cx", xLive);
+        demMarker.setAttribute("cy", yDemLive);
+        demVal.setAttribute("x", xLive + 8);
+        demVal.textContent = `${newDem} kW`;
+    }
+    
+    // Manage vertical spacing to prevent overlapping labels when lines cross/meet
+    if (genVal && demVal) {
+        if (Math.abs(yGenLive - yDemLive) < 14) {
+            if (yGenLive < yDemLive) {
+                genVal.setAttribute("y", yGenLive - 5);
+                demVal.setAttribute("y", yDemLive + 11);
+            } else {
+                genVal.setAttribute("y", yGenLive + 11);
+                demVal.setAttribute("y", yDemLive - 5);
+            }
+        } else {
+            genVal.setAttribute("y", yGenLive + 4);
+            demVal.setAttribute("y", yDemLive + 4);
+        }
+    }
 }
 
 // =====================================
@@ -354,7 +426,8 @@ function runSimulationTick() {
     }
 
     // CALCULATE GLOBAL RESULTS
-    let efficiency = totalLoad > 0 ? (actualLoadCovered / totalLoad) * 100 : 100;
+    let efficiency = totalLoad > 0 ? ((actualLoadCovered - Math.max(0, utilityPowerExchange)) / totalLoad) * 100 : 100;
+    efficiency = Math.max(0, efficiency);
     efficiency = efficiency.toFixed(1);
 
     // Update SCADA Header Values
@@ -765,4 +838,78 @@ runSimulationTick();
 if (gridStatus) {
     gridStatus.textContent = "Ready";
     gridStatus.className = "state-pill status-ready";
+}
+
+// =====================================
+// HOVER INTERACTIVITY FOR SCADA CHART
+// =====================================
+const chartSvg = document.getElementById("scadaChart");
+const hoverLine = document.getElementById("hoverLine");
+const hoverGenMarker = document.getElementById("hoverGenMarker");
+const hoverDemMarker = document.getElementById("hoverDemMarker");
+const chartTooltip = document.getElementById("chartTooltip");
+const tooltipTime = document.getElementById("tooltipTime");
+const tooltipGen = document.getElementById("tooltipGen");
+const tooltipDem = document.getElementById("tooltipDem");
+
+if (chartSvg && hoverLine && hoverGenMarker && hoverDemMarker && chartTooltip) {
+    chartSvg.addEventListener("mousemove", (e) => {
+        const rect = chartSvg.getBoundingClientRect();
+        
+        // Calculate client mouse position relative to the SVG element
+        const mouseX = e.clientX - rect.left;
+        
+        // Convert client coordinate mouseX to SVG coordinate (0 to 1000 viewBox)
+        const svgX = (mouseX / rect.width) * 1000;
+        
+        const pointsCount = chartGenHistory.length;
+        const width = 940;
+        const stepX = width / (pointsCount - 1);
+        
+        let closestIdx = Math.round(svgX / stepX);
+        if (closestIdx < 0) closestIdx = 0;
+        if (closestIdx >= pointsCount) closestIdx = pointsCount - 1;
+        
+        const xPos = closestIdx * stepX;
+        
+        const maxVal = 2200;
+        const height = 280;
+        const padding = 10;
+        
+        const yGen = height - padding - (chartGenHistory[closestIdx] / maxVal) * (height - 2 * padding);
+        const yDem = height - padding - (chartDemHistory[closestIdx] / maxVal) * (height - 2 * padding);
+        
+        hoverLine.setAttribute("x1", xPos);
+        hoverLine.setAttribute("x2", xPos);
+        hoverLine.style.display = "block";
+        
+        hoverGenMarker.setAttribute("cx", xPos);
+        hoverGenMarker.setAttribute("cy", yGen);
+        hoverGenMarker.style.display = "block";
+        
+        hoverDemMarker.setAttribute("cx", xPos);
+        hoverDemMarker.setAttribute("cy", yDem);
+        hoverDemMarker.style.display = "block";
+        
+        tooltipTime.textContent = `T - ${pointsCount - 1 - closestIdx}s`;
+        tooltipGen.textContent = `Gen: ${chartGenHistory[closestIdx]} kW`;
+        tooltipDem.textContent = `Dem: ${chartDemHistory[closestIdx]} kW`;
+        
+        let tooltipX = xPos + 12;
+        let tooltipY = 40;
+        
+        if (tooltipX + 130 > 1000) {
+            tooltipX = xPos - 142;
+        }
+        
+        chartTooltip.setAttribute("transform", `translate(${tooltipX}, ${tooltipY})`);
+        chartTooltip.style.display = "block";
+    });
+    
+    chartSvg.addEventListener("mouseleave", () => {
+        hoverLine.style.display = "none";
+        hoverGenMarker.style.display = "none";
+        hoverDemMarker.style.display = "none";
+        chartTooltip.style.display = "none";
+    });
 }

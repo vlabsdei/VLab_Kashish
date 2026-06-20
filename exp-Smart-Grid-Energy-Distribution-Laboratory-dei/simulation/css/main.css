@@ -64,11 +64,11 @@ header p{
 /* MAIN LAYOUT */
 .main-container{
     display: grid;
-    grid-template-columns: 300px 1fr 320px;
+    grid-template-columns: 380px 1fr 380px;
     grid-template-rows: 100%;
     height: 100vh;
-    gap: 15px;
-    padding: 15px;
+    gap: 12px;
+    padding: 12px;
     box-sizing: border-box;
     max-width: 100vw;
     margin: 0;
@@ -80,7 +80,7 @@ header p{
     background: var(--card-bg);
     border: 1px solid var(--border-light);
     backdrop-filter: blur(12px);
-    padding: 12px;
+    padding: 20px;
     border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.06);
     height: 100%;
@@ -92,7 +92,7 @@ header p{
 
 .control-panel h2{
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.05rem;
+    font-size: 1.3rem;
     margin-top: 0;
     margin-bottom: 8px;
     color: #4f46e5;
@@ -101,22 +101,22 @@ header p{
 }
 
 .control-section-title {
-    font-size: 0.68rem;
+    font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: #4f46e5;
-    margin: 8px 0 4px 0;
+    margin: 12px 0 6px 0;
 }
 
 .input-group{
-    margin-bottom: 6px;
+    margin-bottom: 10px;
 }
 
 .input-group label{
     display: block;
     margin-bottom: 2px;
-    font-size: 0.74rem;
+    font-size: 0.88rem;
     color: var(--text-secondary);
     font-weight: 600;
 }
@@ -136,7 +136,7 @@ header p{
     margin-top: 1px;
     color: #2563eb;
     font-weight: 700;
-    font-size: 0.78rem;
+    font-size: 0.95rem;
     text-align: right;
 }
 
@@ -201,7 +201,7 @@ input:checked + .slider::before {
 }
 
 .toggle-label {
-    font-size: 0.74rem;
+    font-size: 0.88rem;
     font-weight: 600;
     color: var(--text-primary);
 }
@@ -215,10 +215,10 @@ input:checked + .slider::before {
 }
 
 .preset-btn {
-    padding: 5px 6px;
-    font-size: 0.68rem;
+    padding: 7px 8px;
+    font-size: 0.85rem;
     font-weight: 600;
-    border-radius: 5px;
+    border-radius: 6px;
     background: #f1f5f9;
     border: 1px solid rgba(0,0,0,0.05);
     color: #000000 !important;
@@ -244,12 +244,12 @@ input:checked + .slider::before {
 /* Buttons */
 .control-panel button{
     width:100%;
-    padding:7px;
-    margin-top:5px;
+    padding:10px;
+    margin-top:8px;
     border:none;
     border-radius:6px;
     color:white;
-    font-size: 0.78rem;
+    font-size: 0.92rem;
     font-weight: 600;
     cursor:pointer;
     transition: all 0.2s ease;
@@ -372,13 +372,15 @@ input:checked + .slider::before {
 
 /* SMART GRID DIAGRAM */
 .intersection-wrapper{
-    flex:1;
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow:hidden;
     position:relative;
-    width:100%;
+    width: 100%;
+    margin: 0 auto;
+    max-height: 750px;
     min-height: 0;
     background: #ffffff;      /* Pure white grid canvas */
     border-radius: 16px;
@@ -389,7 +391,7 @@ input:checked + .slider::before {
 .smart-grid{
     position:absolute;
     width: 1200px;
-    height: 660px;
+    height: 585px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(var(--scale-factor, 1));
@@ -498,13 +500,13 @@ input:checked + .slider::before {
 }
 
 /* Symmetric Coordinates */
-.solar-node { top: 30px; left: 50px; border-top: 3px solid var(--color-solar); }
-.wind-node { top: 30px; right: 50px; border-top: 3px solid var(--color-wind); }
-.utility-node { top: 220px; left: 50px; border-top: 3px solid var(--color-utility); }
-.battery-node { top: 220px; right: 50px; border-top: 3px solid var(--color-battery); }
+.solar-node { top: 15px; left: 50px; border-top: 3px solid var(--color-solar); }
+.wind-node { top: 15px; right: 50px; border-top: 3px solid var(--color-wind); }
+.utility-node { top: 170px; left: 50px; border-top: 3px solid var(--color-utility); }
+.battery-node { top: 170px; right: 50px; border-top: 3px solid var(--color-battery); }
 
 .controller-node {
-    top: 220px;
+    top: 170px;
     left: 490px;
     width: 220px;
     border: 2px solid #d97706;
@@ -513,17 +515,17 @@ input:checked + .slider::before {
 }
 
 .distribution-node {
-    top: 390px;
+    top: 325px;
     left: 480px;
     width: 240px;
-    height: 100px;
+    height: 80px;
     border: 2px solid #2563eb;
     background: rgba(255, 255, 255, 0.98);
 }
 
-.residential-node { top: 520px; left: 50px; border-top: 3px solid var(--color-dist); }
-.commercial-node { top: 520px; left: 510px; border-top: 3px solid var(--color-dist); }
-.industrial-node { top: 520px; right: 50px; border-top: 3px solid var(--color-dist); }
+.residential-node { top: 440px; left: 50px; border-top: 3px solid var(--color-dist); }
+.commercial-node { top: 440px; left: 510px; border-top: 3px solid var(--color-dist); }
+.industrial-node { top: 440px; right: 50px; border-top: 3px solid var(--color-dist); }
 
 /* Node Hover Visuals */
 .grid-node:hover {
@@ -686,14 +688,16 @@ input:checked + .slider::before {
     background: var(--card-bg);
     border: 1px solid var(--border-light);
     backdrop-filter: blur(12px);
-    padding: 16px 20px;
+    padding: 10px 16px;
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.04);
     box-sizing: border-box;
+
     width: 100%;
+    margin: 0 auto;
+
     flex-shrink: 0;
 }
-
 .chart-container h3 {
     font-size: 0.8rem;
     font-weight: 700;
@@ -706,7 +710,7 @@ input:checked + .slider::before {
 
 .scada-chart {
     width: 100%;
-    height: 130px;
+    height: 280px;
     background: #f8fafc;
     border-radius: 8px;
     border: 1px solid rgba(0,0,0,0.03);
@@ -732,14 +736,14 @@ input:checked + .slider::before {
 .results-sidebar {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    height: fit-content;
+    gap: 12px;
+    height: 100%;
     box-sizing: border-box;
 }
 
 .results-sidebar h2 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.05rem;
+    font-size: 1.3rem;
     margin-bottom: 8px;
     color: #4f46e5;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
@@ -751,7 +755,8 @@ input:checked + .slider::before {
     background: var(--card-bg);
     border: 1px solid var(--border-light);
     backdrop-filter: blur(12px);
-    padding: 10px 12px;
+    padding: 16px 20px;
+    min-height: 95px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.04);
     display: flex;
@@ -760,6 +765,7 @@ input:checked + .slider::before {
     text-align: left;
     border-left: 4px solid transparent;
     box-sizing: border-box;
+    flex: 1;
 }
 
 .results-sidebar .card:nth-child(1) { border-left-color: var(--color-solar); }
@@ -783,7 +789,7 @@ input:checked + .slider::before {
 }
 
 .results-sidebar .card h3 {
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -793,7 +799,7 @@ input:checked + .slider::before {
 
 .results-sidebar .card p {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1.4rem;
     font-weight: 700;
     color: var(--text-primary);
     margin: 0;

@@ -90,26 +90,26 @@
                 <div class="smart-grid">
                     
                     <!-- SVG TRANSMISSION LINES LAYER -->
-                    <svg class="transmission-svg" width="1200" height="660" viewBox="0 0 1200 660">
+                    <svg class="transmission-svg" width="1200" height="585" viewBox="0 0 1200 585">
                         <!-- Static Background Paths -->
-                        <path class="grid-line" id="bg-solar" d="M 140 100 L 140 180 L 600 180 L 600 220" />
-                        <path class="grid-line" id="bg-wind" d="M 1060 100 L 1060 180 L 600 180 L 600 220" />
-                        <path class="grid-line" id="bg-utility" d="M 140 290 L 490 290" />
-                        <path class="grid-line" id="bg-battery" d="M 710 290 L 1060 290" />
-                        <path class="grid-line" id="bg-controller-dist" d="M 600 360 L 600 390" />
-                        <path class="grid-line" id="bg-dist-res" d="M 600 500 L 600 510 L 140 510 L 140 520" />
-                        <path class="grid-line" id="bg-dist-com" d="M 600 500 L 600 520" />
-                        <path class="grid-line" id="bg-dist-ind" d="M 600 500 L 600 510 L 1060 510 L 1060 520" />
+                        <path class="grid-line" id="bg-solar" d="M 140 85 L 140 163 L 600 163 L 600 170" />
+                        <path class="grid-line" id="bg-wind" d="M 1060 85 L 1060 163 L 600 163 L 600 170" />
+                        <path class="grid-line" id="bg-utility" d="M 140 240 L 490 240" />
+                        <path class="grid-line" id="bg-battery" d="M 710 240 L 1060 240" />
+                        <path class="grid-line" id="bg-controller-dist" d="M 600 310 L 600 325" />
+                        <path class="grid-line" id="bg-dist-res" d="M 600 405 L 600 422 L 140 422 L 140 440" />
+                        <path class="grid-line" id="bg-dist-com" d="M 600 405 L 600 440" />
+                        <path class="grid-line" id="bg-dist-ind" d="M 600 405 L 600 422 L 1060 422 L 1060 440" />
                         
                         <!-- Animated Flow Paths (Electricity dashes) -->
-                        <path class="flow-path flow-forward" id="flow-solar" d="M 140 100 L 140 180 L 600 180 L 600 220" />
-                        <path class="flow-path flow-forward" id="flow-wind" d="M 1060 100 L 1060 180 L 600 180 L 600 220" />
-                        <path class="flow-path" id="flow-utility" d="M 140 290 L 490 290" />
-                        <path class="flow-path" id="flow-battery" d="M 710 290 L 1060 290" />
-                        <path class="flow-path flow-forward" id="flow-controller-dist" d="M 600 360 L 600 390" />
-                        <path class="flow-path flow-forward" id="flow-dist-res" d="M 600 500 L 600 510 L 140 510 L 140 520" />
-                        <path class="flow-path flow-forward" id="flow-dist-com" d="M 600 500 L 600 520" />
-                        <path class="flow-path flow-forward" id="flow-dist-ind" d="M 600 500 L 600 510 L 1060 510 L 1060 520" />
+                        <path class="flow-path flow-forward" id="flow-solar" d="M 140 85 L 140 163 L 600 163 L 600 170" />
+                        <path class="flow-path flow-forward" id="flow-wind" d="M 1060 85 L 1060 163 L 600 163 L 600 170" />
+                        <path class="flow-path" id="flow-utility" d="M 140 240 L 490 240" />
+                        <path class="flow-path" id="flow-battery" d="M 710 240 L 1060 240" />
+                        <path class="flow-path flow-forward" id="flow-controller-dist" d="M 600 310 L 600 325" />
+                        <path class="flow-path flow-forward" id="flow-dist-res" d="M 600 405 L 600 422 L 140 422 L 140 440" />
+                        <path class="flow-path flow-forward" id="flow-dist-com" d="M 600 405 L 600 440" />
+                        <path class="flow-path flow-forward" id="flow-dist-ind" d="M 600 405 L 600 422 L 1060 422 L 1060 440" />
                     </svg>
 
                     <!-- GRID NODES -->
@@ -248,7 +248,7 @@
             <!-- LIVE SCADA REAL-TIME CHART -->
             <div class="chart-container">
                 <h3>Live SCADA Analytics: Generation vs Demand</h3>
-                <svg class="scada-chart" id="scadaChart" width="100%" height="150" viewBox="0 0 1000 150">
+                <svg class="scada-chart" id="scadaChart" width="100%" height="280" viewBox="0 0 1000 280" preserveAspectRatio="none">
                     <defs>
                         <linearGradient id="genGlow" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stop-color="#10b981" stop-opacity="0.2"/>
@@ -260,9 +260,9 @@
                         </linearGradient>
                     </defs>
                     <!-- Grid background lines -->
-                    <line x1="0" y1="37.5" x2="1000" y2="37.5" stroke="#e2e8f0" stroke-dasharray="5 5" />
-                    <line x1="0" y1="75" x2="1000" y2="75" stroke="#e2e8f0" stroke-dasharray="5 5" />
-                    <line x1="0" y1="112.5" x2="1000" y2="112.5" stroke="#e2e8f0" stroke-dasharray="5 5" />
+                    <line x1="0" y1="70" x2="940" y2="70" stroke="#e2e8f0" stroke-dasharray="5 5" />
+                    <line x1="0" y1="140" x2="940" y2="140" stroke="#e2e8f0" stroke-dasharray="5 5" />
+                    <line x1="0" y1="210" x2="940" y2="210" stroke="#e2e8f0" stroke-dasharray="5 5" />
                     
                     <!-- Graph Paths -->
                     <path class="chart-area" id="chartAreaGen" fill="url(#genGlow)" d="" />
@@ -273,6 +273,42 @@
                     <!-- Labels -->
                     <text x="10" y="25" fill="#10b981" font-size="12" font-weight="bold">Generation</text>
                     <text x="100" y="25" fill="#2563eb" font-size="12" font-weight="bold">Demand</text>
+
+                    <!-- Historical Marker Groups -->
+                    <g id="genMarkers"></g>
+                    <g id="demMarkers"></g>
+
+                    <!-- Live Markers and Value Labels -->
+                    <!-- Pulse (Outer circle) -->
+                    <circle id="liveGenPulse" r="4.5" fill="#10b981" opacity="0.4" pointer-events="none">
+                        <animate attributeName="r" values="4.5;12;4.5" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.8;0;0.8" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                    <circle id="liveDemPulse" r="4.5" fill="#2563eb" opacity="0.4" pointer-events="none">
+                        <animate attributeName="r" values="4.5;12;4.5" dur="2s" repeatCount="indefinite" />
+                        <animate attributeName="opacity" values="0.8;0;0.8" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                    
+                    <!-- Solid (Inner circle) -->
+                    <circle id="liveGenMarker" r="4.5" fill="#10b981" stroke="#fff" stroke-width="1.5" pointer-events="none" />
+                    <circle id="liveDemMarker" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="1.5" pointer-events="none" />
+                    
+                    <!-- Value text -->
+                    <text id="liveGenVal" fill="#10b981" font-size="11" font-weight="700" text-anchor="start" pointer-events="none"></text>
+                    <text id="liveDemVal" fill="#2563eb" font-size="11" font-weight="700" text-anchor="start" pointer-events="none"></text>
+
+                    <!-- Hover elements (hidden by default) -->
+                    <line id="hoverLine" x1="0" y1="0" x2="0" y2="280" stroke="#64748b" stroke-width="1" stroke-dasharray="3 3" style="display: none;" />
+                    <circle id="hoverGenMarker" r="4.5" fill="#10b981" stroke="#fff" stroke-width="1.5" style="display: none;" />
+                    <circle id="hoverDemMarker" r="4.5" fill="#2563eb" stroke="#fff" stroke-width="1.5" style="display: none;" />
+                    
+                    <!-- Tooltip Box -->
+                    <g id="chartTooltip" style="display: none; pointer-events: none;">
+                        <rect id="tooltipBg" width="130" height="60" rx="6" fill="rgba(15, 23, 42, 0.95)" stroke="#334155" stroke-width="1" />
+                        <text id="tooltipTime" x="8" y="18" fill="#94a3b8" font-size="10" font-weight="600">Step</text>
+                        <text id="tooltipGen" x="8" y="34" fill="#10b981" font-size="11" font-weight="bold">Gen: --</text>
+                        <text id="tooltipDem" x="8" y="48" fill="#38bdf8" font-size="11" font-weight="bold">Dem: --</text>
+                    </g>
                 </svg>
             </div>
         </section>
