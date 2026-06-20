@@ -1,0 +1,175 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "Q1. Under the 'Peak Grid Shaving' dispatch strategy, when does the battery begin discharging to support the loads?",
+      "answers": {
+        "a": "As soon as solar irradiance drops below 100 W/m²",
+        "b": "Only when the utility grid is completely disconnected (Islanded)",
+        "c": "When the power import from the grid exceeds the configured Grid Import Cap",
+        "d": "Whenever the battery State of Charge is above 90%"
+      },
+      "explanations": {
+        "a": "Irradiance levels alone do not trigger battery discharge in shaving mode; net load imports do.",
+        "b": "This describes emergency outage mode, not shaving mode.",
+        "c": "Correct. In shaving mode, the battery discharges to keep grid import below the specified cap.",
+        "d": "The battery only discharges when a deficit occurs that exceeds the grid shaving import limit."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q2. How does the activation of Demand Response (DR) affect consumer load demand in this simulation?",
+      "answers": {
+        "a": "It completely shuts down industrial loads to protect the grid",
+        "b": "It sheds residential and industrial loads by 15%, and commercial loads by 10%",
+        "c": "It increases the charging efficiency of the lithium battery to 100%",
+        "d": "It locks out the wind turbine turbine rotation"
+      },
+      "explanations": {
+        "a": "Loads are shed percentage-wise, not completely shut down.",
+        "b": "Correct. Activating the DR toggle applies a 15% reduction to residential/industrial loads and 10% to commercial loads.",
+        "c": "Demand response manages consumer loads; it does not change battery electrochemical efficiency.",
+        "d": "Wind turbine safety is governed by wind speed cut-out limits, not demand response."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q3. If the total load demand is 900 kW and total renewable generation is 1200 kW, what is the net power balance of the microgrid?",
+      "answers": {
+        "a": "-300 kW (Deficit)",
+        "b": "+300 kW (Surplus)",
+        "c": "+2100 kW (Surplus)",
+        "d": "0 kW (Balanced)"
+      },
+      "explanations": {
+        "a": "A negative balance represents a deficit; here we have more generation than demand.",
+        "b": "Correct. Net power balance = Generation - Demand = 1200 kW - 900 kW = +300 kW.",
+        "c": "This value incorrectly sums generation and demand.",
+        "d": "The grid has a surplus of 300 kW, so it is not balanced at zero."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q4. What is the round-trip or charging efficiency rating of the battery process modeled in this Smart EMS controller?",
+      "answers": {
+        "a": "100%",
+        "b": "92%",
+        "c": "75%",
+        "d": "55%"
+      },
+      "explanations": {
+        "a": "No battery chemistry is 100% efficient due to thermal and chemical losses.",
+        "b": "Correct. The lithium battery charging and discharging process has a 92% efficiency coefficient.",
+        "c": "The battery efficiency is modeled at 92%, not 75%.",
+        "d": "55% is the efficiency rating for the hydrogen fuel cell."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "Q5. What is the maximum output limit of the hydrogen fuel cell when discharging stored hydrogen to cover power deficits?",
+      "answers": {
+        "a": "50 kW",
+        "b": "150 kW",
+        "c": "250 kW",
+        "d": "400 kW"
+      },
+      "explanations": {
+        "a": "The fuel cell output limit is higher than 50 kW.",
+        "b": "Correct. The hydrogen fuel cell output is capped at a maximum of 150 kW.",
+        "c": "The maximum fuel cell discharge limit is 150 kW, not 250 kW.",
+        "d": "The capacity limit is 150 kW."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "Q6. In Grid-Tied mode under 'Max Self-Consumption', what is the priority order for routing surplus renewable power?",
+      "answers": {
+        "a": "Grid Export -> Battery Charging -> Hydrogen Electrolyzer",
+        "b": "Hydrogen Electrolyzer -> Battery Charging -> Grid Export",
+        "c": "Battery Charging -> Hydrogen Electrolyzer -> Grid Export",
+        "d": "Grid Export -> Hydrogen Electrolyzer -> Battery Charging"
+      },
+      "explanations": {
+        "a": "Grid export is the last resort to avoid wasting power, not the first.",
+        "b": "Battery storage is more efficient (92%) than hydrogen (65% in / 55% out), so battery is charged first.",
+        "c": "Correct. Surplus goes to the battery first, then the electrolyzer, and finally any leftover is exported to the grid.",
+        "d": "Self-consumption minimizes grid interactions, so grid export is lowest priority."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q7. How is the solar cell temperature (T_cell) computed in the simulation based on solar irradiance (G) and ambient temperature (T_amb)?",
+      "answers": {
+        "a": "T_cell = T_amb + G * 0.025",
+        "b": "T_cell = T_amb - G * 0.004",
+        "c": "T_cell = T_amb * (G / 1000)",
+        "d": "T_cell = T_amb + 25"
+      },
+      "explanations": {
+        "a": "Correct. Cell temperature rises above ambient temperature as solar irradiance heating occurs, modeled as T_amb + G * 0.025.",
+        "b": "Cell temperature increases with solar irradiance, not decreases.",
+        "c": "This is not the formula for solar cell thermal modeling.",
+        "d": "Irradiance (G) is a key variable in determining cell heating."
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "Q8. What is the total storage capacity limit of the hydrogen tank in this system?",
+      "answers": {
+        "a": "5 kg H2",
+        "b": "20 kg H2",
+        "c": "100 kg H2",
+        "d": "500 kg H2"
+      },
+      "explanations": {
+        "a": "The storage limit is larger than 5 kg.",
+        "b": "Correct. The hydrogen tank capacity is exactly 20 kg of H2.",
+        "c": "The capacity limit is 20 kg, not 100 kg.",
+        "d": "The storage limit is 20 kg."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q9. What is the efficiency coefficient of the hydrogen fuel cell when converting stored hydrogen back to electricity?",
+      "answers": {
+        "a": "92%",
+        "b": "75%",
+        "c": "65%",
+        "d": "55%"
+      },
+      "explanations": {
+        "a": "92% is the efficiency rating of the battery, not the fuel cell.",
+        "b": "Fuel cell electrical conversion efficiency is lower than 75%.",
+        "c": "65% is the input efficiency of the electrolyzer.",
+        "d": "Correct. The fuel cell operates at an efficiency of 55% in converting chemical energy to electricity."
+      },
+      "correctAnswer": "d",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q10. Which scenario preset simulates a complete grid outage, forcing the microgrid into Islanded (off-grid) connection mode?",
+      "answers": {
+        "a": "Standard Day",
+        "b": "Peak Demand",
+        "c": "Storm Event",
+        "d": "Grid Outage"
+      },
+      "explanations": {
+        "a": "Standard Day is a normal grid-tied day.",
+        "b": "Peak Demand tests grid shaving and shedding, but remains grid-tied.",
+        "c": "Storm Event triggers turbine lockout braking due to high winds.",
+        "d": "Correct. The Grid Outage preset disconnects the utility grid, forcing the EMS into emergency islanded mode."
+      },
+      "correctAnswer": "d",
+      "difficulty": "beginner"
+    }
+  ]
+}

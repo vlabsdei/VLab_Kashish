@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renewable Energy Integration & Management Laboratory</title>
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="./css/main.css">
+    <!-- Google Fonts: Orbitron & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- MOBILE TABS NAVIGATION (Hidden on Desktop) -->
+    <div class="mobile-tabs-header">
+        <button class="tab-btn" data-target="controls">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px; vertical-align: middle;"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.292-.16c.764-.415 1.6.42 1.185 1.185l-.16.292a1.873 1.873 0 0 0 1.115 2.693l.319.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.292c.415.764-.42 1.6-1.185 1.185l-.292-.16a1.873 1.873 0 0 0-2.693 1.115l-.094.319c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.693-1.115l-.292.16c-.764.415-1.6-.42-1.185-1.185l.16-.292a1.873 1.873 0 0 0-1.115-2.693l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094a1.873 1.873 0 0 0 1.115-2.693l-.16-.292c-.415-.764.42-1.6 1.185-1.185l.292.16a1.873 1.873 0 0 0 2.693-1.115l.094-.319z"/></svg>
+            Controls
+        </button>
+        <button class="tab-btn active" data-target="scada">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px; vertical-align: middle;"><path d="M1 11.5a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v1zm0-4a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v1zm0-4a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5h-11a.5.5 0 0 0-.5.5v1z"/></svg>
+            SCADA Grid
+        </button>
+        <button class="tab-btn" data-target="metrics">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px; vertical-align: middle;"><path d="M0 0h1v15h15v1H0V0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.707L9.854 8.854a.5.5 0 0 1-.708 0L6.5 6.207l-3.646 3.647a.5.5 0 1 1-.708-.708l4-4a.5.5 0 0 1 .708 0L9 7.793l3.646-3.647H10.5a.5.5 0 0 1-.5-.5z"/></svg>
+            Metrics
+        </button>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container show-scada">
+
+        <!-- SIDEBAR LEFT: CONTROL PANEL -->
+        <aside class="control-panel">
+            
+            <!-- 0. SIMULATION CONTROL -->
+            <div class="control-section">
+                <div class="control-section-title">
+                    <span>Simulation Loop</span>
+                </div>
+                <div class="loop-controls-panel" style="display: flex; gap: 8px; flex-direction: column;">
+                    <button id="startBtn" class="btn btn-success" style="width: 100%; justify-content: center;">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>
+                        Start Loop
+                    </button>
+                    <button id="stopBtn" class="btn btn-warning" style="width: 100%; justify-content: center;" disabled>
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/></svg>
+                        Pause Loop
+                    </button>
+                    <button id="resetBtn" class="btn btn-danger" style="width: 100%; justify-content: center;">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11.534 7h3.932a.25.25 0 0 1 .192.425l-2.007 2.007a.25.25 0 0 1-.354 0L11.236 7.625A.25.25 0 0 1 11.428 7zm-8.068 2h-3.93a.25.25 0 0 1-.192-.425l2.007-2.007a.25.25 0 0 1 .353 0l1.761 1.761A.25.25 0 0 1 3.466 9z"/><path fill-rule="evenodd" d="M7.21.266a.75.75 0 0 1 .79.034l.01.008a.75.75 0 1 1-.8 1.268l-.01-.007a.25.25 0 0 0-.263-.011c-.548.277-1.022.673-1.4 1.157-.746.951-1.136 2.16-1.097 3.393.039 1.237.495 2.42 1.303 3.355.808.935 1.936 1.547 3.201 1.737 1.265.19 2.545-.078 3.633-.762a5.25 5.25 0 0 0 2.212-3.82c.042-.329.318-.58.65-.58h.003a.375.375 0 0 1 .375.38 6.75 6.75 0 0 1-2.844 4.912c-1.4.982-3.048 1.328-4.673 1.084-1.626-.244-3.076-1.03-4.116-2.23-1.04-1.2-1.626-2.723-1.677-4.31-.051-1.587.452-3.14 1.41-4.362.486-.62 1.094-1.129 1.799-1.502A.75.75 0 0 1 7.21.266z"/></svg>
+                        Reset Lab
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 1. WEATHER & GENERATION PARAMETERS -->
+            <div class="control-section">
+                <div class="control-section-title">
+                    <span>1. Weather & Generation</span>
+                </div>
+                
+                <div class="input-group solar-input">
+                    <div class="input-label-row">
+                        <label for="solarIrradiance">Solar Irradiance</label>
+                        <span id="solarIrradianceVal" class="input-value">800 W/m²</span>
+                    </div>
+                    <input type="range" id="solarIrradiance" min="0" max="1000" step="50" value="800">
+                </div>
+
+                <div class="input-group solar-input">
+                    <div class="input-label-row">
+                        <label for="ambientTemp">Ambient Temperature</label>
+                        <span id="ambientTempVal" class="input-value">25 °C</span>
+                    </div>
+                    <input type="range" id="ambientTemp" min="-10" max="50" step="2" value="25">
+                </div>
+
+                <div class="input-group wind-input">
+                    <div class="input-label-row">
+                        <label for="windSpeed">Wind Speed</label>
+                        <span id="windSpeedVal" class="input-value">10 m/s</span>
+                    </div>
+                    <input type="range" id="windSpeed" min="0" max="25" step="0.5" value="10">
+                </div>
+
+                <div class="input-group wind-input">
+                    <div class="input-label-row">
+                        <label for="bladePitch">Blade Pitch Angle</label>
+                        <span id="bladePitchVal" class="input-value">0 °</span>
+                    </div>
+                    <input type="range" id="bladePitch" min="0" max="30" step="1" value="0">
+                </div>
+
+                <div class="input-group biomass-input">
+                    <div class="input-label-row">
+                        <label for="biomassFuel">Biomass Fuel Rate</label>
+                        <span id="biomassFuelVal" class="input-value">50 %</span>
+                    </div>
+                    <input type="range" id="biomassFuel" min="0" max="100" step="5" value="50">
+                </div>
+            </div>
+
+            <!-- 2. ENERGY MANAGEMENT SYSTEM (EMS) -->
+            <div class="control-section">
+                <div class="control-section-title">
+                    <span>2. Smart EMS Settings</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="gridMode" style="font-size: 1.1rem; font-weight: 500; display: block; margin-bottom: 6px;">Grid Connection Mode</label>
+                    <select id="gridMode">
+                        <option value="tied">Grid-Tied (Standard)</option>
+                        <option value="island">Islanded (Off-Grid)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="emsStrategy" style="font-size: 1.1rem; font-weight: 500; display: block; margin-bottom: 6px;">Dispatch Strategy</label>
+                    <select id="emsStrategy">
+                        <option value="consumption">Max Self-Consumption</option>
+                        <option value="shaving">Peak Grid Shaving</option>
+                        <option value="backup">Battery Backup Support</option>
+                    </select>
+                </div>
+
+                <div class="input-group load-input" id="shavingLimitGroup" style="display: none;">
+                    <div class="input-label-row">
+                        <label for="shavingLimit">Grid Import Cap</label>
+                        <span id="shavingLimitVal" class="input-value">300 kW</span>
+                    </div>
+                    <input type="range" id="shavingLimit" min="50" max="800" step="25" value="300">
+                </div>
+
+                <div class="toggle-group">
+                    <span class="toggle-label">Demand Response (DR)</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="demandResponseToggle">
+                        <span class="slider-round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 3. CONSUMER DEMAND SCALE -->
+            <div class="control-section">
+                <div class="control-section-title">
+                    <span>3. Consumer Loads</span>
+                </div>
+
+                <div class="input-group load-input">
+                    <div class="input-label-row">
+                        <label for="resLoad">Residential Load</label>
+                        <span id="resLoadVal" class="input-value">200 kW</span>
+                    </div>
+                    <input type="range" id="resLoad" min="0" max="400" step="10" value="200">
+                </div>
+
+                <div class="input-group load-input">
+                    <div class="input-label-row">
+                        <label for="comLoad">Commercial Load</label>
+                        <span id="comLoadVal" class="input-value">250 kW</span>
+                    </div>
+                    <input type="range" id="comLoad" min="0" max="500" step="10" value="250">
+                </div>
+
+                <div class="input-group load-input">
+                    <div class="input-label-row">
+                        <label for="indLoad">Industrial Load</label>
+                        <span id="indLoadVal" class="input-value">450 kW</span>
+                    </div>
+                    <input type="range" id="indLoad" min="0" max="800" step="10" value="450">
+                </div>
+            </div>
+
+            <!-- 4. LAB EXPERIMENT PRESETS -->
+            <div class="control-section">
+                <div class="control-section-title">
+                    <span>4. Scenario Presets</span>
+                </div>
+                <div class="presets-grid">
+                    <button class="preset-btn" id="presetStandard">Standard Day</button>
+                    <button class="preset-btn" id="presetPeakLoad">Peak Demand</button>
+                    <button class="preset-btn" id="presetStorm">Storm Event</button>
+                    <button class="preset-btn" id="presetOutage">Grid Outage</button>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- CENTER PANEL: SVG SCADA SIMULATION & TREND CHART -->
+        <section class="simulation-panel">
+
+            <!-- INTERACTIVE SCADA CANVAS -->
+            <div class="intersection-wrapper">
+                <div class="scada-scroll-container">
+                    <div class="scada-grid-canvas paused">
+
+                        <!-- SVG Transmission Lines Layer -->
+                        <svg class="transmission-svg" width="1200" height="660" viewBox="0 0 1200 660">
+                            <!-- Static Background Cables -->
+                            <path class="grid-line" d="M 230 90 L 230 180 L 600 180 L 600 230" />
+                            <path class="grid-line" d="M 970 90 L 970 180 L 600 180 L 600 230" />
+                            <path class="grid-line" d="M 600 90 L 600 230" />
+                            <path class="grid-line" d="M 230 280 L 500 280" />
+                            <path class="grid-line" d="M 970 280 L 700 280" />
+                            <path class="grid-line" d="M 600 380 L 600 330" />
+                            <path class="grid-line" d="M 600 330 L 600 495 L 230 495 L 230 520" />
+                            <path class="grid-line" d="M 600 330 L 600 520" />
+                            <path class="grid-line" d="M 600 330 L 600 495 L 970 495 L 970 520" />
+                            
+                            <!-- Animated flow cables (electricity flows) -->
+                            <path class="flow-path flow-solar" id="path-solar" d="M 230 90 L 230 180 L 600 180 L 600 230" />
+                            <path class="flow-path flow-wind" id="path-wind" d="M 970 90 L 970 180 L 600 180 L 600 230" />
+                            <path class="flow-path flow-biomass" id="path-biomass" d="M 600 90 L 600 230" />
+                            <path class="flow-path flow-battery" id="path-battery" d="M 230 280 L 500 280" />
+                            <path class="flow-path flow-hydrogen" id="path-hydrogen" d="M 700 280 L 970 280" />
+                            <path class="flow-path flow-utility" id="path-utility" d="M 600 330 L 600 380" />
+                            <path class="flow-path flow-load" id="path-res" d="M 600 330 L 600 495 L 230 495 L 230 520" />
+                            <path class="flow-path flow-load" id="path-com" d="M 600 330 L 600 520" />
+                            <path class="flow-path flow-load" id="path-ind" d="M 600 330 L 600 495 L 970 495 L 970 520" />
+                        </svg>
+
+                        <!-- GRID NODES -->
+
+                        <!-- Solar Node -->
+                        <div class="grid-node node-solar" id="node-solar">
+                            <div class="node-icon">
+                                <!-- Custom Solar Panel Icon -->
+                                <svg viewBox="0 0 100 100" width="36" height="36" fill="none" stroke="var(--color-solar)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="15" y="25" width="70" height="46" rx="4" />
+                                    <line x1="15" y1="48" x2="85" y2="48" />
+                                    <line x1="38" y1="25" x2="38" y2="71" />
+                                    <line x1="62" y1="25" x2="62" y2="71" />
+                                    <line x1="50" y1="71" x2="50" y2="88" stroke-width="6" />
+                                    <line x1="30" y1="88" x2="70" y2="88" stroke-width="5" />
+                                </svg>
+                            </div>
+                            <h3>Solar Fields</h3>
+                            <p class="output-value" id="nodeSolarVal">0 kW</p>
+                            <div class="node-controls">
+                                <button class="node-btn active" id="nodeSolarSun" data-val="1.0">Sunny</button>
+                                <button class="node-btn" id="nodeSolarCloud" data-val="0.3">Cloudy</button>
+                                <button class="node-btn" id="nodeSolarNight" data-val="0.0">Night</button>
+                            </div>
+                        </div>
+
+                        <!-- Biomass Node -->
+                        <div class="grid-node node-biomass" id="node-biomass">
+                            <div class="node-icon">
+                                <!-- Custom Biomass Plant Icon -->
+                                <svg viewBox="0 0 100 100" width="36" height="36" fill="none" stroke="var(--color-biomass)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M 20 85 L 20 50 L 45 60 L 45 40 L 70 50 L 70 30 L 85 40 L 85 85 Z" />
+                                    <path id="biomass-flame" d="M 32 85 C 32 75 40 70 45 70 C 50 70 58 75 58 85 Z" fill="none" stroke="var(--color-biomass)" stroke-width="3" />
+                                    <line x1="30" y1="35" x2="30" y2="42" stroke-width="5" />
+                                    <line x1="55" y1="25" x2="55" y2="35" stroke-width="5" />
+                                </svg>
+                            </div>
+                            <h3>Biomass Plant</h3>
+                            <p class="output-value" id="nodeBiomassVal">0 kW</p>
+                            <div class="node-controls">
+                                <button class="node-btn active" id="nodeBiomassOn">Online</button>
+                                <button class="node-btn" id="nodeBiomassOff">Standby</button>
+                            </div>
+                        </div>
+
+                        <!-- Wind Node -->
+                        <div class="grid-node node-wind" id="node-wind">
+                            <div class="node-icon" style="overflow: visible;">
+                                <!-- Custom Wind Turbine Icon -->
+                                <svg viewBox="0 0 100 100" width="36" height="36" style="overflow: visible;">
+                                    <line x1="50" y1="50" x2="50" y2="92" stroke="var(--color-wind)" stroke-width="5" stroke-linecap="round" />
+                                    <g id="wind-rotor" class="spinning-turbine">
+                                        <circle cx="50" cy="50" r="5" fill="var(--color-wind)" stroke="white" stroke-width="2" />
+                                        <!-- Blades -->
+                                        <path d="M 50 50 L 50 12 C 53 12 55 24 50 50 Z" fill="var(--color-wind)" />
+                                        <path d="M 50 50 L 83 69 C 81 71 71 73 50 50 Z" fill="var(--color-wind)" />
+                                        <path d="M 50 50 L 17 69 C 19 71 29 73 50 50 Z" fill="var(--color-wind)" />
+                                    </g>
+                                </svg>
+                            </div>
+                            <h3>Wind Array</h3>
+                            <p class="output-value" id="nodeWindVal">0 kW</p>
+                            <span class="node-badge badge-danger" id="windBrakeBadge" style="display: none;">BRAKED</span>
+                        </div>
+
+                        <!-- Battery Storage (BESS) Node -->
+                        <div class="grid-node node-battery" id="node-battery">
+                            <div class="node-icon">
+                                <!-- Custom Battery Icon -->
+                                <svg viewBox="0 0 100 100" width="34" height="34" fill="none" stroke="var(--color-battery)" stroke-width="4" stroke-linecap="round">
+                                    <rect x="25" y="25" width="50" height="60" rx="6" />
+                                    <rect x="42" y="15" width="16" height="10" fill="var(--color-battery)" />
+                                    <line x1="38" y1="55" x2="62" y2="55" stroke-width="5" />
+                                    <line x1="50" y1="43" x2="50" y2="67" stroke-width="5" id="battery-plus-icon" />
+                                </svg>
+                            </div>
+                            <h3>Lithium Battery</h3>
+                            <p class="output-value" id="nodeBatteryVal">50.0% SoC</p>
+                            <div class="battery-container">
+                                <div class="battery-fill" id="nodeBatteryBar"></div>
+                            </div>
+                            <span class="node-badge badge-success" id="batteryStatusBadge" style="top:-8px; right:-8px;">IDLE</span>
+                        </div>
+
+                        <!-- Smart EMS Controller Node -->
+                        <div class="grid-node node-controller" id="node-controller">
+                            <div class="node-icon">
+                                <!-- Custom Chip Icon -->
+                                <svg viewBox="0 0 100 100" width="36" height="36" fill="none" stroke="var(--color-controller)" stroke-width="4">
+                                    <rect x="25" y="25" width="50" height="50" rx="6" />
+                                    <line x1="40" y1="15" x2="40" y2="25" /> <line x1="50" y1="15" x2="50" y2="25" /> <line x1="60" y1="15" x2="60" y2="25" />
+                                    <line x1="40" y1="75" x2="40" y2="85" /> <line x1="50" y1="75" x2="50" y2="85" /> <line x1="60" y1="75" x2="60" y2="85" />
+                                    <line x1="15" y1="40" x2="25" y2="40" /> <line x1="15" y1="50" x2="25" y2="50" /> <line x1="15" y1="60" x2="25" y2="60" />
+                                    <line x1="75" y1="40" x2="85" y2="40" /> <line x1="75" y1="50" x2="85" y2="50" /> <line x1="75" y1="60" x2="85" y2="60" />
+                                    <polygon points="50,38 42,52 58,52 50,66" fill="var(--color-controller)" />
+                                </svg>
+                            </div>
+                            <h3>EMS Controller</h3>
+                            <p class="output-value" id="nodeControllerVal" style="font-size: 0.75rem; letter-spacing:0.5px;">STABLE</p>
+                        </div>
+
+                        <!-- Hydrogen Storage & Fuel Cell Node -->
+                        <div class="grid-node node-hydrogen" id="node-hydrogen">
+                            <div class="node-icon" style="position: relative;">
+                                <!-- Custom H2 Fuel Cell Icon -->
+                                <svg viewBox="0 0 100 100" width="36" height="36" fill="none" stroke="var(--color-hydrogen)" stroke-width="4" stroke-linecap="round">
+                                    <circle cx="50" cy="50" r="35" />
+                                    <text x="50" y="58" font-size="24" font-weight="900" text-anchor="middle" fill="var(--color-hydrogen)" stroke="none" font-family="'Orbitron', monospace">H₂</text>
+                                </svg>
+                                <!-- Bubbles for electrolyzer active -->
+                                <div class="bubble bubble-1" id="hBubble1"></div>
+                                <div class="bubble bubble-2" id="hBubble2"></div>
+                                <div class="bubble bubble-3" id="hBubble3"></div>
+                            </div>
+                            <h3>H₂ Storage Cell</h3>
+                            <p class="output-value" id="nodeHydrogenVal">0.0 kg H₂</p>
+                            <div class="hydrogen-container">
+                                <div class="hydrogen-fill" id="nodeHydrogenBar"></div>
+                            </div>
+                            <span class="node-badge badge-info" id="h2StatusBadge" style="display: none;">STANDBY</span>
+                        </div>
+
+                        <!-- Backup Utility Grid Node -->
+                        <div class="grid-node node-utility" id="node-utility">
+                            <div class="node-icon">
+                                <!-- Custom Grid Tower Icon -->
+                                <svg viewBox="0 0 100 100" width="36" height="36" fill="none" stroke="var(--color-utility)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M 50 15 L 20 90 M 50 15 L 80 90" />
+                                    <path d="M 33 55 L 67 55 M 24 75 L 76 75" />
+                                    <path d="M 12 45 L 88 45 M 12 45 L 50 15 L 88 45" />
+                                </svg>
+                            </div>
+                            <h3>Utility Grid</h3>
+                            <p class="output-value" id="nodeUtilityVal">STANDBY</p>
+                            <span class="node-badge badge-success" id="nodeUtilityBadge">TIED</span>
+                        </div>
+
+                        <!-- Residential Consumer Node -->
+                        <div class="grid-node node-load" id="node-res">
+                            <div class="node-icon">
+                                <!-- Custom Home Icon -->
+                                <svg viewBox="0 0 100 100" width="34" height="34" fill="none" stroke="var(--color-load)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M 20 45 L 50 18 L 80 45 L 80 85 L 20 85 Z" />
+                                    <rect x="42" y="55" width="16" height="30" />
+                                </svg>
+                            </div>
+                            <h3>Residential Load</h3>
+                            <p class="output-value" id="nodeResVal">0 kW</p>
+                            <span class="led led-active" id="nodeResLed" style="position: absolute; top: 10px; right: 10px;"></span>
+                        </div>
+
+                        <!-- Commercial Consumer Node -->
+                        <div class="grid-node node-load" id="node-com">
+                            <div class="node-icon">
+                                <!-- Custom Building Icon -->
+                                <svg viewBox="0 0 100 100" width="34" height="34" fill="none" stroke="var(--color-load)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="25" y="15" width="50" height="70" rx="4" />
+                                    <rect x="35" y="25" width="10" height="10" />
+                                    <rect x="55" y="25" width="10" height="10" />
+                                    <rect x="35" y="45" width="10" height="10" />
+                                    <rect x="55" y="45" width="10" height="10" />
+                                    <rect x="45" y="65" width="10" height="20" />
+                                </svg>
+                            </div>
+                            <h3>Commercial Load</h3>
+                            <p class="output-value" id="nodeComVal">0 kW</p>
+                            <span class="led led-active" id="nodeComLed" style="position: absolute; top: 10px; right: 10px;"></span>
+                        </div>
+
+                        <!-- Industrial Consumer Node -->
+                        <div class="grid-node node-load" id="node-ind">
+                            <div class="node-icon">
+                                <!-- Custom Factory Icon -->
+                                <svg viewBox="0 0 100 100" width="34" height="34" fill="none" stroke="var(--color-load)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M 15 85 L 15 50 L 40 65 L 40 45 L 65 60 L 65 30 L 85 45 L 85 85 Z" />
+                                    <line x1="25" y1="30" x2="25" y2="45" stroke-width="5" />
+                                    <line x1="50" y1="25" x2="50" y2="40" stroke-width="5" />
+                                </svg>
+                            </div>
+                            <h3>Industrial Load</h3>
+                            <p class="output-value" id="nodeIndVal">0 kW</p>
+                            <span class="led led-active" id="nodeIndLed" style="position: absolute; top: 10px; right: 10px;"></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- TRENDS CHART PANEL -->
+            <div class="trends-panel">
+                <div class="trends-header">
+                    <h3>SCADA Live Trends: Generation vs Demand vs SoC</h3>
+                    <div class="trends-legend" style="display:flex; gap:16px; font-size:0.75rem; font-weight:600;">
+                        <span id="legendGen" style="color:#f97316; display:flex; align-items:center; gap:4px; cursor:pointer; user-select:none; transition:all 0.2s;"><span style="width:10px; height:3px; background:#f97316; display:inline-block;"></span> Generation</span>
+                        <span id="legendDem" style="color:#ec4899; display:flex; align-items:center; gap:4px; cursor:pointer; user-select:none; transition:all 0.2s;"><span style="width:10px; height:3px; background:#ec4899; display:inline-block;"></span> Demand</span>
+                        <span id="legendSoC" style="color:#6366f1; display:flex; align-items:center; gap:4px; cursor:pointer; user-select:none; transition:all 0.2s;"><span style="width:10px; height:3px; background:#6366f1; display:inline-block;"></span> Battery SoC</span>
+                        <span id="legendH2" style="color:#06b6d4; display:flex; align-items:center; gap:4px; cursor:pointer; user-select:none; transition:all 0.2s;"><span style="width:10px; height:3px; background:#06b6d4; display:inline-block;"></span> H₂ Tank</span>
+                    </div>
+                </div>
+                <div class="trends-chart-container">
+                    <canvas id="trendsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIDEBAR RIGHT: LIVE RESULTS / SCADA OUTPUTS -->
+        <aside class="results-sidebar">
+
+            <div class="control-section-title">
+                <span>Output Metrics</span>
+            </div>
+
+            <!-- Metric Cards -->
+            <div class="metric-card solar-border">
+                <div class="metric-card-icon" style="background-color: var(--color-solar-light);">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--color-solar)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/><circle cx="12" cy="12" r="4"/></svg>
+                </div>
+                <div class="metric-card-info">
+                    <h4>Total Generation</h4>
+                    <p id="metricTotalGen">0 kW</p>
+                </div>
+            </div>
+
+            <div class="metric-card load-border">
+                <div class="metric-card-icon" style="background-color: var(--color-load-light);">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--color-load)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                </div>
+                <div class="metric-card-info">
+                    <h4>Total Demand</h4>
+                    <p id="metricTotalDemand">0 kW</p>
+                </div>
+            </div>
+
+            <div class="metric-card controller-border">
+                <div class="metric-card-icon" style="background-color: var(--color-controller-light);">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--color-controller)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </div>
+                <div class="metric-card-info">
+                    <h4>Net Power Balance</h4>
+                    <p id="metricNetBalance">0 kW</p>
+                </div>
+            </div>
+
+            <!-- Solar Cell Temperature -->
+            <div class="metric-card solar-border">
+                <div class="metric-card-icon" style="background-color: var(--color-solar-light);">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--color-solar)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+                </div>
+                <div class="metric-card-info">
+                    <h4>Solar Cell Temp</h4>
+                    <p id="metricCellTemp">25.0 °C</p>
+                </div>
+            </div>
+
+            <!-- Battery Net Flow -->
+            <div class="metric-card battery-border">
+                <div class="metric-card-icon" style="background-color: var(--color-battery-light);">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--color-battery)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="16" height="10" rx="2" ry="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line><line x1="6" y1="12" x2="12" y2="12"></line><line x1="9" y1="9" x2="9" y2="15"></line></svg>
+                </div>
+                <div class="metric-card-info">
+                    <h4>Battery Net Flow</h4>
+                    <p id="metricBatteryFlow">0 kW</p>
+                </div>
+            </div>
+
+            <!-- Hydrogen Flow -->
+            <div class="metric-card hydrogen-border">
+                <div class="metric-card-icon" style="background-color: var(--color-hydrogen-light);">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--color-hydrogen)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                </div>
+                <div class="metric-card-info">
+                    <h4>H₂ Storage Flow</h4>
+                    <p id="metricHydrogenFlow">0 kW</p>
+                </div>
+            </div>
+
+            <!-- Grid Import/Export -->
+            <div class="metric-card utility-border">
+                <div class="metric-card-icon" style="background-color: var(--color-utility-light);">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--color-utility)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </div>
+                <div class="metric-card-info">
+                    <h4>Grid Import/Export</h4>
+                    <p id="metricGridFlow">0 kW</p>
+                </div>
+            </div>
+
+            <div class="metric-card controller-border">
+                <div class="metric-card-icon" style="background-color: var(--color-controller-light);">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--color-controller)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="metric-card-info">
+                    <h4>System Status</h4>
+                    <p id="metricCondition">Normal</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Script -->
+    <script src="./js/main.js"></script>
+</body>
+</html>

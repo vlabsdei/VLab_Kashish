@@ -1,0 +1,175 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "Q1. What environmental factor determines the raw energy available for conversion by the solar photovoltaic fields?",
+      "answers": {
+        "a": "Solar Irradiance (sunlight intensity)",
+        "b": "Ambient Temperature",
+        "c": "Blade Pitch Angle",
+        "d": "Wind Speed"
+      },
+      "explanations": {
+        "a": "Correct. Solar irradiance represents the power per unit area received from the sun, directly determining solar panel generation.",
+        "b": "Ambient temperature affects efficiency, but is not the raw input energy source.",
+        "c": "Blade pitch angle is a wind turbine control parameter.",
+        "d": "Wind speed determines wind turbine output, not solar."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q2. Below what wind speed threshold (cut-in speed) does the wind turbine generation drop to 0 kW?",
+      "answers": {
+        "a": "0 m/s",
+        "b": "3.0 m/s",
+        "c": "12.0 m/s",
+        "d": "20.0 m/s"
+      },
+      "explanations": {
+        "a": "Turbines require a minimum wind threshold to overcome friction and spin the rotor.",
+        "b": "Correct. Below the cut-in wind speed of 3.0 m/s, the wind turbine does not generate any power.",
+        "c": "12.0 m/s is the rated wind speed where the turbine achieves maximum output.",
+        "d": "20.0 m/s is the cut-out wind speed where the turbine shuts down for safety."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q3. What happens to wind turbine operation when wind speed exceeds the cut-out limit of 20 m/s?",
+      "answers": {
+        "a": "Output is capped at its rated limit of 600 kW",
+        "b": "The rotor enters overspeed mode, increasing generation",
+        "c": "Mechanical brakes engage (output falls to 0 kW) to prevent structural damage",
+        "d": "The system automatically switches the biomass plant off"
+      },
+      "explanations": {
+        "a": "Output does not remain at rated; it drops to 0 kW for safety.",
+        "b": "Overspeeding is dangerous and is actively prevented.",
+        "c": "Correct. At 20 m/s and above, the turbine is braked to protect it from extreme wind forces.",
+        "d": "Biomass operation is independent of wind turbine safety braking."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q4. How does adjusting the blade pitch angle affect the wind turbine's power generation?",
+      "answers": {
+        "a": "It increases rotor aerodynamic efficiency",
+        "b": "It reduces turbine output by turning the blades out of the wind",
+        "c": "It increases the wind speed cut-out limit",
+        "d": "It charges the backup utility grid directly"
+      },
+      "explanations": {
+        "a": "Increasing pitch angle reduces aerodynamic lift and efficiency.",
+        "b": "Correct. Adjusting/increasing the blade pitch angle reduces aerodynamic power extraction to regulate or reduce output.",
+        "c": "The cut-out wind speed threshold is constant at 20 m/s.",
+        "d": "Blade pitch is a mechanical control and does not charge the grid directly."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q5. What is the nominal capacity rating of the Biomass Plant when it is online at 100% fuel rate?",
+      "answers": {
+        "a": "200 kW",
+        "b": "400 kW",
+        "c": "600 kW",
+        "d": "800 kW"
+      },
+      "explanations": {
+        "a": "200 kW is the output at a 50% fuel rate.",
+        "b": "Correct. The Biomass Plant has a maximum rating of 400 kW at a 100% fuel rate.",
+        "c": "The maximum rating is 400 kW.",
+        "d": "The biomass system capacity does not exceed 400 kW."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q6. In an Islanded (off-grid) microgrid connection mode, what happens to surplus generated renewable energy that cannot be absorbed by loads or storage?",
+      "answers": {
+        "a": "It is automatically exported to the utility grid",
+        "b": "It is stored in the hydrogen tank indefinitely, bypassing limits",
+        "c": "It is curtailed (wasted) because there is no grid connection to absorb it",
+        "d": "It triggers battery discharge"
+      },
+      "explanations": {
+        "a": "In Islanded mode, the grid is disconnected, so export is impossible.",
+        "b": "Hydrogen storage cannot exceed its physical tank capacity (20 kg).",
+        "c": "Correct. In Islanded mode, excess power that cannot be stored must be curtailed.",
+        "d": "Surplus power charges the battery, not discharges it."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q7. What is the minimum state of charge (SoC) limit for the Lithium Battery below which discharge is blocked to protect the battery cell?",
+      "answers": {
+        "a": "0.0%",
+        "b": "10.0%",
+        "c": "20.0%",
+        "d": "50.0%"
+      },
+      "explanations": {
+        "a": "Discharging to 0% causes permanent degradation to lithium chemistry.",
+        "b": "Correct. The battery discharge is capped at a minimum 10.0% SoC limit.",
+        "c": "The minimum SoC cut-off is 10.0%, not 20.0%.",
+        "d": "Batteries can discharge way below 50.0% SoC during deficits."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q8. What is the primary function of the hydrogen electrolyzer in this experiment?",
+      "answers": {
+        "a": "To burn hydrogen gas to generate steam power",
+        "b": "To convert excess electrical energy into stored hydrogen gas",
+        "c": "To supply power when demand exceeds generation",
+        "d": "To regulate grid voltage levels"
+      },
+      "explanations": {
+        "a": "The electrolyzer uses electricity to split water; it does not burn hydrogen.",
+        "b": "Correct. The electrolyzer uses surplus power to generate and store hydrogen.",
+        "c": "The fuel cell performs energy discharge, not the electrolyzer.",
+        "d": "The electrolyzer acts purely as a deferrable energy storage load."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q9. What is the maximum input power capacity of the hydrogen electrolyzer in this EMS system?",
+      "answers": {
+        "a": "50 kW",
+        "b": "100 kW",
+        "c": "200 kW",
+        "d": "300 kW"
+      },
+      "explanations": {
+        "a": "The electrolyzer input limit is larger than 50 kW.",
+        "b": "The limit is 200 kW, not 100 kW.",
+        "c": "Correct. The electrolyzer is capped at a maximum charging rate of 200 kW.",
+        "d": "The input charging rate is restricted to a 200 kW limit."
+      },
+      "correctAnswer": "c",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "Q10. Which dispatch strategy focuses on keeping the battery SoC at 100% at all times to prepare for grid outages?",
+      "answers": {
+        "a": "Max Self-Consumption",
+        "b": "Peak Grid Shaving",
+        "c": "Battery Backup Support",
+        "d": "Demand Response"
+      },
+      "explanations": {
+        "a": "Max Self-Consumption prioritizes using battery power to minimize export/import.",
+        "b": "Peak Grid Shaving holds battery reserve unless grid import limits are breached.",
+        "c": "Correct. Battery Backup Support prioritizes keeping the battery fully charged (100% SoC) in case of grid failure.",
+        "d": "Demand Response sheds load, rather than managing battery backup thresholds."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+To analyze the integration of renewable energy sources (solar, wind, and biomass) into a smart grid, evaluate the dispatch strategies of an Energy Management System (EMS) using battery and hydrogen storage, and study real-time load balancing across residential, commercial, and industrial sectors under variable generation and demand.
