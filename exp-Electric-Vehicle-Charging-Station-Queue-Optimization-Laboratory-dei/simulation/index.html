@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EV Charging Station Queue Optimization Laboratory</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- MathJax for LaTeX mathematical rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <!-- Main Three Column Layout (No Inner Header) -->
+  <div class="lab-workspace">
+    <!-- Left Column: Controls -->
+    <aside class="workspace-sidebar left-sidebar">
+      <div class="sidebar-section">
+        <h3>Simulation Engine</h3>
+        <div class="sim-time-container" style="margin-bottom: 0.75rem; background: #f8fafc; border: 1.5px solid var(--border-color); padding: 0.5rem; border-radius: 6px; text-align: center;">
+          <span class="control-label-text" style="font-size: 0.65rem; color: var(--text-muted); font-weight: 800; display: block; margin-bottom: 2px;">SIMULATION TIME</span>
+          <div id="header-sim-time" style="font-family: 'Share Tech Mono', monospace; font-size: 1.25rem; font-weight: bold; color: var(--blue);">0h 00m</div>
+        </div>
+        <div class="loop-buttons">
+          <button id="btn-play-pause" class="btn-loop btn-start"><i data-lucide="play"></i> Start Sim</button>
+          <button id="btn-pause" class="btn-loop btn-pause" disabled><i data-lucide="pause"></i> Pause Sim</button>
+          <button id="btn-reset" class="btn-loop btn-reset"><i data-lucide="rotate-ccw"></i> Reset Lab</button>
+        </div>
+
+      </div>
+
+      <div class="sidebar-section">
+        <h3>1. Queue Management Policy</h3>
+        <div class="control-group" style="display: none;">
+          <label for="param-discipline" class="control-label-text">Discipline ($\text{Discipline}$)</label>
+          <select id="param-discipline" class="select-premium">
+            <option value="FIFO" selected>FIFO (First-In, First-Out)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="param-capacity" class="control-label-text">Queue Buffer ($K$)</label>
+          <select id="param-capacity" class="select-premium">
+            <option value="999" selected>Infinite (M/M/c)</option>
+            <option value="3">3 spots (M/M/c/3)</option>
+            <option value="5">5 spots (M/M/c/5)</option>
+            <option value="8">8 spots (M/M/c/8)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>2. Charging Facility Configuration</h3>
+        <div class="control-group">
+          <div class="control-label">
+            <span>Charger Bays ($c$)</span>
+            <span class="control-val" id="val-chargers">3 Bays</span>
+          </div>
+          <input type="range" id="param-chargers" min="1" max="5" value="3" step="1" class="slider-premium">
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>Arrival Rate ($\lambda$)</span>
+            <span class="control-val" id="val-arrival-rate">12 EVs/hr</span>
+          </div>
+          <input type="range" id="param-arrival-rate" min="2" max="60" value="12" step="1" class="slider-premium">
+        </div>
+
+        <div class="control-group">
+          <div class="control-label">
+            <span>Avg Charge Time ($1/\mu$)</span>
+            <span class="control-val" id="val-service-rate">20 mins</span>
+          </div>
+          <input type="range" id="param-service-rate" min="5" max="60" value="20" step="5" class="slider-premium">
+        </div>
+      </div>
+
+      <div class="sidebar-section" style="display: none;">
+        <h3>3. Smart Grid & Power EMS</h3>
+        <div class="control-group">
+          <div class="control-label">
+            <span>Grid Power Limit</span>
+            <span class="control-val" id="val-grid-limit">300 kW</span>
+          </div>
+          <input type="range" id="param-grid-limit" min="100" max="600" value="300" step="50" class="slider-premium">
+        </div>
+        <div class="control-group">
+          <label for="param-power-mode" class="control-label-text">Load Balancing Strategy</label>
+          <select id="param-power-mode" class="select-premium">
+            <option value="fixed" selected>Equal Throttle (Fixed Max)</option>
+            <option value="smart">Smart Balancing (SOC Weighted)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="sidebar-section" style="display: none;">
+        <h3>4. Incident Laboratory</h3>
+        <div class="incident-buttons">
+          <button id="btn-trigger-surge" class="btn-incident btn-surge"><i data-lucide="zap-off"></i> Traffic Surge</button>
+          <button id="btn-trigger-outage" class="btn-incident btn-outage"><i data-lucide="shield-alert"></i> Grid Outage</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center Column: SCADA Mimic & Analytical Tabs -->
+    <main class="workspace-center">
+      <!-- Outage / Alert Banner -->
+      <div id="outage-overlay" class="alert-overlay">
+        <div class="alert-banner-content">
+          <i data-lucide="alert-octagon" class="alert-icon animate-pulse"></i>
+          <div>
+            <h3>EMERGENCY POWER OUTAGE TRIGGERED</h3>
+            <p>EMS Controller has cut power to charging bays. Charging is suspended.</p>
+          </div>
+          <button id="btn-resolve-outage" class="btn-resolve">RECOVER GRID</button>
+        </div>
+      </div>
+
+      <!-- 1. Top Telemetry Row -->
+      <div class="scada-top-row" style="display: none;">
+        <!-- EV Arrivals -->
+        <div class="mimic-block border-arrivals">
+          <div class="block-icon orange"><i data-lucide="navigation"></i></div>
+          <div class="block-title">EV Stream</div>
+          <div class="block-value" id="mimic-arrival-val">12 EVs/hr</div>
+          <div class="block-badge standby" id="mimic-arrival-status">Streaming</div>
+        </div>
+        
+        <!-- Utility Grid -->
+        <div class="mimic-block border-grid">
+          <div class="block-icon green"><i data-lucide="bolt"></i></div>
+          <div class="block-title">Utility Grid</div>
+          <div class="block-value" id="mimic-grid-power">0 kW</div>
+          <div class="block-badge active" id="mimic-grid-status">Connected</div>
+        </div>
+        
+        <!-- Total Bays -->
+        <div class="mimic-block border-chargers">
+          <div class="block-icon purple"><i data-lucide="plug"></i></div>
+          <div class="block-title">Total Bays</div>
+          <div class="block-value" id="mimic-total-bays-val">3 Bays</div>
+          <div class="block-badge active" id="mimic-total-bays-badge">Operational</div>
+          <div class="charger-bays-containers-wrapper" id="mimic-chargers-list" style="display: none;"></div>
+        </div>
+        
+        <!-- Queue Buffer -->
+        <div class="mimic-block border-queue">
+          <div class="block-icon purple"><i data-lucide="users"></i></div>
+          <div class="block-title">Queue Buffer</div>
+          <div class="block-value" id="mimic-queue-val">0/&infin;</div>
+          <div class="block-badge active" id="mimic-queue-status">Empty</div>
+        </div>
+        
+        <!-- EMS Controller -->
+        <div class="mimic-block border-ems">
+          <div class="block-icon teal"><i data-lucide="cpu"></i></div>
+          <div class="block-title">EMS Controller</div>
+          <div class="block-value" id="mimic-ems-val">Normal</div>
+          <div class="block-badge active" id="mimic-ems-status">Online</div>
+        </div>
+        
+        <!-- Completed Departures -->
+        <div class="mimic-block border-departures">
+          <div class="block-icon pink"><i data-lucide="check-circle"></i></div>
+          <div class="block-title">Departures</div>
+          <div class="block-value" id="mimic-served-val">0 Served</div>
+          <div class="block-badge active" id="mimic-served-badge">Served</div>
+        </div>
+      </div>
+
+      <!-- 2. Simulation Container (Dark theme layout) -->
+      <div class="mimic-container dark-mimic">
+        <div class="mimic-header">
+          <div class="mimic-title">CHARGING STATION LAYOUT</div>
+          <div class="mimic-legend">
+            <span class="legend-item"><span class="dot purple"></span>Waiting in Queue</span>
+            <span class="legend-item"><span class="dot green"></span>Charging</span>
+            <span class="legend-item"><span class="dot blue"></span>Departing</span>
+            <span class="legend-item"><span class="dot grey"></span>Idle</span>
+          </div>
+        </div>
+        
+        <div class="road-track-system">
+          <!-- Queue Entry Box -->
+          <div class="queue-entry-box">
+            <span class="entry-label">QUEUE ENTRY</span>
+            <i data-lucide="arrow-right"></i>
+          </div>
+          <!-- Road Lane -->
+          <div class="road-lane-dark">
+            <div class="road-lane-dashes"></div>
+          </div>
+          <!-- Charger Bays Canopy Substation -->
+          <div class="canopy-substation">
+            <div class="canopy-roof">
+              <i data-lucide="zap"></i> CHARGER BAYS
+            </div>
+            <div class="charger-bays-bg" id="charger-bays-bg"></div>
+          </div>
+          <!-- Exit Box -->
+          <div class="exit-box">
+            <span class="exit-label">EXIT</span>
+            <i data-lucide="arrow-right"></i>
+          </div>
+        </div>
+
+        <!-- SVG Connections Layout for SCADA Lines -->
+        <svg class="mimic-svg-connections" style="height: 300px; position: absolute; top: 0; left: 0; width: 100%; pointer-events: none; z-index: 4;">
+          <!-- Hidden grid path for compatibility -->
+          <path id="flow-grid-ems" style="display: none;" />
+          <g id="svg-power-flows"></g>
+        </svg>
+      </div>
+
+      <!-- 3. Metrics Summary Row -->
+      <div class="scada-metrics-row" style="display: none;">
+        <!-- Queue Overview -->
+        <div class="metric-summary-card">
+          <div class="card-title">Queue Overview</div>
+          <div class="metric-row-item">
+            <span class="val-big" id="metric-queue-len">0</span>
+            <span class="lbl-small">In Queue</span>
+          </div>
+          <div class="metric-row-item border-top-item">
+            <span class="val-mid" id="metric-max-queue">0</span>
+            <span class="lbl-small">Max Queue</span>
+          </div>
+        </div>
+        
+        <!-- Charging Status -->
+        <div class="metric-summary-card">
+          <div class="card-title">Charging Status</div>
+          <div class="metric-row-item">
+            <span class="val-big" id="metric-active-bays">0/3</span>
+            <span class="lbl-small">Charging</span>
+          </div>
+          <div class="metric-row-item border-top-item">
+            <span class="val-mid" id="metric-utilization">0%</span>
+            <span class="lbl-small">Utilization</span>
+          </div>
+        </div>
+        
+        <!-- Performance Metrics -->
+        <div class="metric-summary-card">
+          <div class="card-title">Performance Metrics</div>
+          <div class="metrics-quad-grid">
+            <div class="quad-item">
+              <span class="val-mid green-text" id="metric-served">0</span>
+              <span class="lbl-small">Total Served</span>
+            </div>
+            <div class="quad-item">
+              <span class="val-mid blue-text" id="metric-wait-time">0.0 min</span>
+              <span class="lbl-small">Avg Wait Time</span>
+            </div>
+            <div class="quad-item">
+              <span class="val-mid purple-text" id="metric-max-len">0</span>
+              <span class="lbl-small">Max Queue Len</span>
+            </div>
+            <div class="quad-item">
+              <span class="val-mid teal-text" id="metric-efficiency">100.0%</span>
+              <span class="lbl-small">System Efficiency</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Power Management -->
+        <div class="metric-summary-card">
+          <div class="card-title">Power Management</div>
+          <div class="power-bar-wrapper">
+            <div class="power-values">
+              <div class="power-val-block">
+                <span class="power-num" id="metric-grid-load">0 kW</span>
+                <span class="power-lbl">Grid Load</span>
+              </div>
+              <div class="power-val-block text-right">
+                <span class="power-num" id="metric-grid-limit">300 kW</span>
+                <span class="power-lbl">Grid Limit</span>
+              </div>
+            </div>
+            <div class="power-progress-bg">
+              <div class="power-progress-fill" id="metric-grid-bar" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- System Health -->
+        <div class="metric-summary-card">
+          <div class="card-title">System Health</div>
+          <div class="health-alert-box green" id="metric-health-box">
+            <span class="health-status-text" id="metric-health-status">STABLE</span>
+            <span class="health-desc-text" id="metric-health-desc">All systems normal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Bottom Row (Graph & Logs) -->
+      <div class="scada-bottom-row">
+        <!-- Analytical Tabs (Left) -->
+        <div class="bottom-left-panel">
+          <div class="analysis-tabs">
+            <button class="tab-btn active" data-tab="tab-chart"><i data-lucide="activity"></i> SCADA Live Trends</button>
+            <button class="tab-btn" data-tab="tab-math"><i data-lucide="calculator"></i> Queuing Theory Validator</button>
+          </div>
+          
+          <div class="tab-content active" id="tab-chart">
+            <div class="chart-wrapper">
+              <canvas id="metricsChart"></canvas>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="tab-math">
+            <div class="math-validator-grid">
+              <div class="math-card formula-card">
+                <h4>Queuing Model Formulas</h4>
+                <div class="formula-list">
+                  <div class="formula-item">
+                    <span class="formula-label">Model Class:</span>
+                    <span class="formula-value" id="math-model-class">M/M/c</span>
+                  </div>
+                  <div class="formula-item">
+                    <span class="formula-label">Traffic Intensity ($\rho$):</span>
+                    <span class="formula-expression">$\rho = \frac{\lambda}{c \cdot \mu}$</span>
+                    <span class="formula-value" id="math-rho-val">0.00</span>
+                  </div>
+                  <div class="formula-item">
+                    <span class="formula-label">Wait Time in Queue ($W_q$):</span>
+                    <span class="formula-expression">$W_q = \frac{L_q}{\lambda_{eff}}$</span>
+                  </div>
+                  <div class="formula-item">
+                    <span class="formula-label">Balking / Blocking ($P_K$):</span>
+                    <span class="formula-expression">$P_K = \frac{r^K}{c! c^{K-c}} P_0$</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="math-card table-card">
+                <h4>Model Validation Matrix (Theory vs. Live Sim)</h4>
+                <table class="validation-table">
+                  <thead>
+                    <tr>
+                      <th>Performance Metric</th>
+                      <th>Analytical Theory</th>
+                      <th>Empirical Sim Avg</th>
+                      <th>Relative Error</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Avg Wait Time ($W_q$)</td>
+                      <td id="math-theory-wq">0.00 min</td>
+                      <td id="math-sim-wq">0.00 min</td>
+                      <td id="math-error-wq">0.0%</td>
+                    </tr>
+                    <tr>
+                      <td>Avg Queue Length ($L_q$)</td>
+                      <td id="math-theory-lq">0.00 cars</td>
+                      <td id="math-sim-lq">0.00 cars</td>
+                      <td id="math-error-lq">0.0%</td>
+                    </tr>
+                    <tr>
+                      <td>Balking Rate ($P_b$)</td>
+                      <td id="math-theory-balk">0.0%</td>
+                      <td id="math-sim-balk">0.0%</td>
+                      <td id="math-error-balk">0.0%</td>
+                    </tr>
+                    <tr>
+                      <td>Bays Utilization ($U$)</td>
+                      <td id="math-theory-util">0.0%</td>
+                      <td id="math-sim-util">0.0%</td>
+                      <td id="math-error-util">0.0%</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="table-footnote">
+                  * Theoretical values are calculated using steady-state queuing formulas. Empirical values accumulate averages over the current run.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <!-- Right Sidebar: SCADA Telemetry Metrics -->
+    <aside class="workspace-sidebar right-sidebar">
+      <h3>SCADA Live Telemetry</h3>
+      
+      <div class="metric-card" style="display: none;">
+        <div class="metric-icon green"><i data-lucide="activity"></i></div>
+        <div class="metric-info">
+          <span class="metric-title">System Efficiency</span>
+          <h4 class="metric-value" id="header-efficiency">100.0%</h4>
+          <span class="metric-status">Throughput Ratio</span>
+        </div>
+      </div>
+
+      <div class="metric-card" style="display: none;">
+        <div class="metric-icon orange"><i data-lucide="arrow-right-circle"></i></div>
+        <div class="metric-info">
+          <span class="metric-title">Total Arrivals</span>
+          <h4 class="metric-value" id="telemetry-arrivals">0 EVs</h4>
+          <span class="metric-status">Cumulative Load</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon pink"><i data-lucide="check"></i></div>
+        <div class="metric-info">
+          <span class="metric-title">Total Served</span>
+          <h4 class="metric-value" id="telemetry-served">0 EVs</h4>
+          <span class="metric-status">Completed Cycles</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon blue"><i data-lucide="activity"></i></div>
+        <div class="metric-info">
+          <span class="metric-title">Charger Utilization</span>
+          <h4 class="metric-value" id="telemetry-utilization">0.0%</h4>
+          <span class="metric-status" id="telemetry-util-status">Standby</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon green"><i data-lucide="clock"></i></div>
+        <div class="metric-info">
+          <span class="metric-title">Avg Wait Time (Wq)</span>
+          <h4 class="metric-value" id="telemetry-wait">0.0 min</h4>
+          <span class="metric-status" id="telemetry-wait-status">Optimal</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon purple"><i data-lucide="users"></i></div>
+        <div class="metric-info">
+          <span class="metric-title">Current Queue</span>
+          <h4 class="metric-value" id="telemetry-queue-len">0.0 Cars</h4>
+          <span class="metric-status" id="telemetry-queue-status">No Queue</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon orange"><i data-lucide="ban"></i></div>
+        <div class="metric-info">
+          <span class="metric-title">Balked / Lost Demand</span>
+          <h4 class="metric-value" id="telemetry-balked">0 EVs</h4>
+          <span class="metric-status" id="telemetry-balk-status">0.0% Balk Rate</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon green"><i data-lucide="zap"></i></div>
+        <div class="metric-info">
+          <span class="metric-title">EMS Grid Load</span>
+          <h4 class="metric-value" id="telemetry-power">0 kW</h4>
+          <span class="metric-status" id="telemetry-power-status">Grid stable</span>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon green" id="telemetry-system-icon"><i data-lucide="heart"></i></div>
+        <div class="metric-info">
+          <span class="metric-title">EMS System Status</span>
+          <h4 class="metric-value" id="telemetry-system-status">Normal</h4>
+          <span class="metric-status" id="telemetry-system-desc">Grid stable</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="js/main.js"></script>
+<script src="../assets/js/iframeResize.js"></script></body>
+</html>

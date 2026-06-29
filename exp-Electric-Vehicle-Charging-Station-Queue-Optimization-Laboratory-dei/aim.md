@@ -1,0 +1,1 @@
+To study and analyze the performance of an EV charging station using queueing theory by simulating electric vehicle arrivals, charger availability, and charging time.

@@ -1,0 +1,175 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "Q1. What does the first 'M' in the Kendall notation of an M/M/c queue represent?",
+      "answers": {
+        "a": "Markovian (Poisson arrival process / exponential inter-arrival times)",
+        "b": "Deterministic arrival times",
+        "c": "Multi-channel configuration",
+        "d": "Maximum queue length"
+      },
+      "explanations": {
+        "a": "The first letter in Kendall's notation represents the arrival process. 'M' stands for Markovian or Memoryless, indicating a Poisson arrival process.",
+        "b": "Incorrect, deterministic is denoted by 'D'.",
+        "c": "Incorrect, channels are represented by 'c'.",
+        "d": "Incorrect, queue length is represented by 'K'."
+      },
+      "correctAnswer": "a",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q2. What does the parameter 'c' represent in an M/M/c queuing system?",
+      "answers": {
+        "a": "Customer arrival rate",
+        "b": "Number of parallel servers (charging bays)",
+        "c": "System capacity limit",
+        "d": "Average service duration"
+      },
+      "explanations": {
+        "a": "Incorrect, arrival rate is lambda.",
+        "b": "In Kendall's notation, 'c' denotes the number of parallel servers or channels in the system.",
+        "c": "Incorrect, system capacity is K.",
+        "d": "Incorrect, average service duration is 1/mu."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q3. If the average arrival rate (λ) of EVs is 15 cars per hour, what is the mean inter-arrival time?",
+      "answers": {
+        "a": "2 minutes",
+        "b": "4 minutes",
+        "c": "15 minutes",
+        "d": "30 minutes"
+      },
+      "explanations": {
+        "a": "Incorrect.",
+        "b": "Inter-arrival time is 1/λ = 1/15 hours, which is equal to 4 minutes.",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q4. Under what condition is an infinite buffer queue (M/M/c) considered stable?",
+      "answers": {
+        "a": "Traffic intensity (ρ) < 1",
+        "b": "Traffic intensity (ρ) >= 1",
+        "c": "Arrival rate exceeds service capacity",
+        "d": "Buffer capacity is infinite"
+      },
+      "explanations": {
+        "a": "An infinite queue is stable if and only if the server utilisation index/traffic intensity ρ = λ / (c * μ) < 1. Otherwise, the queue grows infinitely.",
+        "b": "Incorrect, the queue will grow infinitely and be unstable.",
+        "c": "Incorrect, this causes instability.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q5. What probability distribution is typically used to model the service times in an M/M/c queue?",
+      "answers": {
+        "a": "Normal distribution",
+        "b": "Exponential distribution",
+        "c": "Poisson distribution",
+        "d": "Uniform distribution"
+      },
+      "explanations": {
+        "a": "Incorrect.",
+        "b": "The second 'M' in Kendall's notation represents Markovian/memoryless service times, which are modeled using the exponential distribution.",
+        "c": "Incorrect, Poisson is used for count of arrivals.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q6. What is the meaning of 'balking' in queuing systems?",
+      "answers": {
+        "a": "A customer leaves the queue after waiting too long.",
+        "b": "A customer decides not to join the queue because it is too long.",
+        "c": "The server breaks down.",
+        "d": "Two queues merge."
+      },
+      "explanations": {
+        "a": "Incorrect, this is reneging.",
+        "b": "Balking occurs when an arriving customer decides not to enter the system at all because of the visible queue length or wait time.",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q7. If the average charging time is 20 minutes, what is the service rate (μ) per charger per hour?",
+      "answers": {
+        "a": "3 vehicles/hour",
+        "b": "20 vehicles/hour",
+        "c": "0.05 vehicles/hour",
+        "d": "1.5 vehicles/hour"
+      },
+      "explanations": {
+        "a": "The service rate is μ = 1 / service time = 1 / (20/60 hours) = 3 vehicles per hour.",
+        "b": "Incorrect.",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q8. Which queuing model has a finite limit on the maximum number of customers allowed in the system?",
+      "answers": {
+        "a": "M/M/c",
+        "b": "M/M/c/K",
+        "c": "M/D/1",
+        "d": "M/M/1"
+      },
+      "explanations": {
+        "a": "Incorrect, M/M/c has infinite queue buffer.",
+        "b": "The fourth letter 'K' in Kendall's notation M/M/c/K represents the system capacity (servers + queue spots).",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q9. What is the primary purpose of an Energy Management System (EMS) in an EV charging station?",
+      "answers": {
+        "a": "To schedule vehicle cleaning",
+        "b": "To balance and monitor grid load under maximum power limits",
+        "c": "To calculate payment transactions",
+        "d": "To increase battery capacity of cars"
+      },
+      "explanations": {
+        "a": "Incorrect.",
+        "b": "An EMS monitors and regulates the total power drawn by all chargers to prevent overloading the utility grid limit.",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q10. Which metric measures the average proportion of time that charging bays are actively occupied?",
+      "answers": {
+        "a": "Balking probability",
+        "b": "Queue delay",
+        "c": "Charger utilization",
+        "d": "Service rate"
+      },
+      "explanations": {
+        "a": "Incorrect.",
+        "b": "Incorrect.",
+        "c": "Charger utilization is the ratio of busy servers to the total number of servers over time.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    }
+  ]
+}

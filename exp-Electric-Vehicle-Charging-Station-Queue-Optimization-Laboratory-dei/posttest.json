@@ -1,0 +1,175 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "Q1. In an M/M/3 queue with λ = 6 cars/hour and μ = 3 cars/hour, what is the traffic intensity (ρ)?",
+      "answers": {
+        "a": "2.0",
+        "b": "0.67",
+        "c": "0.5",
+        "d": "1.0"
+      },
+      "explanations": {
+        "a": "Incorrect, did you forget to multiply mu by the server count (c = 3)?",
+        "b": "ρ = λ / (c * μ) = 6 / (3 * 3) = 6/9 = 0.67.",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q2. How are priority/urgent vehicles (like ambulances) handled under the station's FIFO queue system?",
+      "answers": {
+        "a": "They are charged first by bypassing the waiting normal cars via a dedicated express lane.",
+        "b": "They are blocked from entering if the queue size exceeds 3 vehicles.",
+        "c": "They charge at a lower priority than standard vehicles.",
+        "d": "They require a separate dedicated charger bay that is never used by standard cars."
+      },
+      "explanations": {
+        "a": "Urgent vehicles are routed to a dedicated express lane (top lane) and sorted to the front of the queue to be served first, bypassing standard FIFO traffic.",
+        "b": "Incorrect, capacity limits apply to the whole system.",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q3. What happens to incoming EVs when a finite M/M/c/K system reaches its capacity limit K?",
+      "answers": {
+        "a": "They wait on the street infinitely.",
+        "b": "They are blocked and balked (lost demand).",
+        "c": "They charge at twice the normal speed.",
+        "d": "The chargers shut down."
+      },
+      "explanations": {
+        "a": "Incorrect, they cannot enter the queue.",
+        "b": "In a finite capacity system, arrivals when the system is full are blocked and cannot enter the queue, resulting in balking.",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q4. What is the main function of the Energy Management System (EMS) when the total charging demand exceeds the grid limit?",
+      "answers": {
+        "a": "It suspends the simulation.",
+        "b": "It dynamically throttles charger power output to keep total load within the grid limit.",
+        "c": "It blocks new arrivals from entering the station.",
+        "d": "It disconnects the utility grid completely."
+      },
+      "explanations": {
+        "a": "Incorrect.",
+        "b": "The EMS throttles power output across the active bays to prevent overloading the grid beyond its capacity limit.",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q5. What is the impact of a 'Traffic Surge' on the station's performance indicators?",
+      "answers": {
+        "a": "Utilization decreases, average wait time decreases.",
+        "b": "Wait time (Wq), queue length (Lq), and balking rate increase.",
+        "c": "Service rate (μ) increases automatically.",
+        "d": "System efficiency increases to 100%."
+      },
+      "explanations": {
+        "a": "Incorrect, wait time increases.",
+        "b": "A traffic surge increases the arrival rate, causing queues to build up and wait times/balking rates to spike.",
+        "c": "Incorrect, service rate remains constant unless chargers are upgraded.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q6. In an M/M/c/K system, what does the effective arrival rate (λ_eff) represent?",
+      "answers": {
+        "a": "The arrival rate during a surge.",
+        "b": "The actual rate of vehicles entering the queue, excluding those that balk.",
+        "c": "The maximum charger output power.",
+        "d": "The rate of vehicles completing their charge."
+      },
+      "explanations": {
+        "a": "Incorrect.",
+        "b": "The effective arrival rate is λ_eff = λ * (1 - P_K), representing only the vehicles that successfully enter the system.",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "Q7. If a 'Grid Outage' occurs, how should the Energy Management System (EMS) respond?",
+      "answers": {
+        "a": "Switch to standard equal throttling.",
+        "b": "Suspend charging and cut power to all bays to protect the grid.",
+        "c": "Increase charging speed to clear the queue quickly.",
+        "d": "Turn off the queue display only."
+      },
+      "explanations": {
+        "a": "Incorrect.",
+        "b": "During a grid outage, EMS cuts power to all bays to ensure system safety and prevent damage.",
+        "c": "Incorrect, no power is available.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q8. Under a fixed equal-throttling allocation with 3 active cars, if the grid limit is 300 kW and each charger requests 120 kW, what is the allocated power per car?",
+      "answers": {
+        "a": "120 kW",
+        "b": "100 kW",
+        "c": "300 kW",
+        "d": "90 kW"
+      },
+      "explanations": {
+        "a": "Incorrect, this would draw 360 kW, exceeding the grid limit.",
+        "b": "The total requested power is 3 * 120 = 360 kW. Since it exceeds the 300 kW limit, power is throttled equally to 300 / 3 = 100 kW per car.",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "Q9. Why is a dedicated express lane added for emergency/urgent vehicles in a standard FIFO charging queue?",
+      "answers": {
+        "a": "To charge vehicles with the largest battery capacity first.",
+        "b": "To prevent critical emergency vehicles from getting stuck waiting behind standard FIFO traffic.",
+        "c": "To reduce overall electricity consumption.",
+        "d": "To increase utility grid power limit automatically."
+      },
+      "explanations": {
+        "a": "Incorrect.",
+        "b": "Standard FIFO makes every vehicle wait in order of arrival, which is unsafe for critical services. An express lane lets emergency vehicles bypass the queue.",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q10. Which of the following relative error values indicates that the empirical simulation averages have converged closely to steady-state theory?",
+      "answers": {
+        "a": "95.0%",
+        "b": "1.2%",
+        "c": "100.0%",
+        "d": "50.0%"
+      },
+      "explanations": {
+        "a": "Incorrect, that is a high error.",
+        "b": "Relative error measures the deviation between theory and simulation averages. A small relative error (e.g. 1.2%) indicates high alignment and convergence.",
+        "c": "Incorrect.",
+        "d": "Incorrect."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    }
+  ]
+}

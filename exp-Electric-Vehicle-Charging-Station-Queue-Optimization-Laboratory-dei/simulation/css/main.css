@@ -1,0 +1,1787 @@
+/* SCADA Telemetry & Roads Hybrid Style */
+:root {
+  --bg-workspace: #f8fafc;
+  --bg-sidebar: rgba(255, 255, 255, 0.85);
+  --bg-card: #ffffff;
+  --border-color: #e2e8f0;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  
+  --primary: #10b981; /* Success Green */
+  --primary-glow: rgba(16, 185, 129, 0.35);
+  --blue: #3b82f6; /* Charger Blue */
+  --blue-glow: rgba(59, 130, 246, 0.3);
+  --purple: #8b5cf6; /* Queue Violet */
+  --orange: #f97316; /* Warning Orange */
+  --pink: #ec4899; /* Cumulative Pink */
+  --teal: #14b8a6; /* System Status Teal */
+  --red: #ef4444; /* Outage Red */
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-card: 0 12px 20px -8px rgba(148, 163, 184, 0.12), 0 4px 4px -2px rgba(148, 163, 184, 0.04);
+}
+
+/* General Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f1f5f9;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Header Styling */
+.lab-header {
+  height: 64px;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  border-bottom: 2px solid #334155;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-icon-container {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+.header-icon {
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+.header-title h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.header-subtitle {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.header-status-bar {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.status-item {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}
+
+.status-value {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #38bdf8;
+}
+
+/* Workspace Layout */
+.lab-workspace {
+  display: flex;
+  flex-grow: 1;
+  height: 100vh; /* Fill workspace when header is removed */
+  overflow: hidden;
+}
+
+/* Sidebars */
+.workspace-sidebar {
+  width: 280px;
+  background-color: var(--bg-sidebar);
+  backdrop-filter: blur(12px);
+  border-right: 1.5px solid var(--border-color);
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow-y: auto;
+  flex-shrink: 0;
+  z-index: 5;
+}
+
+.right-sidebar {
+  border-right: none;
+  border-left: 1.5px solid var(--border-color);
+  width: 290px;
+}
+
+.workspace-sidebar h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  margin-bottom: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-left: 3px solid var(--blue);
+  padding-left: 6px;
+}
+
+.sidebar-section {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Sim Controls */
+.loop-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.btn-loop {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: 700;
+  font-size: 0.78rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.btn-loop i {
+  width: 13px;
+  height: 13px;
+}
+
+.btn-start { background-color: var(--primary); box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2); }
+.btn-start:hover:not(:disabled) { background-color: #059669; }
+.btn-pause { background-color: #eab308; box-shadow: 0 2px 6px rgba(234, 179, 8, 0.2); }
+.btn-pause:hover:not(:disabled) { background-color: #ca8a04; }
+.btn-reset { 
+  grid-column: span 2;
+  background-color: #64748b; 
+  box-shadow: 0 2px 6px rgba(100, 116, 139, 0.15); 
+}
+.btn-reset:hover:not(:disabled) { background-color: #475569; }
+
+.btn-loop:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
+
+.speed-control-group {
+  margin-top: 0.5rem;
+}
+
+.control-label-text {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.speed-control-row {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.speed-btn {
+  flex: 1;
+  padding: 0.3rem;
+  border: 1px solid var(--border-color);
+  background-color: #f8fafc;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.speed-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.speed-btn.active {
+  background-color: var(--blue);
+  color: white;
+  border-color: var(--blue);
+  box-shadow: 0 2px 4px var(--blue-glow);
+}
+
+/* Premium Form Elements */
+.select-premium {
+  width: 100%;
+  padding: 0.45rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: 6px;
+  background-color: #f8fafc;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.select-premium:focus {
+  border-color: var(--blue);
+  background-color: white;
+}
+
+.control-group {
+  margin-bottom: 0.85rem;
+}
+.control-group:last-child {
+  margin-bottom: 0;
+}
+
+.control-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 0.3rem;
+}
+
+.control-val {
+  color: var(--blue);
+  font-weight: 800;
+}
+
+.slider-premium {
+  width: 100%;
+  accent-color: var(--blue);
+  height: 5px;
+  background: #cbd5e1;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Incident Buttons */
+.incident-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.btn-incident {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1.5px solid transparent;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.2s;
+}
+
+.btn-surge {
+  background-color: #fff7ed;
+  color: #ea580c;
+  border-color: #ffedd5;
+}
+.btn-surge:hover {
+  background-color: #ffedd5;
+  box-shadow: 0 0 8px rgba(234, 88, 12, 0.15);
+}
+
+.btn-outage {
+  background-color: #fef2f2;
+  color: var(--red);
+  border-color: #fee2e2;
+}
+.btn-outage:hover {
+  background-color: #fee2e2;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.15);
+}
+
+/* Center Workspace */
+.workspace-center {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Alert/Outage Overlay */
+.alert-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 560px;
+  background-color: rgba(239, 68, 68, 0.12);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid var(--red);
+  box-shadow: inset 0 0 60px rgba(239, 68, 68, 0.25);
+  animation: alarmPulse 2.5s infinite alternate;
+}
+
+@keyframes alarmPulse {
+  from { background-color: rgba(239, 68, 68, 0.08); }
+  to { background-color: rgba(239, 68, 68, 0.22); }
+}
+
+.alert-banner-content {
+  background: white;
+  border: 2px solid var(--red);
+  padding: 1.25rem 2rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg), 0 0 25px rgba(239, 68, 68, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 550px;
+  animation: slideInDown 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes slideInDown {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.alert-icon {
+  width: 36px;
+  height: 36px;
+  color: var(--red);
+}
+
+.alert-banner-content h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  color: #991b1b;
+  font-weight: 800;
+  margin-bottom: 0.15rem;
+}
+
+.alert-banner-content p {
+  font-size: 0.78rem;
+  color: #7f1d1d;
+  font-weight: 500;
+}
+
+.btn-resolve {
+  padding: 0.45rem 1rem;
+  background-color: var(--red);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.25);
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-resolve:hover {
+  background-color: #dc2626;
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.4);
+}
+
+/* SCADA Mimic Container Stage */
+.mimic-container {
+  height: 560px;
+  background-color: #f1f5f9;
+  background-image: radial-gradient(rgba(148, 163, 184, 0.15) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1.5px solid var(--border-color);
+  box-shadow: inset 0 -4px 10px rgba(15, 23, 42, 0.02);
+}
+
+/* SVG Connection lines */
+.mimic-svg-connections {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.flow-path {
+  fill: none;
+  stroke-width: 3px;
+  stroke-linecap: round;
+  transition: stroke 0.4s ease;
+}
+
+.animate-flow {
+  stroke-dasharray: 6, 8;
+  animation: flowMotion 12s linear infinite;
+}
+
+.animate-flow-paused {
+  stroke-dasharray: 6, 8;
+  animation: none;
+}
+
+@keyframes flowMotion {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -300; }
+}
+
+/* Road system graphics */
+.road-track-system {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.grass-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f8fafc; /* Clean off-white bg */
+  z-index: -1;
+}
+
+.solar-canopy-outline {
+  position: absolute;
+  top: 75px;
+  left: 540px;
+  width: 240px;
+  height: 70px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.05), rgba(59, 130, 246, 0.03));
+  border: 1.5px dashed rgba(59, 130, 246, 0.25);
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.solar-label {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.5rem;
+  font-weight: 800;
+  color: #3b82f6;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.road-lane {
+  position: absolute;
+  height: 46px;
+  background-color: #1e293b; /* Asphalt */
+  display: flex;
+  align-items: center;
+}
+
+.road-curb {
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background-color: #94a3b8;
+}
+.curb-top { top: 0; }
+.curb-bottom { bottom: 0; }
+
+.road-markings {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: repeating-linear-gradient(90deg, transparent, transparent 15px, #f59e0b 15px, #f59e0b 35px);
+  opacity: 0.45;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lane-entrance {
+  border-radius: 0 8px 8px 0;
+}
+.lane-queue {
+  border-radius: 8px;
+  border: 1px solid #334155;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.3);
+}
+.lane-exit {
+  border-radius: 8px 0 0 8px;
+}
+
+/* Queue Spots Outlines inside road */
+.queue-indicators {
+  position: absolute;
+  right: 24px;
+  display: flex;
+  gap: 16px;
+}
+
+.queue-spot-outline {
+  width: 52px;
+  height: 30px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 0.65rem;
+  font-weight: 800;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+/* Charger bays block design */
+.charger-bays-bg {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgba(30, 41, 59, 0.9);
+  border: 1.5px solid #334155;
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
+}
+
+.charger-bay-outline {
+  width: 32px;
+  height: 100px;
+  border: 1.5px dashed #475569;
+  border-radius: 6px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 5px;
+  transition: all 0.3s;
+}
+
+.charger-bay-outline.active {
+  border-color: var(--primary);
+  background-color: rgba(16, 185, 129, 0.08);
+}
+
+.charger-bay-label {
+  font-size: 0.5rem;
+  font-weight: 800;
+  color: #64748b;
+  background-color: #0f172a;
+  padding: 1px 4px;
+  border-radius: 2px;
+  margin-bottom: 2px;
+}
+
+.charger-bay-outline.active .charger-bay-label {
+  background-color: var(--primary);
+  color: white;
+}
+
+.charger-pole-icon {
+  position: absolute;
+  top: 8px;
+  width: 14px;
+  height: 20px;
+  background-color: #475569;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.charger-pole-icon::before {
+  content: '⚡';
+  font-size: 8px;
+  color: #94a3b8;
+}
+.charger-bay-outline.active .charger-pole-icon {
+  background-color: var(--primary);
+  box-shadow: 0 0 10px var(--primary);
+}
+.charger-bay-outline.active .charger-pole-icon::before {
+  color: white;
+}
+
+/* SCADA Block Console Cards */
+.mimic-block {
+  position: absolute;
+  width: 140px;
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: var(--shadow-sm);
+  padding: 0.6rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.mimic-block:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+/* Card Top Border Accents */
+.border-grid { border-top: 3px solid var(--primary) !important; }
+.border-arrivals { border-top: 3px solid var(--orange) !important; }
+.border-queue { border-top: 3px solid var(--purple) !important; }
+.border-ems { border-top: 3px solid var(--teal) !important; }
+.border-chargers { border-top: 3px solid var(--blue) !important; }
+.border-departures { border-top: 3px solid var(--pink) !important; }
+
+.wide-block {
+  width: 220px;
+}
+
+.block-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.3rem;
+}
+
+.block-icon i {
+  width: 13px;
+  height: 13px;
+}
+
+.block-icon.green { background-color: #ecfdf5; color: var(--primary); }
+.block-icon.orange { background-color: #fff7ed; color: var(--orange); }
+.block-icon.purple { background-color: #f5f3ff; color: var(--purple); }
+.block-icon.teal { background-color: #f0fdfa; color: var(--teal); }
+.block-icon.blue { background-color: #eff6ff; color: var(--blue); }
+.block-icon.pink { background-color: #fdf2f8; color: var(--pink); }
+
+.block-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.block-value {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin: 0.1rem 0;
+}
+
+.block-badge {
+  font-size: 0.55rem;
+  font-weight: 800;
+  color: #fff;
+  background-color: #64748b;
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-top: 0.15rem;
+}
+
+.block-badge.active { background-color: var(--primary); box-shadow: 0 1px 4px var(--primary-glow); }
+.block-badge.standby { background-color: var(--orange); }
+.block-badge.alert { background-color: var(--red); box-shadow: 0 1px 4px rgba(239, 68, 68, 0.3); }
+
+/* Mini bays status tracker inside console */
+.charger-bays-containers-wrapper {
+  width: 100%;
+  height: 38px;
+  margin-top: 0.25rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.charger-mini-bay {
+  width: 24px;
+  height: 26px;
+  border: 1.2px dashed #94a3b8;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.55rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.charger-mini-bay.occupied {
+  border-color: var(--primary);
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--primary);
+}
+
+/* High Fidelity EV Car Model */
+.ev-car {
+  width: 52px;
+  height: 30px;
+  border-radius: 5px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: white;
+  font-weight: 800;
+  font-size: 0.52rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.05s linear; /* Continuous movement */
+  z-index: 10;
+  transform-origin: center center;
+}
+
+.ev-car.car-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); border: 1.2px solid #60a5fa; }
+.ev-car.car-purple { background: linear-gradient(135deg, #8b5cf6, #5b21b6); border: 1.2px solid #a78bfa; }
+.ev-car.car-orange { background: linear-gradient(135deg, #f97316, #c2410c); border: 1.2px solid #fb923c; }
+.ev-car.car-green { background: linear-gradient(135deg, #10b981, #047857); border: 1.2px solid #34d399; }
+
+.ev-car::before {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: 5px;
+  width: 3.5px;
+  height: 3.5px;
+  background-color: #fef08a;
+  border-radius: 50%;
+  box-shadow: 0 0 5px #fef08a;
+}
+.ev-car::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  bottom: 5px;
+  width: 3.5px;
+  height: 3.5px;
+  background-color: #fef08a;
+  border-radius: 50%;
+  box-shadow: 0 0 5px #fef08a;
+}
+
+.car-taillights {
+  position: absolute;
+  left: -2px;
+  width: 2px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 5px 0;
+  pointer-events: none;
+}
+.car-taillights::before, .car-taillights::after {
+  content: '';
+  width: 2.5px;
+  height: 3.5px;
+  background-color: #ef4444;
+  border-radius: 1px;
+}
+
+.car-glass {
+  position: absolute;
+  right: 11px;
+  top: 4px;
+  width: 12px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
+  transform: skewX(-5deg);
+  border: 0.5px solid rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+}
+
+.car-wheels {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+.car-wheels::before, .car-wheels::after {
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 3px;
+  background: #1e293b;
+  border-radius: 1px;
+}
+.car-wheels::before { top: -3px; right: 9px; }
+.car-wheels::after { bottom: -3px; right: 9px; }
+
+.car-wheels-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+.car-wheels-back::before, .car-wheels-back::after {
+  content: '';
+  position: absolute;
+  width: 9px;
+  height: 3px;
+  background: #1e293b;
+  border-radius: 1px;
+}
+.car-wheels-back::before { top: -3px; left: 9px; }
+.car-wheels-back::after { bottom: -3px; left: 9px; }
+
+/* Wheel spin when moving */
+.ev-car.moving .car-wheels::before,
+.ev-car.moving .car-wheels::after,
+.ev-car.moving .car-wheels-back::before,
+.ev-car.moving .car-wheels-back::after {
+  animation: wheelScroll 0.2s linear infinite;
+}
+
+@keyframes wheelScroll {
+  from { background-color: #1e293b; }
+  to { background-color: #64748b; }
+}
+
+.car-charge-bar {
+  width: 70%;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  margin-top: 3px;
+  overflow: hidden;
+  display: none;
+  border: 0.5px solid rgba(0,0,0,0.15);
+}
+.car-charge-fill {
+  height: 100%;
+  background: var(--primary);
+  width: 0%;
+}
+.ev-car.charging .car-charge-bar {
+  display: block;
+}
+
+.charge-spark {
+  position: absolute;
+  top: -15px;
+  font-size: 11px;
+  color: #34d399;
+  text-shadow: 0 0 6px var(--primary);
+  display: none;
+  animation: sparkAnimation 0.4s infinite alternate;
+}
+.ev-car.charging .charge-spark {
+  display: block;
+}
+@keyframes sparkAnimation {
+  from { transform: translateY(0) scale(0.9); }
+  to { transform: translateY(-3px) scale(1.1); }
+}
+
+/* Priority Siren */
+.car-priority-badge {
+  position: absolute;
+  top: -14px;
+  background-color: var(--red);
+  color: white;
+  font-size: 7px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: 800;
+  display: none;
+  box-shadow: 0 0 6px var(--red);
+  animation: sirenFlash 0.3s infinite alternate;
+}
+.ev-car.priority-car .car-priority-badge {
+  display: block;
+}
+@keyframes sirenFlash {
+  from { background-color: var(--red); box-shadow: 0 0 4px var(--red); }
+  to { background-color: var(--blue); box-shadow: 0 0 8px var(--blue); }
+}
+
+/* Bottom Analytical Section */
+.analysis-section {
+  flex-grow: 1;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  border-top: 1.5px solid var(--border-color);
+}
+
+.analysis-tabs {
+  background-color: #f8fafc;
+  display: flex;
+  border-bottom: 1.5px solid var(--border-color);
+}
+
+.tab-btn {
+  padding: 0.85rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.tab-btn i {
+  width: 14px;
+  height: 14px;
+}
+
+.tab-btn:hover {
+  background-color: #cbd5e1;
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  border-bottom-color: var(--blue);
+  color: var(--blue);
+  background-color: white;
+}
+
+.tab-content {
+  display: none;
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+.tab-content.active {
+  display: flex;
+}
+
+.chart-wrapper {
+  flex-grow: 1;
+  position: relative;
+  height: 100%;
+}
+
+/* Math Validator Grid Layout */
+.math-validator-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr;
+  gap: 1rem;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.math-card {
+  background: #f8fafc;
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.math-card h4 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.35rem;
+}
+
+.formula-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.formula-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.formula-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.formula-expression {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  color: var(--blue);
+  font-weight: 600;
+}
+
+.formula-value {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.validation-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.validation-table th, .validation-table td {
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+}
+
+.validation-table th {
+  background-color: #f1f5f9;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  color: var(--text-secondary);
+  border-bottom: 1.5px solid var(--border-color);
+}
+
+.validation-table td {
+  font-weight: 500;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.validation-table tr:last-child td {
+  border-bottom: none;
+}
+
+.validation-table tr:hover td {
+  background-color: #f8fafc;
+}
+
+.validation-table td:nth-child(2),
+.validation-table td:nth-child(3) {
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.validation-table td:nth-child(4) {
+  font-weight: 700;
+}
+
+.table-footnote {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-style: italic;
+}
+
+/* Right Sidebar Metrics Cards */
+.metric-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.metric-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.metric-icon i {
+  width: 17px;
+  height: 17px;
+}
+
+.metric-icon.orange { background-color: #fff7ed; color: var(--orange); }
+.metric-icon.pink { background-color: #fdf2f8; color: var(--pink); }
+.metric-icon.blue { background-color: #eff6ff; color: var(--blue); }
+.metric-icon.green { background-color: #ecfdf5; color: var(--primary); }
+.metric-icon.purple { background-color: #f5f3ff; color: var(--purple); }
+.metric-icon.red { background-color: #fef2f2; color: var(--red); }
+
+.metric-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.metric-value {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.metric-status {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* --- SCADA Dashboard Layout Layout Updates --- */
+.scada-top-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.scada-top-row .mimic-block {
+  position: relative !important;
+  width: 100% !important;
+  top: auto !important;
+  left: auto !important;
+  margin: 0 !important;
+  transform: none !important;
+  box-shadow: var(--shadow-sm) !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.5rem 0.35rem !important;
+}
+
+.scada-top-row .mimic-block:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Re-scale mimic container for dark theme */
+.dark-mimic {
+  height: 380px !important;
+  background-color: #0f172a !important; /* Dark Slate */
+  border: 1px solid #1e293b !important;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  padding: 1rem !important;
+  box-shadow: var(--shadow-sm);
+}
+
+.mimic-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.mimic-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.mimic-legend {
+  display: flex;
+  gap: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.legend-item .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.legend-item .dot.purple { background-color: #c084fc; }
+.legend-item .dot.green { background-color: #4ade80; }
+.legend-item .dot.blue { background-color: #60a5fa; }
+.legend-item .dot.grey { background-color: #64748b; }
+
+/* Road track system in dark mimic */
+.road-lane-dark {
+  position: absolute;
+  top: 215px;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background-color: #1e293b;
+  border-top: 2px solid #475569;
+  border-bottom: 2px solid #475569;
+  display: flex;
+  align-items: center;
+}
+
+.road-lane-dashes {
+  width: 100%;
+  height: 0;
+  border-top: 2px dashed rgba(255, 255, 255, 0.35); /* Dashed lane separator */
+}
+
+/* Entry and Exit signs */
+.queue-entry-box, .exit-box {
+  position: absolute;
+  top: 219px;
+  height: 72px;
+  background-color: rgba(15, 23, 42, 0.95);
+  border: 1px solid #334155;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 8px;
+  color: #f59e0b;
+}
+
+.queue-entry-box {
+  left: 10px;
+  border-left: 3px solid #f59e0b;
+}
+
+.exit-box {
+  right: 10px;
+  border-right: 3px solid #f59e0b;
+}
+
+.entry-label, .exit-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+/* Canopy structure */
+.canopy-substation {
+  position: absolute;
+  top: 90px;
+  left: 850px;
+  width: 320px;
+  height: 115px;
+  display: flex;
+  flex-direction: column;
+}
+
+.canopy-roof {
+  width: 100%;
+  height: 26px;
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+  border: 1px solid #475569;
+  border-radius: 4px 4px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.canopy-roof i {
+  color: #f59e0b;
+  width: 12px;
+  height: 12px;
+}
+
+.charger-bays-bg {
+  width: 100%;
+  height: 89px;
+  background-color: rgba(15, 23, 42, 0.5);
+  border-left: 2px solid #475569;
+  border-right: 2px solid #475569;
+  border-bottom: 2px solid #475569;
+  position: relative;
+}
+
+/* Premium Dark Theme Charger Bays */
+.dark-mimic .charger-bay-outline {
+  height: 80px;
+  width: 44px;
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.3) 0%, rgba(15, 23, 42, 0.5) 100%);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.dark-mimic .charger-bay-outline.active {
+  border-color: #10b981;
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.04) 0%, rgba(16, 185, 129, 0.08) 100%);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2), inset 0 0 8px rgba(16, 185, 129, 0.05);
+}
+
+.dark-mimic .charger-bay-label {
+  position: absolute;
+  bottom: 6px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  color: #64748b;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: transparent !important;
+  padding: 0;
+  margin: 0;
+  transition: all 0.3s;
+}
+
+.dark-mimic .charger-bay-outline.active .charger-bay-label {
+  color: #10b981 !important;
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+.dark-mimic .charger-pole-icon {
+  position: absolute;
+  top: 6px;
+  width: 16px;
+  height: 18px;
+  background: linear-gradient(180deg, #475569 0%, #1e293b 100%);
+  border: 1px solid #64748b;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s;
+}
+
+.dark-mimic .charger-pole-icon::before {
+  content: '⚡';
+  font-size: 9px;
+  color: #64748b;
+  font-weight: bold;
+}
+
+.dark-mimic .charger-bay-outline.active .charger-pole-icon {
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  border-color: #34d399;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+.dark-mimic .charger-bay-outline.active .charger-pole-icon::before {
+  color: #ffffff;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+}
+
+/* Metrics Row styling */
+.scada-metrics-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.metric-summary-card {
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+
+.metric-summary-card .card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.metric-row-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+
+.border-top-item {
+  border-top: 1px solid var(--border-color);
+  margin-top: 4px;
+  padding-top: 6px;
+}
+
+.val-big {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.val-mid {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.lbl-small {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* Quad grid for performance metrics */
+.metrics-quad-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  flex-grow: 1;
+}
+
+.quad-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #f8fafc;
+  border-radius: 6px;
+  padding: 4px 8px;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.green-text { color: var(--primary) !important; }
+.blue-text { color: var(--blue) !important; }
+.purple-text { color: var(--purple) !important; }
+.teal-text { color: var(--teal) !important; }
+
+/* Power bar */
+.power-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.power-values {
+  display: flex;
+  justify-content: space-between;
+}
+
+.power-val-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.power-num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.power-lbl {
+  font-size: 0.55rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.power-progress-bg {
+  width: 100%;
+  height: 8px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.power-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7 0%, #8b5cf6 100%);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* Health box */
+.health-alert-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+  border: 1px solid transparent;
+}
+
+.health-alert-box.green {
+  background-color: rgba(16, 185, 129, 0.06);
+  border-color: rgba(16, 185, 129, 0.2);
+  color: var(--primary);
+}
+
+.health-alert-box.orange {
+  background-color: rgba(249, 115, 22, 0.06);
+  border-color: rgba(249, 115, 22, 0.2);
+  color: var(--orange);
+}
+
+.health-alert-box.red {
+  background-color: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: var(--red);
+}
+
+.health-status-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.health-desc-text {
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.scada-bottom-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  width: 100%;
+  flex-grow: 1;
+  overflow: hidden;
+  height: 170px;
+}
+
+.bottom-left-panel {
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.bottom-right-panel {
+  background-color: #ffffff;
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  padding: 0.75rem;
+}
+
+.bottom-right-panel .panel-header {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 6px;
+}
+
+.bottom-right-panel .panel-header i {
+  width: 12px;
+  height: 12px;
+  color: var(--blue);
+}
+
+.events-log-container {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.events-log-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.events-log-table th {
+  text-align: left;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.events-log-table td {
+  padding: 5px 6px;
+  font-size: 0.65rem;
+  border-bottom: 1px dashed rgba(226, 232, 240, 0.5);
+  font-family: 'Inter', sans-serif;
+}
+
+.events-log-table tr:hover {
+  background-color: #f8fafc;
+}
+
+.events-log-time {
+  font-family: 'Share Tech Mono', monospace;
+  font-weight: bold;
+  color: var(--text-secondary);
+}
+
+.events-log-type {
+  font-weight: bold;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  padding: 1px 4px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.events-log-type.arrival { background-color: rgba(249, 115, 22, 0.08); color: var(--orange); }
+.events-log-type.charge-start { background-color: rgba(59, 130, 246, 0.08); color: var(--blue); }
+.events-log-type.charge-end { background-color: rgba(16, 185, 129, 0.08); color: var(--primary); }
+.events-log-type.throttle { background-color: rgba(139, 92, 246, 0.08); color: var(--purple); }
+.events-log-type.outage { background-color: rgba(239, 68, 68, 0.08); color: var(--red); }
