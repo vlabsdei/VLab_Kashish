@@ -1,0 +1,175 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "Q1: Which detection technique is best suited for identifying the exact volumetric rate of water loss (Q_leak) in a straight pipeline section?",
+      "answers": {
+        "a": "Acoustic wave monitoring",
+        "b": "Mass Balance (Inflow minus Outflow)",
+        "c": "Ground penetrating radar",
+        "d": "Visual pipe inspections"
+      },
+      "explanations": {
+        "a": "Acoustic monitoring is excellent for locating the position of leaks, but cannot accurately measure flow rate loss.",
+        "b": "Correct! The Mass Balance method directly measures flow rates at the inlet and outlet to calculate volumetric loss: Q_leak = Q_in - Q_out.",
+        "c": "Radar is used to detect underground water accumulation, not rate of pipe flow loss.",
+        "d": "Visual inspections are manual, slow, and cannot quantify internal volumetric loss rates."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q2: If an IoT gateway is configured with a Flow Delta Limit of 0.80 L/min, and the flow sensors read FS-01 = 12.5 L/min and FS-02 = 11.2 L/min, what action will the automatic rule trigger?",
+      "answers": {
+        "a": "Increase the pump speed slider",
+        "b": "Keep the solenoid valve open",
+        "c": "Shut the solenoid valve and trigger a leak alarm",
+        "d": "Open the bypass valve"
+      },
+      "explanations": {
+        "a": "Automation rules do not increase pump speed during leaks; doing so would increase water loss.",
+        "b": "The valve will not stay open because the difference exceeds the safety threshold.",
+        "c": "Correct! The calculated flow difference is 12.5 - 11.2 = 1.3 L/min. Since 1.3 L/min is greater than the 0.80 L/min limit, the rule triggers an emergency solenoid shutdown.",
+        "d": "Opening a bypass valve is not a safety measure for pipe leakage."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q3: During a simulated pipeline rupture, why does the inlet flow rate (Q_in) at FS-01 rise slightly above its normal operating value?",
+      "answers": {
+        "a": "The pump is automatically commanded to spin faster",
+        "b": "The leak orifice decreases the overall flow resistance (friction head) in the pipe",
+        "c": "The water density increases at the leak zone",
+        "d": "The outlet sensor blocks fluid flow"
+      },
+      "explanations": {
+        "a": "The pump speed remains constant unless manually adjusted by the user.",
+        "b": "Correct! The puncture creates a low-resistance discharge path, reducing the pipeline friction head. This allows the pump to push more volumetric flow into the inlet.",
+        "c": "Water is incompressible under these conditions, so its density remains constant.",
+        "d": "The outlet sensor does not block flow; it merely measures fluid passing through."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "Q4: How does enabling 'Auto-Shutoff Mode' protect the laboratory experimental setup during a sudden pipe burst?",
+      "answers": {
+        "a": "It increases line pressure to seal the crack",
+        "b": "It automatically cuts pump power",
+        "c": "It isolates the pipeline via the solenoid valve, minimizing water wastage",
+        "d": "It increases water velocity to push past the burst"
+      },
+      "explanations": {
+        "a": "Increasing pressure would worsen the leak and water spray.",
+        "b": "In this setup, the pump continues to run, but the valve blocks fluid entry.",
+        "c": "Correct! The automation safety logic closes the solenoid valve at the inlet, isolating the downstream pipeline and halting further water loss.",
+        "d": "Increasing velocity would accelerate water loss and system damage."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q5: In our laboratory trials, what is the effect of raising the Flow Delta Threshold to an excessively high limit (e.g., 2.50 L/min)?",
+      "answers": {
+        "a": "The system will shut off the valve too quickly",
+        "b": "The system may fail to detect minor leakages, leading to uncontained water loss",
+        "c": "Sensor telemetry noise will trigger false shutdowns",
+        "d": "System line pressure will drop to zero immediately"
+      },
+      "explanations": {
+        "a": "A high threshold delays or prevents valve shutoff rather than speeding it up.",
+        "b": "Correct! If the threshold is set too high (e.g., 2.50 L/min), minor leaks (e.g., 1.0 L/min) will go undetected by the IoT gateway, and the system will remain open.",
+        "c": "High thresholds reduce false shutdowns from noise, but increase undetected leaks.",
+        "d": "Pressure remains steady until a leak actually occurs or the valve is closed."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q6: If a user closes the solenoid valve downstream of the pump, why does the pressure transducer (PT-01) reading drop to 0 kPa in our setup?",
+      "answers": {
+        "a": "The pump keeps pushing against the closed valve",
+        "b": "The solenoid valve is located upstream of the pressure sensor, isolating the line from the pressure source",
+        "c": "Water starts flowing backwards",
+        "d": "The sensor calibrates itself to ambient pressure"
+      },
+      "explanations": {
+        "a": "Pump pressure remains, but it is blocked before reaching the sensor.",
+        "b": "Correct! The solenoid valve is placed upstream of the sensor grid. Closing the valve blocks water entry, so the pressure downstream of the valve drops to ambient zero.",
+        "c": "Water does not flow backward; it simply stops moving.",
+        "d": "The sensor measures the actual physical pressure of the isolated pipe, which is zero."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q7: What mathematical parameter determines the cumulative volume of water lost (V_wasted) during a leakage event?",
+      "answers": {
+        "a": "The sum of Inflow and Outflow rates",
+        "b": "The integral of the leak flow rate over time (∫ Q_leak dt)",
+        "c": "The system line pressure divided by leak duration",
+        "d": "The ratio of Inflow to Outflow"
+      },
+      "explanations": {
+        "a": "Adding flow rates does not represent volume lost.",
+        "b": "Correct! Cumulative volume is the summation (integration) of the leak flow rate (Q_leak = Q_in - Q_out) over the duration of the leakage period.",
+        "c": "Pressure and duration ratios do not equal volume.",
+        "d": "The ratio represents efficiency, not volumetric waste."
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "Q8: Which of the following thresholds is most likely to trigger a false alarm (shutdown) due to standard ambient sensor telemetry noise?",
+      "answers": {
+        "a": "Flow Delta Limit of 0.05 L/min",
+        "b": "Flow Delta Limit of 0.50 L/min",
+        "c": "Flow Delta Limit of 1.50 L/min",
+        "d": "Flow Delta Limit of 2.50 L/min"
+      },
+      "explanations": {
+        "a": "Correct! Standard flow meters fluctuate due to minor friction and voltage noise. A threshold of 0.05 L/min is too sensitive and will trigger false alarms under normal flow.",
+        "b": "0.50 L/min is a balanced threshold that filters noise while catching leaks.",
+        "c": "1.50 L/min is high and will filter all noise, but will miss minor leaks.",
+        "d": "2.50 L/min is extremely high and will never trigger from ambient noise."
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q9: Under a 'Pipe Burst' simulation, what are the characteristic telemetry readings observed at the sensors?",
+      "answers": {
+        "a": "High outflow, high pressure",
+        "b": "High inflow, near-zero outflow, and near-zero line pressure",
+        "c": "Zero inflow, zero outflow, and high pressure",
+        "d": "Telemetry remains identical to normal leak-free state"
+      },
+      "explanations": {
+        "a": "A pipe burst drops pressure and outflow, rather than increasing them.",
+        "b": "Correct! A catastrophic pipe burst allows almost all water to escape. Consequently, pressure drops to near-zero, delivery flow (Q_out) drops to near-zero, and inflow increases.",
+        "c": "Inflow is high because the pump is running and pipeline resistance is low.",
+        "d": "Telemetry changes drastically during a burst event."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q10: What is the primary purpose of recording multiple trials at different pump speeds in the observation log sheet?",
+      "answers": {
+        "a": "To clean the pipeline and supply tank",
+        "b": "To identify the correlation between pump speed (inflow rate) and line pressure drops during leakages",
+        "c": "To increase the sensitivity of the pressure transducers",
+        "d": "To charge the microcontroller battery"
+      },
+      "explanations": {
+        "a": "Recording data in a table does not clean any physical hardware.",
+        "b": "Correct! Running trials under varying pump speeds helps students analyze how flow rate magnitude affects the pressure profile and leakage rate throughout the pipeline.",
+        "c": "Transducer sensitivity is a hardware property and is not affected by logging trials.",
+        "d": "Microcontrollers are powered by standard electrical sources, not data logs."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    }
+  ]
+}

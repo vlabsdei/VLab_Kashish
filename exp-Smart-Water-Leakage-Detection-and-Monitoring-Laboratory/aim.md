@@ -1,0 +1,1 @@
+The aim of this experiment is to study and configure an IoT-based system to detect and isolate water pipeline leakages.

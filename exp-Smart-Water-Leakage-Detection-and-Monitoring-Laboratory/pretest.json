@@ -1,0 +1,175 @@
+{
+  "version": 2.0,
+  "questions": [
+    {
+      "question": "Q1: Which physical principle states that the mass flow rate entering a pipeline must equal the mass flow rate exiting it under steady, leak-free conditions?",
+      "answers": {
+        "a": "Pascal's Law",
+        "b": "Principle of Conservation of Mass (Mass Balance)",
+        "c": "Bernoulli's Principle",
+        "d": "Archimedes' Principle"
+      },
+      "explanations": {
+        "a": "Pascal's Law describes pressure transmission in static fluids, not flow conservation.",
+        "b": "Correct! Conservation of mass dictates that the mass entering a closed system must equal the mass leaving it, unless there is accumulation or a leak.",
+        "c": "Bernoulli's Principle relates velocity, pressure, and elevation in flowing fluids.",
+        "d": "Archimedes' Principle describes the buoyancy force on submerged objects."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q2: What happens to the downstream flow rate (Q_out) relative to the inlet flow rate (Q_in) when a pipeline leak occurs?",
+      "answers": {
+        "a": "Q_out becomes greater than Q_in",
+        "b": "Q_out becomes less than Q_in",
+        "c": "Q_out remains equal to Q_in",
+        "d": "Both flow rates instantly drop to zero"
+      },
+      "explanations": {
+        "a": "Downstream flow cannot exceed inflow unless there is an external supply feeding the pipe.",
+        "b": "Correct! Since fluid escapes through the leak orifice, the remaining volume reaching the outlet sensor (Q_out) decreases, making it less than the inlet flow (Q_in).",
+        "c": "A flow difference is created because fluid escapes, meaning they cannot remain equal.",
+        "d": "Flow rates only drop to zero if the supply pump is cut off or the valve is completely closed."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q3: Which type of valve is commonly used in electronic automation systems to quickly shut off or isolate water pipelines using an electric control signal?",
+      "answers": {
+        "a": "Gate Valve",
+        "b": "Solenoid Valve",
+        "c": "Globe Valve",
+        "d": "Check Valve"
+      },
+      "explanations": {
+        "a": "Gate valves are typically manual and designed for slow on/off service.",
+        "b": "Correct! A solenoid valve is an electromechanically operated valve controlled by an electrical current through a solenoid coil, allowing quick automated control.",
+        "c": "Globe valves are used for regulating flow, not quick on/off isolation.",
+        "d": "Check valves allow fluid to flow in only one direction and are mechanically operated by fluid pressure."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q4: How does a sudden pipe puncture or leakage affect the line pressure measured near the leak zone?",
+      "answers": {
+        "a": "Pressure increases significantly",
+        "b": "Pressure drops suddenly",
+        "c": "Pressure oscillates wildly but averages the same",
+        "d": "Pressure remains unaffected"
+      },
+      "explanations": {
+        "a": "Pressure only increases if the pipe downstream is blocked, not punctured.",
+        "b": "Correct! Water escaping through the leak converts static pressure energy into kinetic energy (velocity) and reduces downstream resistance, causing a sudden pressure drop.",
+        "c": "Pressure drops and stabilizes at a lower value, it does not average the same.",
+        "d": "The leak provides an exit path for the fluid, which directly decreases line pressure."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q5: Which of the following equations represents the leak flow rate (Q_leak) based on inlet (Q_in) and outlet (Q_out) flow sensors?",
+      "answers": {
+        "a": "Q_leak = Q_in + Q_out",
+        "b": "Q_leak = Q_in - Q_out",
+        "c": "Q_leak = Q_in * Q_out",
+        "d": "Q_leak = Q_in / Q_out"
+      },
+      "explanations": {
+        "a": "Adding them does not represent water lost.",
+        "b": "Correct! The difference between the volume entering the pipe segment and the volume leaving it is the volume of water lost through the leak.",
+        "c": "Multiplying flow rates has no physical meaning in mass balance.",
+        "d": "Dividing flow rates yields a ratio, not a volumetric leak rate."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q6: What is the SI unit of pipeline pressure measurement?",
+      "answers": {
+        "a": "Liter per minute (L/min)",
+        "b": "Pascal (Pa)",
+        "c": "Cubic meter per second (m³/s)",
+        "d": "Newton (N)"
+      },
+      "explanations": {
+        "a": "L/min is a unit of volumetric flow rate.",
+        "b": "Correct! Pressure is force per unit area, and its SI unit is the Pascal (Pa), where 1 Pa = 1 N/m².",
+        "c": "Cubic meter per second is the SI unit of flow rate.",
+        "d": "Newton is the SI unit of force, not pressure."
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q7: What is the primary advantage of smart IoT monitoring compared to traditional manual leakage inspection in water supply networks?",
+      "answers": {
+        "a": "It increases the maximum velocity of water flow",
+        "b": "It enables real-time detection and automated isolation of leaks",
+        "c": "It eliminates pipe wall friction losses completely",
+        "d": "It makes water cleaner by filtering particulates"
+      },
+      "explanations": {
+        "a": "IoT systems monitor and control flow, they do not increase maximum fluid velocity.",
+        "b": "Correct! Real-time telemetry allows the system to identify abnormal flow rates immediately and trigger automated valves to isolate the leak without human intervention.",
+        "c": "Friction loss is a physical property of fluid movement and cannot be eliminated by IoT.",
+        "d": "IoT networks collect sensor data, they do not filter or purify the water."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q8: In a smart water system, which component processes telemetry data and triggers the valve shutoff relay?",
+      "answers": {
+        "a": "Solenoid coil",
+        "b": "Flow sensor impeller",
+        "c": "Microcontroller or IoT Gateway",
+        "d": "Pressure transducer"
+      },
+      "explanations": {
+        "a": "The solenoid coil is the actuator that physically moves the valve, it does not process logic.",
+        "b": "The impeller is the mechanical part of the flow sensor that spins to measure flow.",
+        "c": "Correct! The microcontroller (such as Arduino/ESP32) or gateway runs the code to analyze sensor data and decide when to activate the valve actuator.",
+        "d": "The pressure transducer is a sensor that outputs analog voltage based on line pressure."
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "Q9: Under normal leak-free conditions, if the inlet flow rate is measured as 15.0 L/min, what should the outlet flow sensor read (ignoring minor sensor noise)?",
+      "answers": {
+        "a": "0.0 L/min",
+        "b": "7.5 L/min",
+        "c": "15.0 L/min",
+        "d": "30.0 L/min"
+      },
+      "explanations": {
+        "a": "Outlet flow is only zero if the pipeline is isolated.",
+        "b": "Flow rate is conserved; it does not drop by half unless there is a huge leak.",
+        "c": "Correct! In a closed, leak-free pipeline, flow rate remains conserved, meaning inflow equals outflow.",
+        "d": "Flow rate cannot double without adding fluid to the system."
+      },
+      "correctAnswer": "c",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "Q10: Why does downstream line pressure drop to zero when the pipeline inlet solenoid valve is closed?",
+      "answers": {
+        "a": "The water pump increases its rotational speed",
+        "b": "The flow path is isolated and water supply is cut off",
+        "c": "The size of the leak downstream decreases",
+        "d": "Atmospheric pressure increases"
+      },
+      "explanations": {
+        "a": "The pump does not speed up when downstream pressure drops to zero.",
+        "b": "Correct! Closing the valve isolates the pipeline from the pressurized water source (pump), meaning fluid movement stops and static pressure drops to zero.",
+        "c": "The physical leak size remains the same, though water stops escaping because there is no pressure.",
+        "d": "Atmospheric pressure is constant and unaffected by solenoid valve actions."
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    }
+  ]
+}
